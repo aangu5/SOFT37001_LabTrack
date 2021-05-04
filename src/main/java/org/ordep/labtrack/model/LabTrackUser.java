@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class User {
+public class LabTrackUser {
     @Id
     private UUID userId;
     private String displayName;
