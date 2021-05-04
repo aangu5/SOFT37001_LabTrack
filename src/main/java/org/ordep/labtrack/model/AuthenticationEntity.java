@@ -42,17 +42,17 @@ public class AuthenticationEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return active;
+        return isEnabled();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return active;
+        return isEnabled();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return active;
+        return isEnabled();
     }
 
     @Override
