@@ -1,13 +1,12 @@
 package org.ordep.labtrack.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
+import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +14,10 @@ import javax.persistence.Entity;
 public class Man extends PhysicalHazardData {
     private String manName;
     private String manState;
+
+    public Man(UUID manID, String manName, String manState) {
+        super(manID);
+        this.manName = manName;
+        this.manState = manState;
+    }
 }

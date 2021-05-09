@@ -34,6 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .loginProcessingUrl("/api/login")
                 .defaultSuccessUrl("/home", true)
                 .and()

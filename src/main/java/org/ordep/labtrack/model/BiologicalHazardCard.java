@@ -1,14 +1,14 @@
 package org.ordep.labtrack.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

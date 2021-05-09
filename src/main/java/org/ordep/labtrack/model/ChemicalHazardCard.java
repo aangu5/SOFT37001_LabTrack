@@ -1,23 +1,24 @@
 package org.ordep.labtrack.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.ordep.labtrack.model.enums.SignalWord;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class ChemistryHazardCard extends Card {
+public class ChemicalHazardCard extends Card {
     private String cas;
-    @OneToMany
-    private List<Pictogram> pictograms;
+    @Enumerated(EnumType.STRING)
+    private SignalWord signalWord;
     @OneToMany
     private List<HazardStatement> hazardStatements;
     @OneToMany
