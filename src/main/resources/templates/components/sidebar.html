@@ -2,9 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
 </head>
-<body>
-
-</body>
-</html>
+<style>
+    div.sidebar{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        padding-left: 15px;
+    }
+    div.sidebarchild{
+        height: 40px;
+        display: flex;
+        align-items: center;
+        padding: 5px;
+        padding-left: 50px;
+    }
+    div.sidebar:hover, div.sidebarchild:hover {
+        background-color: #C4C4C4;
+    }
+</style>
+<div style="background-color:#E0E0E0; height: calc(100% - 60px); width: 275px; margin-right: 0px; min-width: 275px; position: absolute;">
+    <ul>
+        <a href="/home"><div class="sidebar" style="">Overview</div></a>
+        <a href="/home"><div class="sidebar">Cards</div></a>
+        <ul>
+            <a href="/home"><div class="sidebarchild">Chemical</div></a>
+            <a href="/home"><div class="sidebarchild">Biological</div></a>
+            <a href="/home"><div class="sidebarchild">Physical</div></a>
+        </ul>
+        <a href="/home"><div class="sidebar">Assessments</div></a>
+        <ul>
+            <a href="/home"><div class="sidebarchild">Risk</div></a>
+            <a href="/home"><div class="sidebarchild">COSHH</div></a>
+        </ul>
+        <a href="/api/logout" methods="POST"><div class="sidebar">Logout</div></a>
+    </ul>
+</div>

@@ -29,4 +29,8 @@ public abstract class Card {
         }
         return null;
     }
+
+    public String isActive() {
+        return status ? "Active" : "Inactive";
+    }
 }

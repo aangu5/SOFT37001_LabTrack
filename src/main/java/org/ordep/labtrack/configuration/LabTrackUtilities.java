@@ -5,6 +5,10 @@ import java.time.format.DateTimeFormatter;
 
 public class LabTrackUtilities {
 
+    private LabTrackUtilities() {
+
+    }
+
     public static String formatDate(LocalDateTime dateTime) {
         String output;
         var now = LocalDateTime.now();

@@ -3,65 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemical Hazard Card</title>
+    <style>
+        ul {
+            font-size: 24px;
+            font-family: montserrat;
+            list-style-type: none;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        li {
+            margin: 0 0 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-family: montserrat;
+        }
+
+        td.data {
+            text-align: left;
+            background-color: #E0E0E0;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            width: 100%;
+            padding-left: 15px;
+        }
+
+        th {
+            padding: 20px;
+            text-align: center;
+            background-color: #64D8CB;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            align-content: flex-start;
+            white-space: nowrap;
+        }
+    </style>
 </head>
-<body>
-<h1>Chemical Hazard Card</h1>
-<table style="width: 100%">
-    <th>Card Title</th>
-    <th>Status</th>
-    <th>Date Created</th>
-    <th>Author</th>
-    <th>CAS</th>
-    <th>Signal Word</th>
-    <tr th:each="card : ${chemicalHazardCard}">
-        <td th:text="${card.cardName}">Card Name</td>
-        <td th:text="${card.status}">Status</td>
-        <td th:text="${card.getFormattedDate()}">Date Created</td>
-        <td th:text="${card.author.displayName}">Author Name</td>
-        <td th:text="${card.cas}">CAS</td>
-        <td th:text="${card.signalWord}">Signal Word</td>
-    </tr>
-</table>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
 
-<h2>Synonyms</h2>
-<table>
-    <tr th:each="synonym : ${chemicalHazardCard.synonyms}">
-        <td th:text="${synonym}">Synonym</td>
-    </tr>
-</table>
+<div style="width:calc(100% - 275px); height: calc(100% - 60px); margin-left: 275px; justify-content: center; text-align: center; ">
+    <h1>Ethanol</h1>
+    <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+        <tr>
+            <th>Card Type</th>
+            <td class="data" th:text="${chemicalHazardCard.class.simpleName}">Barclays</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td class="data" th:text="${chemicalHazardCard.isActive()}">Active</td>
+        </tr>
+        <tr>
+            <th>Date Created</th>
+            <td class="data" th:text="${chemicalHazardCard.getFormattedDate()}">11/04/2021</td>
+        </tr>
+        <tr>
+            <th>Author</th>
+            <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner</td>
+        </tr>
+        <tr>
+            <th>CAS</th>
+            <td class="data" th:text="${chemicalHazardCard.cas}">ual sex</td>
+        </tr>
+        <tr>
+            <th>Signal Word</th>
+            <td class="data" th:text="${chemicalHazardCard.signalWord.name()}">"Bananas"</td>
+        </tr>
 
-<h2>Pictograms</h2>
-<table>
-    <th>Pictogram ID</th>
-    <th>Pictogram Title</th>
-    <tr th:each="pictogram : ${chemicalHazardCard.pictograms}">
-        <td th:text="${pictogram.pictogramId}">Pictogram ID</td>
-        <td th:text="${pictogram.pictogramName}">Pictogram Title</td>
-    </tr>
-</table>
+    </table>
+</div>
 
-<h2>Hazard Statements</h2>
-<table>
-    <th>Statement ID</th>
-    <th>Statement Title</th>
-    <th>Statement State</th>
-    <tr th:each="statement : ${chemicalHazardCard.hazardStatements}">
-        <td th:text="${statement.statementId}">Statement ID</td>
-        <td th:text="${statement.statementName}">Statement Title</td>
-        <td th:text="${statement.statementState}">Statement State</td>
-    </tr>
-</table>
-
-<h2>Precautionary Statements</h2>
-<table>
-    <th>Statement ID</th>
-    <th>Statement Title</th>
-    <th>Statement State</th>
-    <tr th:each="statement : ${chemicalHazardCard.precautionaryStatements}">
-        <td th:text="${statement.statementId}">Statement ID</td>
-        <td th:text="${statement.statementName}">Statement Title</td>
-        <td th:text="${statement.statementState}">Statement State</td>
-    </tr>
-</table>
 </body>
 </html>
