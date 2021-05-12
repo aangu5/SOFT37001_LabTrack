@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.springframework.core.io.ClassPathResource;
 
@@ -64,7 +65,7 @@ class CardServiceTest {
 
     @Test
     void newChemicalHazardCard() throws JsonProcessingException {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram");
+        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS01);
         List<Pictogram> pictogramList = Collections.singletonList(pictogram);
         when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
 
@@ -150,7 +151,7 @@ class CardServiceTest {
 
     @Test
     void newPhysicalHazardCard() {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram");
+        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS01);
         List<Pictogram> pictogramList = Collections.singletonList(pictogram);
         when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
 
@@ -241,7 +242,7 @@ class CardServiceTest {
 
     @Test
     void newBiologicalHazardCard() throws JsonProcessingException {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram");
+        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS02);
         List<Pictogram> pictogramList = Collections.singletonList(pictogram);
         when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
 

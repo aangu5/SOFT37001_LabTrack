@@ -26,6 +26,11 @@
             font-family: montserrat;
         }
 
+        p {
+            font-family: montserrat, sans-serif;
+            font-weight: bold;
+        }
+
         td.data {
             text-align: left;
             background-color: #E0E0E0;
@@ -44,41 +49,84 @@
             align-content: flex-start;
             white-space: nowrap;
         }
+
+        img.pictogram {
+            height: 100px;
+            margin: 10px;
+        }
     </style>
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
-<div style="width:calc(100% - 275px); height: calc(100% - 60px); margin-left: 275px; justify-content: center; text-align: center; ">
-    <h1>Ethanol</h1>
-    <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
-        <tr>
-            <th>Card Type</th>
-            <td class="data" th:text="${chemicalHazardCard.class.simpleName}">Barclays</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td class="data" th:text="${chemicalHazardCard.isActive()}">Active</td>
-        </tr>
-        <tr>
-            <th>Date Created</th>
-            <td class="data" th:text="${chemicalHazardCard.getFormattedDate()}">11/04/2021</td>
-        </tr>
-        <tr>
-            <th>Author</th>
-            <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner</td>
-        </tr>
-        <tr>
-            <th>CAS</th>
-            <td class="data" th:text="${chemicalHazardCard.cas}">ual sex</td>
-        </tr>
-        <tr>
-            <th>Signal Word</th>
-            <td class="data" th:text="${chemicalHazardCard.signalWord.name()}">"Bananas"</td>
-        </tr>
+<div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+        <div style="width: 100%"><h1>Ethanol</h1></div>
+        <div style="width: 50%">
+            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+                <tr>
+                    <th>Card Type</th>
+                    <td class="data" th:text="${chemicalHazardCard.class.simpleName}">Barclays</td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td class="data" th:text="${chemicalHazardCard.isActive()}">Active</td>
+                </tr>
+                <tr>
+                    <th>Date Created</th>
+                    <td class="data" th:text="${chemicalHazardCard.getFormattedDate()}">11/04/2021</td>
+                </tr>
+                <tr>
+                    <th>Author</th>
+                    <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner</td>
+                </tr>
+                <tr>
+                    <th>CAS</th>
+                    <td class="data" th:text="${chemicalHazardCard.cas}">ual sex</td>
+                </tr>
+                <tr>
+                    <th>Signal Word</th>
+                    <td class="data" th:text="${chemicalHazardCard.signalWord.name()}">"Bananas"</td>
+                </tr>
+            </table>
+        </div>
+        <div style="width: 50%">
+            <div style="background-color: white; height:50%; align-items: center; display: flex; justify-content: center">
+                <!-- hazard thing image here -->
+                <img src="/images/ChemicalHazardCard.png" alt="Chemical Hazard Card">
+            </div>
+            <div style="background-color: white; height:50%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+                <!-- images in here -->
+                <div th:each="pictogram : ${chemicalHazardCard.getPictograms()}">
+                    <img th:src="@{${'/images/' + pictogram.getImage().name() +'.png'}}" th:alt="${pictogram.getImage().name()}"
+                         width="100">
+                    <p th:text="${pictogram.pictogramName}"></p>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%">
+            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+                <div th:if="${!chemicalHazardCard.getHazardStatements().isEmpty()}">
+                    <tr>
+                        <th>Hazard Statements</th>
+                        <div th:each="hazardStatement : ${chemicalHazardCard.getHazardStatements()}">
+                            <td class="data" th:text="${hazardStatement.getStatementName()}"></td>
+                        </div>
+                    </tr>
+                </div>
 
-    </table>
+                <div th:if="${!chemicalHazardCard.getPrecautionaryStatements().isEmpty()}">
+                    <tr>
+                        <th>Precautionary Statements</th>
+                        <div th:each="precautionaryStatement : ${chemicalHazardCard.getPrecautionaryStatements()}">
+                            <td class="data" th:text="${precautionaryStatement.getStatementName()}"></td>
+                        </div>
+                    </tr>
+                </div>
+            </table>
+        </div>
+    </div>
 </div>
 
 </body>
