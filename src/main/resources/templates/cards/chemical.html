@@ -6,10 +6,10 @@
     <style>
         ul {
             font-size: 24px;
-            font-family: montserrat;
+            font-family: montserrat, sans-serif;
             list-style-type: none;
-            padding: 0px;
-            margin: 0px;
+            padding: 0;
+            margin: 0;
         }
 
         li {
@@ -23,7 +23,7 @@
         }
 
         h1 {
-            font-family: montserrat;
+            font-family: montserrat, sans-serif;
         }
 
         p {
@@ -79,7 +79,8 @@
                 </tr>
                 <tr>
                     <th>Author</th>
-                    <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner</td>
+                    <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner
+                    </td>
                 </tr>
                 <tr>
                     <th>CAS</th>
@@ -94,35 +95,45 @@
         <div style="width: 50%">
             <div style="background-color: white; height:50%; align-items: center; display: flex; justify-content: center">
                 <!-- hazard thing image here -->
-                <img src="/images/ChemicalHazardCard.png" alt="Chemical Hazard Card">
+                <img alt="Chemical Hazard Card" src="/images/ChemicalHazardCard.png">
             </div>
             <div style="background-color: white; height:50%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
                 <!-- images in here -->
                 <div th:each="pictogram : ${chemicalHazardCard.getPictograms()}">
-                    <img th:src="@{${'/images/' + pictogram.getImage().name() +'.png'}}" th:alt="${pictogram.getImage().name()}"
+                    <img th:alt="${pictogram.getPictogramName()}"
+                         th:src="@{${'/images/' + pictogram.getImage().name() +'.png'}}"
                          width="100">
                     <p th:text="${pictogram.pictogramName}"></p>
                 </div>
             </div>
         </div>
         <div style="width: 100%">
-            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
                 <div th:if="${!chemicalHazardCard.getHazardStatements().isEmpty()}">
                     <tr>
-                        <th>Hazard Statements</th>
-                        <div th:each="hazardStatement : ${chemicalHazardCard.getHazardStatements()}">
-                            <td class="data" th:text="${hazardStatement.getStatementName()}"></td>
-                        </div>
+                        <th th:colspan="${chemicalHazardCard.getHazardStatements().size()}">Hazard
+                            Statements
+                        </th>
                     </tr>
+
+                    <div th:each="hazardStatement : ${chemicalHazardCard.getHazardStatements()}">
+                        <tr>
+                            <td th:text="${hazardStatement.getStatementName()}"></td>
+                        </tr>
+                    </div>
+
                 </div>
 
                 <div th:if="${!chemicalHazardCard.getPrecautionaryStatements().isEmpty()}">
                     <tr>
-                        <th>Precautionary Statements</th>
-                        <div th:each="precautionaryStatement : ${chemicalHazardCard.getPrecautionaryStatements()}">
-                            <td class="data" th:text="${precautionaryStatement.getStatementName()}"></td>
-                        </div>
+                        <th th:colspan="${chemicalHazardCard.getPrecautionaryStatements().size()}">Precautionary Statements</th>
+
                     </tr>
+                    <div th:each="precautionaryStatement : ${chemicalHazardCard.getPrecautionaryStatements()}">
+                        <tr>
+                            <td th:text="${precautionaryStatement.getStatementName()}"></td>
+                        </tr>
+                    </div>
                 </div>
             </table>
         </div>
