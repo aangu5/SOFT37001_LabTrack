@@ -41,9 +41,7 @@ class CardServiceTest {
     @Mock
     private PictogramRepository pictogramRepository;
     @Mock
-    private HazardStatementRepository hazardStatementRepository;
-    @Mock
-    private PrecautionaryStatementRepository precautionaryStatementRepository;
+    private StatementService statementService;
     @Mock
     private SymRepository symRepository;
     @Mock
@@ -71,12 +69,12 @@ class CardServiceTest {
 
         HazardStatement hazardStatement = new HazardStatement(uuid1, "name", "state");
         List<HazardStatement> hazardStatements = Collections.singletonList(hazardStatement);
-        when(hazardStatementRepository.findByStatementIdIn(any())).thenReturn(hazardStatements);
+        when(statementService.findHazardStatements(any())).thenReturn(hazardStatements);
 
         PrecautionaryStatement precautionaryStatement = new PrecautionaryStatement(uuid2, "name",
                 "state");
         List<PrecautionaryStatement> precautionaryStatements = Collections.singletonList(precautionaryStatement);
-        when(precautionaryStatementRepository.findByStatementIdIn(any())).thenReturn(precautionaryStatements);
+        when(statementService.findPrecautionaryStatements(any())).thenReturn(precautionaryStatements);
 
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
         when(userService.findUser(any())).thenReturn(user);
