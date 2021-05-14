@@ -1,11 +1,14 @@
 package org.ordep.labtrack.controller;
 
+import org.ordep.labtrack.model.BiologicalHazardCard;
+import org.ordep.labtrack.model.ChemicalHazardCard;
+import org.ordep.labtrack.model.PhysicalHazardCard;
+import org.ordep.labtrack.model.enums.SignalWord;
 import org.ordep.labtrack.service.CardService;
+import org.ordep.labtrack.service.StatementService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -13,9 +16,11 @@ import java.util.UUID;
 public class WebController {
 
     private final CardService cardService;
+    private final StatementService statementService;
 
-    public WebController(CardService cardService) {
+    public WebController(CardService cardService, StatementService statementService) {
         this.cardService = cardService;
+        this.statementService = statementService;
     }
 
     @GetMapping("/home")
@@ -45,5 +50,32 @@ public class WebController {
         }
 
         return null;
+    }
+
+    @GetMapping("/card/{type}/new")
+    public String newCard(@PathVariable String type, Model model) {
+        if (type.equals("ChemicalHazardCard")) {
+            model.addAttribute("chemicalHazardCard", new ChemicalHazardCard());
+            model.addAttribute("signalWords", SignalWord.values());
+            model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
+            return "cards/newChemical";
+        }
+        if (type.equals("PhysicalHazardCard")) {
+            model.addAttribute("physicalHazardCard", new PhysicalHazardCard());
+            return "cards/newPhysical";
+        }
+        if (type.equals("BiologicalHazardCard")) {
+            model.addAttribute("biologicalHazardCard", new BiologicalHazardCard());
+            return "cards/newBiological";
+        }
+
+        return null;
+    }
+
+    @PostMapping("/card/new/chemical")
+    public String newCard(@ModelAttribute ChemicalHazardCard chemicalHazardCard, Model model) {
+        System.out.println(chemicalHazardCard);
+        model.addAttribute(chemicalHazardCard);
+        return "home";
     }
 }

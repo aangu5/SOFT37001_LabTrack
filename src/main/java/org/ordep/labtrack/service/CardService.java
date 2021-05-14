@@ -23,9 +23,7 @@ public class CardService {
     @Autowired
     private PictogramRepository pictogramRepository;
     @Autowired
-    private HazardStatementRepository hazardStatementRepository;
-    @Autowired
-    private PrecautionaryStatementRepository precautionaryStatementRepository;
+    private StatementService statementService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -48,9 +46,9 @@ public class CardService {
                                                     List<UUID> precautionaryStatementIDs, List<String> synonyms, SignalWord signalWord) {
 
         List<Pictogram> pictograms = pictogramRepository.findByPictogramIdIn(pictogramIDs);
-        List<HazardStatement> hazardStatements = hazardStatementRepository.findByStatementIdIn(hazardStatementIDs);
+        List<HazardStatement> hazardStatements = statementService.findHazardStatements(hazardStatementIDs);
         List<PrecautionaryStatement> precautionaryStatements =
-                precautionaryStatementRepository.findByStatementIdIn(precautionaryStatementIDs);
+                statementService.findPrecautionaryStatements(precautionaryStatementIDs);
         LabTrackUser user = userService.findUser(userId);
 
         var chemicalHazardCard = new ChemicalHazardCard();
