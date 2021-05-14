@@ -52,6 +52,12 @@ public class WebController {
         return null;
     }
 
+    @GetMapping("/cards")
+    public String allCards(Model model) {
+        model.addAttribute("allCards", cardService.getAllCards());
+        return "cards/allcards";
+    }
+
     @GetMapping("/card/{type}/new")
     public String newCard(@PathVariable String type, Model model) {
         if (type.equals("ChemicalHazardCard")) {
