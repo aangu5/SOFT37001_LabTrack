@@ -64,6 +64,7 @@ public class WebController {
             model.addAttribute("chemicalHazardCard", new ChemicalHazardCard());
             model.addAttribute("signalWords", SignalWord.values());
             model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
+            model.addAttribute("precautionaryStatements", statementService.getAllPrecautionaryStatements());
             return "cards/newChemical";
         }
         if (type.equals("PhysicalHazardCard")) {
