@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/login*").permitAll()
-                .antMatchers("/api**").permitAll()
+                .antMatchers("/api/register*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
