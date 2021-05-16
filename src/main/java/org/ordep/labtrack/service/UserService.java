@@ -30,4 +30,8 @@ public class UserService {
     public void updateUser(LabTrackUser updatedLabTrackUser){
         userRepository.save(updatedLabTrackUser);
     }
+
+    public void registerUser(LabTrackUser labTrackUser) {
+        userRepository.save(labTrackUser);
+    }
 }

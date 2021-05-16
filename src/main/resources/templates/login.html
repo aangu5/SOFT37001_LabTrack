@@ -1,28 +1,100 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" style="height:100%"><head>
     <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Please sign in</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link rel="icon" type="image/ico" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
+    <title>LabTrack Home</title>
+    <style>
+        ul {
+            font-size: 24px;
+            font-family: montserrat;
+            list-style-type:none;
+            padding: 0px;
+            margin: 0px;
+        }
+        li {
+            margin: 0 0 20px 0;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+        h1, h2, form {
+            font-family: montserrat;
+            font-weight: bold;
+        }
+        th {
+            background-color:#64D8CB;
+            padding: 8px;
+        }
+        td {
+            background-color: #E0E0E0;
+            padding: 8px;
+        }
+        div.divider {
+            width: 50%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            min-width:400px;
+        }
+        input[type=text], input[type=password], select {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button[type=submit] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
 </head>
-<body>
-<div style="background-color:#26A69A; height: 60px; width: 100%">
-    <h1 style="padding: 10px; font-size:35px">LabTrack</h1></div>
-<div class="container" style="padding-top: 60px">
+<body style="margin:0px; height: 100%">
+    <div th:replace="components/header">Header</div>
+    <div style="height: 100%; padding-top: 60px; display: flex; flex-wrap: wrap; align-items: flex-start; align-content: middle;">
+        <div class="divider">
+            <form class="form-signin" method="post" action="/api/login">
+                <h2 class="form-signin-heading">Sign in</h2>
+                <p>
+                    <label for="username" class="sr-only">Email</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+                </p>
+                <p>
+                    <label for="password" class="sr-only">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+                </p>
+                <button type="submit">Sign in</button>
+            </form>
+        </div>
 
-    <form class="form-signin" method="post" action="/api/login">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <p>
-            <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
-        </p>
-        <p>
-            <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
-        </p>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    </form>
-</div>
-</body></html>
+        <div class="divider">
+            <form class="form-sign-up" method="post" action="/api/register">
+                <h2 class="form-sign-up-heading">Sign up</h2>
+                <p>
+                    <label for="username-sign-up" class="sr-only">Email</label>
+                    <input type="text" id="username-sign-up" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+                </p>
+                <p>
+                    <label for="password-sign-up" class="sr-only">Password</label>
+                    <input type="password" id="password-sign-up" name="password" class="form-control" placeholder="Password" required="">
+                </p>
+                <p>
+                    <label for="displayName" class="sr-only">Display Name</label>
+                    <input type="text" id="displayName" name="displayName" class="form-control" placeholder="DisplayName" required="">
+                </p>
+                <button type="submit">Sign up</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

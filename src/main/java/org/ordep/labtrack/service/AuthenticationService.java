@@ -1,6 +1,7 @@
 package org.ordep.labtrack.service;
 
 import org.ordep.labtrack.data.AuthenticationRepository;
+import org.ordep.labtrack.model.AuthenticationEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,5 +19,9 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return authenticationRepository.getAuthenticationEntityByUsername(username);
+    }
+
+    public void registerUser(AuthenticationEntity authenticationEntity) {
+        authenticationRepository.save(authenticationEntity);
     }
 }
