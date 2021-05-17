@@ -1,66 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
   <title>Chemical Hazard Card</title>
   <style>
-    ul {
-      font-size: 24px;
-      font-family: montserrat, sans-serif;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
+        ul {
+            font-size: 24px;
+            font-family: montserrat, sans-serif;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
 
-    li {
-      margin: 0 0 20px 0;
-    }
+        li {
+            margin: 0 0 20px 0;
+        }
 
-    a {
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-    }
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
 
-    h1 {
-      font-family: montserrat, sans-serif;
-    }
+        h1 {
+            font-family: montserrat, sans-serif;
+        }
 
-    p {
-      font-family: montserrat, sans-serif;
-      font-weight: bold;
-    }
+        p {
+            font-family: montserrat, sans-serif;
+            font-weight: bold;
+        }
 
-    td.data {
-      text-align: left;
-      background-color: #E0E0E0;
-      border-radius: 6px;
-      -moz-border-radius: 6px;
-      width: 100%;
-      padding-left: 15px;
-    }
+        td.data {
+            text-align: left;
+            background-color: #E0E0E0;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            width: 100%;
+            padding-left: 15px;
+        }
 
-    th {
-      padding: 20px;
-      text-align: center;
-      background-color: #64D8CB;
-      border-radius: 6px;
-      -moz-border-radius: 6px;
-      align-content: flex-start;
-      white-space: nowrap;
-    }
+        th {
+            padding: 20px;
+            text-align: center;
+            background-color: #64D8CB;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            align-content: flex-start;
+            white-space: nowrap;
+        }
 
-    img.pictogram {
-      height: 100px;
-      margin: 10px;
-    }
-  </style>
+        img.pictogram {
+            height: 100px;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
-<form action="#" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}" method="POST">
+<form:form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
       <div style="width: 100%"><h1>Ethanol</h1></div>
@@ -69,20 +69,20 @@
           <tr>
             <th>Chemical Name</th>
             <td class="data">
-              <input type="text" th:field="*{cardName}">
+              <input th:field="*{cardName}" type="text">
             </td>
           </tr>
           <tr>
             <th>CAS</th>
             <td class="data">
-              <input type="text" th:field="*{cas}">
+              <input th:field="*{cas}" type="text">
             </td>
           </tr>
           <tr>
             <th>Signal Word</th>
             <td class="data">
               <select th:field="*{signalWord}">
-                <option th:each="i : ${signalWords}" th:value="${i}" th:text="${i}"></option>
+                <option th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
               </select>
             </td>
           </tr>
@@ -95,51 +95,45 @@
         </div>
         <div style="background-color: white; height:50%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
           <!-- images in here -->
-          <div th:each="pictogram : ${chemicalHazardCard.getPictograms()}">
-            <img th:alt="${pictogram.getPictogramName()}"
-                 th:src="@{${'/images/' + pictogram.getImage().name() +'.png'}}"
-                 width="100">
-            <p th:text="${pictogram.pictogramName}"></p>
-          </div>
+          <select id="pictogramSelection" multiple="multiple" style="width: 100%">
+            <option th:each="pictogram : ${pictograms}" th:text="${pictogram.name()}"></option>
+            <!--                        <img th:alt="${pictogram.name()}"-->
+            <!--                             th:src="@{${'/images/' + pictogram.name() +'.png'}}"-->
+            <!--                             width="100">-->
+          </select>
         </div>
       </div>
       <div style="width: 100%">
         <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
-          <div th:if="${!hazardStatements.isEmpty()}">
-            <tr>
-              <th>Hazard
-                Statements
-              </th>
-            </tr>
+          <tr>
+            <th>Hazard
+              Statements
+            </th>
+          </tr>
+          <tr>
+            <select id="hazardStatements" multiple="multiple" style="width: 100%">
+              <option th:each="statement : ${hazardStatements}"
+                      th:text="${statement.getStatementName()}"></option>
+            </select>
+          </tr>
 
-            <div th:each="hazardStatement : ${hazardStatements}">
-              <tr>
-                <td th:text="${hazardStatement.getStatementName()}">
-                  <input type="radio" th:field="*{hazardStatements}" th:value="${hazardStatement}">
-                  <label th:for="${#ids.prev('hazardStatements')}" th:text="${model}">model</label>
-                </td>
-              </tr>
-            </div>
-
-          </div>
-
-          <div th:if="${!chemicalHazardCard.getPrecautionaryStatements().isEmpty()}">
-            <tr>
-              <th>Precautionary Statements</th>
-
-            </tr>
-            <div th:each="precautionaryStatement : ${chemicalHazardCard.getPrecautionaryStatements()}">
-              <tr>
-                <td th:text="${precautionaryStatement.getStatementName()}"></td>
-              </tr>
-            </div>
-          </div>
+          <tr>
+            <th>Precautionary Statements</th>
+          </tr>
+          <tr>
+            <select id="precautionaryStatements" multiple="multiple" style="width: 100%">
+              <option th:each="statement : ${precautionaryStatements}"
+                      th:text="${statement.getStatementName()}"></option>
+            </select>
+          </tr>
         </table>
       </div>
     </div>
   </div>
-  <p><input type="submit" value="Submit">dsdsd</p>
-</form>
+  <div style="width: 100%; text-align:center; align-content: center">
+    <input type="submit" value="Submit">
+  </div>
+</form:form>
 
 </body>
 </html>

@@ -3,9 +3,12 @@ package org.ordep.labtrack.controller;
 import org.ordep.labtrack.model.BiologicalHazardCard;
 import org.ordep.labtrack.model.ChemicalHazardCard;
 import org.ordep.labtrack.model.PhysicalHazardCard;
+import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.ordep.labtrack.service.CardService;
 import org.ordep.labtrack.service.StatementService;
+import org.ordep.labtrack.service.UserService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +20,12 @@ public class WebController {
 
     private final CardService cardService;
     private final StatementService statementService;
+    private final UserService userService;
 
-    public WebController(CardService cardService, StatementService statementService) {
+    public WebController(CardService cardService, StatementService statementService, UserService userService) {
         this.cardService = cardService;
         this.statementService = statementService;
+        this.userService = userService;
     }
 
     @GetMapping("/home")
@@ -58,6 +63,12 @@ public class WebController {
         return "cards/allcards";
     }
 
+    @GetMapping("/cards/chemical")
+    public String chemicalCards(Model model) {
+        model.addAttribute("chemicalCards", cardService.findAllChemicalHazardCardsForUser(userService.getCurrentUser()));
+        return "cards/chemicals";
+    }
+
     @GetMapping("/card/{type}/new")
     public String newCard(@PathVariable String type, Model model) {
         if (type.equals("ChemicalHazardCard")) {
@@ -65,6 +76,7 @@ public class WebController {
             model.addAttribute("signalWords", SignalWord.values());
             model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
             model.addAttribute("precautionaryStatements", statementService.getAllPrecautionaryStatements());
+            model.addAttribute("pictograms", PictogramType.values());
             return "cards/newChemical";
         }
         if (type.equals("PhysicalHazardCard")) {
