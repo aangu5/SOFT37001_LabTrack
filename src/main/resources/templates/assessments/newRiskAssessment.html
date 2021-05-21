@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Risk Assessment</title>
+    <style>
+        ul {
+            font-size: 24px;
+            font-family: montserrat, sans-serif;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 0 0 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-family: montserrat, sans-serif;
+        }
+
+        p {
+            font-family: montserrat, sans-serif;
+            font-weight: bold;
+        }
+
+        td.data {
+            text-align: left;
+            background-color: #E0E0E0;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            width: 100%;
+            padding-left: 15px;
+            padding-top: 0px;
+            padding:0px;
+            vertical-align: top;
+        }
+
+        th {
+            padding: 20px;
+            text-align: center;
+            background-color: #64D8CB;
+            border-radius: 6px;
+            -moz-border-radius: 6px;
+            align-content: flex-start;
+            white-space: nowrap;
+        }
+
+        img.pictogram {
+            height: 100px;
+            margin: 10px;
+        }
+
+        input[type="text"], select.table{
+            border: 0px;
+            background-color: rgba(0,0,0,0);
+            height:100%;
+            width: calc(100% - 10px);
+            border-radius:20px;
+            padding: 0px;
+            padding-left: 10px;
+            font-family: montserrat, sans-serif;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        option.table{
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+
+    </style>
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<form method="POST" th:action="@{/api/assessment/risk/new}" th:object="${riskAssessment}">
+    <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+        <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+            <div style="width: 100%"><h1>New Risk Assessment</h1></div>
+            <div style="width: 100%">
+                <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+                    <tr>
+                        <th>Assessment Name</th>
+                        <td class="data">
+                            <input th:field="*{assessmentName}" type="text">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Reaction</th>
+                        <td class="data">
+                            <input th:field="*{reaction}" type="text">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="width: 100%">
+                <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
+                    <tr>
+                        <th><label for="chemicalHazardCards">Chemical Hazard Cards</label>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="chemicalHazardCards" type="checkbox" th:field="*{chemicalHazardCards}" th:each="card : ${chemicalHazardCards}" th:text="${card.getCardName()}" th:value="${card.getCardId()}"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th><label for="biologicalHazardCards">Biological Hazard Cards
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="biologicalHazardCards" style="width: 100%">
+                                <option value = "" selected="selected">None</option>
+                                <option th:each="card : ${biologicalHazardCards}"
+                                        th:text="${card.getCardName()}" th:field="chemicalHazardCards"></option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><label for="physicalHazardCards">Physical Hazard Cards
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select id="physicalHazardCards" style="width: 100%">
+                                <option value = "" selected="selected">None</option>
+                                <option th:each="card : ${physicalHazardCards}"
+                                        th:text="${card.getCardName()}"></option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div style="width: 100%; text-align:center; align-content: center">
+            <input type="submit" value="Submit" name="Submit"/>
+        </div>
+    </div>
+</form>
+
+</body>
+</html>

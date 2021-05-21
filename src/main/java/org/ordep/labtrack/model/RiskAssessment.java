@@ -41,4 +41,11 @@ public class RiskAssessment {
     private LocalDateTime dateSigned;
     private boolean approved;
 
+    @OneToMany
+    private List<PhysicalHazardCard> physicalHazardCards;
+    @OneToMany
+    private List<ChemicalHazardCard> chemicalHazardCards;
+    @OneToMany
+    private List<BiologicalHazardCard> biologicalHazardCards;
+
 }

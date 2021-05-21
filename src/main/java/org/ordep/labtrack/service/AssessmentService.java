@@ -22,4 +22,19 @@ public class AssessmentService {
         LabTrackUser currentUser = userService.findUser(userID);
         return riskAssessmentRepository.findRiskAssessmentByAuthor(currentUser);
     }
+
+    public RiskAssessment newRiskAssessment(RiskAssessment input, UUID userID) {
+
+        var riskAssessmentID = UUID.randomUUID();
+        LabTrackUser author = userService.findUser(userID);
+
+        var riskAssessment = new RiskAssessment();
+        riskAssessment.setAssessmentId(riskAssessmentID);
+        riskAssessment.setAssessmentName(input.getAssessmentName());
+        riskAssessment.setAuthor(author);
+        riskAssessment.setReaction(input.getReaction());
+        riskAssessment.setRisks(input.getRisks());
+
+        return riskAssessment;
+    }
 }

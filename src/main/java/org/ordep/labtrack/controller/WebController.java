@@ -3,12 +3,13 @@ package org.ordep.labtrack.controller;
 import org.ordep.labtrack.model.BiologicalHazardCard;
 import org.ordep.labtrack.model.ChemicalHazardCard;
 import org.ordep.labtrack.model.PhysicalHazardCard;
+import org.ordep.labtrack.model.RiskAssessment;
+import org.ordep.labtrack.model.dto.RiskAssessmentDTO;
 import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.ordep.labtrack.service.CardService;
 import org.ordep.labtrack.service.StatementService;
 import org.ordep.labtrack.service.UserService;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -96,5 +97,20 @@ public class WebController {
         System.out.println(chemicalHazardCard);
         model.addAttribute(chemicalHazardCard);
         return "home";
+    }
+
+    @GetMapping("/assessment/risk/new")
+    public String newRiskAssessment(Model model) {
+        model.addAttribute("riskAssessment", new RiskAssessmentDTO());
+        model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
+        model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
+        model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
+        return "assessments/newRiskAssessment";
+    }
+
+    @PostMapping("/api/assessment/risk/new")
+    public String submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, Model model) {
+        System.out.println(riskAssessment.toString());
+        return "/home";
     }
 }
