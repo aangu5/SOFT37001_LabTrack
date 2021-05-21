@@ -23,6 +23,10 @@ public class AssessmentService {
         return riskAssessmentRepository.findRiskAssessmentByAuthor(currentUser);
     }
 
+    public List<RiskAssessment> getAllRiskAssessments(){
+        return riskAssessmentRepository.findAll();
+    }
+
     public RiskAssessment newRiskAssessment(RiskAssessment input, UUID userID) {
 
         var riskAssessmentID = UUID.randomUUID();

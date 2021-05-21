@@ -7,6 +7,7 @@ import org.ordep.labtrack.model.RiskAssessment;
 import org.ordep.labtrack.model.dto.RiskAssessmentDTO;
 import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
+import org.ordep.labtrack.service.AssessmentService;
 import org.ordep.labtrack.service.CardService;
 import org.ordep.labtrack.service.StatementService;
 import org.ordep.labtrack.service.UserService;
@@ -22,11 +23,13 @@ public class WebController {
     private final CardService cardService;
     private final StatementService statementService;
     private final UserService userService;
+    private final AssessmentService assessmentService;
 
-    public WebController(CardService cardService, StatementService statementService, UserService userService) {
+    public WebController(CardService cardService, StatementService statementService, UserService userService, AssessmentService assessmentService) {
         this.cardService = cardService;
         this.statementService = statementService;
         this.userService = userService;
+        this.assessmentService = assessmentService;
     }
 
     @GetMapping("/home")
@@ -61,13 +64,25 @@ public class WebController {
     @GetMapping("/cards")
     public String allCards(Model model) {
         model.addAttribute("allCards", cardService.getAllCards());
-        return "cards/allcards";
+        return "cards/allCards";
     }
 
     @GetMapping("/cards/chemical")
     public String chemicalCards(Model model) {
         model.addAttribute("chemicalCards", cardService.findAllChemicalHazardCardsForUser(userService.getCurrentUser()));
         return "cards/chemicals";
+    }
+
+    @GetMapping("/assessments")
+    public String allAssessments(Model model) {
+        model.addAttribute("allAssessments", assessmentService.getAllRiskAssessments());
+        return "assessments/allAssessments";
+    }
+
+    @GetMapping("/assessments/risk")
+    public String riskAssessments(Model model) {
+        model.addAttribute("riskAssessments", assessmentService.getAllRiskAssessments());
+        return "assessments/risk";
     }
 
     @GetMapping("/card/{type}/new")
@@ -106,11 +121,5 @@ public class WebController {
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
         return "assessments/newRiskAssessment";
-    }
-
-    @PostMapping("/api/assessment/risk/new")
-    public String submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, Model model) {
-        System.out.println(riskAssessment.toString());
-        return "/home";
     }
 }

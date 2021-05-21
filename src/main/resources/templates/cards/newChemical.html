@@ -30,14 +30,13 @@
             font-family: montserrat, sans-serif;
             font-weight: bold;
         }
-
         td.data {
-            text-align: left;
-            background-color: #E0E0E0;
-            border-radius: 6px;
-            -moz-border-radius: 6px;
-            width: 100%;
-            padding-left: 15px;
+          text-align: left;
+          background-color: #E0E0E0;
+          border-radius: 6px;
+          -moz-border-radius: 6px;
+          width: 100%;
+          padding-left: 15px;
           padding-top: 0px;
           padding:0px;
           vertical-align: top;
@@ -58,7 +57,7 @@
             margin: 10px;
         }
 
-        input, select.table{
+        input[type="text"], select.table{
           border: 0px;
           background-color: rgba(0,0,0,0);
           height:100%;
@@ -75,7 +74,33 @@
           font-weight: bold;
           font-size: 16px;
         }
-
+        div.unselected {
+          border: 5px solid rgba(255,255,255,0);
+          border-radius: 12px;
+          -moz-border-radius: 12px;
+          margin: 10px;
+          padding: 10px;
+        }
+        div.selected {
+          border: 5px solid #00766C;
+          border-radius: 12px;
+          -moz-border-radius: 12px;
+          margin: 10px;
+          padding: 10px;
+        }
+        table {
+          background-color:white;
+          height: 1px;
+          width: calc(100% - 30px);
+          font-family: montserrat,sans-serif;
+          font-weight: bold;
+          margin: 0px;
+          border-spacing: 20px 20px;
+          border-radius:6px;
+          -moz-border-radius:6px;
+          align-content:flex-start;
+          margin-right: -5px;
+        }
 
     </style>
 </head>
@@ -83,48 +108,47 @@
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
-<form:form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
+<form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
       <div style="width: 100%"><h1>New Chemical Hazard Card</h1></div>
-      <div style="width: 50%">
-        <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+      <div style="width: 100%">
+        <table>
           <tr>
             <th>Chemical Name</th>
             <td class="data">
               <input th:field="*{cardName}" type="text">
             </td>
           </tr>
-          <tr>
-            <th>CAS</th>
-            <td class="data">
-              <input th:field="*{cas}" type="text">
-            </td>
-          </tr>
-          <tr>
-            <th>Signal Word</th>
-            <td class="data">
-              <select style="width:100%" class="table" th:field="*{signalWord}">
-                <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
-              </select>
-            </td>
-          </tr>
         </table>
+        </div>
+        <div style="width: 50%">
+          <table>
+            <tr>
+                <th>CAS</th>
+                <td class="data">
+                  <input th:field="*{cas}" type="text">
+                </td>
+            </tr>
+          </table>
+        </div>
+        <div style="width: 50%">
+          <table>
+            <tr>
+              <th>Signal Word</th>
+              <td class="data">
+                <select style="width:100%" class="table" th:field="*{signalWord}">
+                  <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
+                </select>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
-      <div style="width: 50%">
-        <div style="background-color: white; height:50%; align-items: center; display: flex; justify-content: center">
-          <!-- hazard thing image here -->
-          <img alt="Chemical Hazard Card" src="/images/ChemicalHazardCard.png">
-        </div>
-        <div style="background-color: white; height:50%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+      <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
           <!-- images in here -->
-          <select id="pictogramSelection" multiple="multiple" style="width: 100%">
-            <option th:each="pictogram : ${pictograms}" th:text="${pictogram.name()}"></option>
-            <!--                        <img th:alt="${pictogram.name()}"-->
-            <!--                             th:src="@{${'/images/' + pictogram.name() +'.png'}}"-->
-            <!--                             width="100">-->
-          </select>
-        </div>
+        <div class="unselected" th:each="pictogram : ${pictograms}" th:id="${pictogram.name()}" th:attr="onclick=|changeSelectState('${pictogram.name()}')|"><img  th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"><h3 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/></div>
+
       </div>
       <div style="width: 100%">
         <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
@@ -134,29 +158,41 @@
             </th>
           </tr>
           <tr>
-            <select id="hazardStatements" multiple="multiple" style="width: 100%">
-              <option th:each="statement : ${hazardStatements}"
-                      th:text="${statement.getStatementName()}"></option>
-            </select>
+            <td>
+                  <input id="hazardStatements" type="checkbox" th:field="*{hazardStatements}" th:each="statement : ${hazardStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+          </td>
           </tr>
 
           <tr>
             <th>Precautionary Statements</th>
           </tr>
           <tr>
-            <select id="precautionaryStatements" multiple="multiple" style="width: 100%">
-              <option th:each="statement : ${precautionaryStatements}"
-                      th:text="${statement.getStatementName()}"></option>
-            </select>
+            <td>
+                <input id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:each="statement : ${precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+            </td>
           </tr>
         </table>
       </div>
     </div>
+    <div style="width: 100%; text-align:center; align-content: center">
+      <input type="submit" value="Submit">
+    </div>
   </div>
-  <div style="width: 100%; text-align:center; align-content: center">
-    <input type="submit" value="Submit">
-  </div>
-</form:form>
+</form>
 
 </body>
 </html>
+
+<script>
+  var selected = []
+  function changeSelectState(id)
+  {
+    if (selected.includes(id)){
+      selected.pop(id)
+      document.getElementById(id).setAttribute("class", "unselected");
+    } else {
+      selected.push(id)
+      document.getElementById(id).setAttribute("class", "selected");
+    }
+  }
+</script>

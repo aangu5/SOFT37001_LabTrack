@@ -11,11 +11,9 @@ import org.ordep.labtrack.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -68,5 +66,13 @@ public class APIController {
     @GetMapping("/api/risks")
     public List<RiskAssessment> getRisks() {
         return riskAssessmentRepository.findAll();
+    }
+
+    @PostMapping("/api/assessment/risk/new")
+    public String submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, Model model) {
+        System.out.println(riskAssessment.toString());
+        riskAssessment.setAssessmentId(UUID.randomUUID());
+        riskAssessmentRepository.save(riskAssessment);
+        return "/home";
     }
 }

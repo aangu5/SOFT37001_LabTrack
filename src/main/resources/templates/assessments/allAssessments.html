@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hazard Cards</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chemical Hazard Card</title>
+    <style>
+        ul {
+            font-size: 24px;
+            font-family: montserrat, sans-serif;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin: 0 0 20px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+
+        h1, h2 {
+            font-family: montserrat, sans-serif;
+        }
+
+        p {
+            font-family: montserrat, sans-serif;
+            font-weight: bold;
+        }
+
+        th {
+            background-color:#64D8CB;
+            padding: 8px;
+        }
+        td {
+            background-color: #E0E0E0;
+            padding: 8px;
+        }
+        div.button {
+            height: 50px;
+            width: 400px;
+            margin: 17px;
+            background-color:#64D8CB;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        img.pictogram {
+            height: 100px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center;">
+        <div style="width: 100%"><h1>Assessments</h1></div>
+        <div style="width: 80%; display: flex; justify-content: space-between;flex-wrap: wrap;">
+            <a href="/cards/chemical"><div class="button"><h2>View Chemical Hazard Cards</h2></div></a>
+            <a href="/cards/biological"><div class="button"><h2>View Biological Hazard Cards</h2></div></a>
+            <a href="/cards/physical"><div class="button"><h2>View Physical Hazard Cards</h2></div></a>
+        </div>
+        <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
+            <tr style="font-size: 18px;">
+                <th>Type</th>
+                <th>Name</th>
+                <th>Date Created</th>
+                <th>Author</th>
+            </tr>
+            <tr th:each="assessment : ${allAssessments}">
+                <td th:text="${assessment.class.simpleName}">Type</td>
+                <td><a th:text="${assessment.cardName}" th:href="@{/assessment/{type}(id=${assessment.assessmentId}, type=${assessment.class.simpleName})}">Assessment Name</a></td>
+                <td th:text="${assessment.createdDate}">Date Created</td>
+                <td th:text="${assessment.author.displayName}">Author</td>
+
+            </tr>
+        </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
