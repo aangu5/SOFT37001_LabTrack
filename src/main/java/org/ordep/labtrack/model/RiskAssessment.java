@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -20,8 +17,10 @@ public class RiskAssessment {
     @Id
     private UUID assessmentId;
     private String assessmentName;
-    private UUID authorId;
-    private UUID approverId;
+    @OneToOne
+    private LabTrackUser author;
+    @OneToOne
+    private LabTrackUser approver;
     private String reaction;
     @OneToMany
     private List<Pictogram> pictograms;

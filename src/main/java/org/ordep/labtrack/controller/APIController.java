@@ -1,8 +1,10 @@
 package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.model.AuthenticationEntity;
 import org.ordep.labtrack.model.LabTrackUser;
+import org.ordep.labtrack.model.RiskAssessment;
 import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.service.AuthenticationService;
 import org.ordep.labtrack.service.UserService;
@@ -10,12 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 import java.util.UUID;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,12 +28,14 @@ public class APIController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final RiskAssessmentRepository riskAssessmentRepository;
 
     public APIController(AuthenticationService authenticationService, UserService userService,
-                         PasswordEncoder passwordEncoder) {
+                         PasswordEncoder passwordEncoder, RiskAssessmentRepository riskAssessmentRepository) {
         this.authenticationService = authenticationService;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.riskAssessmentRepository = riskAssessmentRepository;
     }
 
     @PostMapping(value = "/api/register", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
@@ -57,5 +63,10 @@ public class APIController {
         userService.registerUser(labTrackUser);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/api/risks")
+    public List<RiskAssessment> getRisks() {
+        return riskAssessmentRepository.findAll();
     }
 }

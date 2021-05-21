@@ -38,6 +38,9 @@
             -moz-border-radius: 6px;
             width: 100%;
             padding-left: 15px;
+          padding-top: 0px;
+          padding:0px;
+          vertical-align: top;
         }
 
         th {
@@ -54,6 +57,26 @@
             height: 100px;
             margin: 10px;
         }
+
+        input, select.table{
+          border: 0px;
+          background-color: rgba(0,0,0,0);
+          height:100%;
+          width: calc(100% - 10px);
+          border-radius:20px;
+          padding: 0px;
+          padding-left: 10px;
+          font-family: montserrat, sans-serif;
+          font-weight: bold;
+          font-size: 16px;
+        }
+
+        option.table{
+          font-weight: bold;
+          font-size: 16px;
+        }
+
+
     </style>
 </head>
 <body style="margin: 0px">
@@ -63,9 +86,9 @@
 <form:form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-      <div style="width: 100%"><h1>Ethanol</h1></div>
+      <div style="width: 100%"><h1>New Chemical Hazard Card</h1></div>
       <div style="width: 50%">
-        <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+        <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
           <tr>
             <th>Chemical Name</th>
             <td class="data">
@@ -81,8 +104,8 @@
           <tr>
             <th>Signal Word</th>
             <td class="data">
-              <select th:field="*{signalWord}">
-                <option th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
+              <select style="width:100%" class="table" th:field="*{signalWord}">
+                <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
               </select>
             </td>
           </tr>
