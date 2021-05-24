@@ -68,9 +68,14 @@
 <div th:replace="components/sidebar">Sidebar</div>
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
-  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-between;">
-    <h1 style="margin: 17px; margin-bottom: 0px; ">Risk Assessments</h1>
-    <a href="/assessment/risk/new"><div class="button" style="margin-bottom: 0px;"><h2>New Risk Assessment</h2></div></a>
+  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+    <div style="width:100%">
+      <div class="button" style="margin-bottom: 0px; margin-left:auto; margin-right: 17px ">
+        <a href="/assessment/risk/new">
+          <h2>New Risk Assessment</h2>
+        </a>
+      </div>
+    </div>
     <table th:if="${!riskAssessments.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
         <th>Type</th>

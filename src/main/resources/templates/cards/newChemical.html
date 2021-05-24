@@ -74,14 +74,14 @@
           font-weight: bold;
           font-size: 16px;
         }
-        div.unselected {
+        li.unselected {
           border: 5px solid rgba(255,255,255,0);
           border-radius: 12px;
           -moz-border-radius: 12px;
           margin: 10px;
           padding: 10px;
         }
-        div.selected {
+        li.selected {
           border: 5px solid #00766C;
           border-radius: 12px;
           -moz-border-radius: 12px;
@@ -110,6 +110,16 @@
 
 <form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+      <!-- images in here -->
+      <ul>
+        <li class="unselected" th:each="pictogram : ${pictogramTypes}" th:id="${pictogram.name()}"  th:attr="onclick=|changeSelectState('${pictogram.name()}')|">
+          <div th:field="*{pictograms}" th:value="${pictogram}">
+            <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100">
+            <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+          </div>
+        </li>
+      </ul>
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
       <div style="width: 100%"><h1>New Chemical Hazard Card</h1></div>
       <div style="width: 100%">
@@ -145,9 +155,6 @@
           </table>
         </div>
       </div>
-      <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
-          <!-- images in here -->
-        <div class="unselected" th:each="pictogram : ${pictograms}" th:id="${pictogram.name()}" th:attr="onclick=|changeSelectState('${pictogram.name()}')|"><img  th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"><h3 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/></div>
 
       </div>
       <div style="width: 100%">
@@ -185,8 +192,7 @@
 
 <script>
   var selected = []
-  function changeSelectState(id)
-  {
+  function changeSelectState(id) {
     if (selected.includes(id)){
       selected.pop(id)
       document.getElementById(id).setAttribute("class", "unselected");
@@ -194,5 +200,9 @@
       selected.push(id)
       document.getElementById(id).setAttribute("class", "selected");
     }
+  }
+
+  function submitForm() {
+
   }
 </script>

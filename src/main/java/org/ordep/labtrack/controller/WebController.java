@@ -35,26 +35,34 @@ public class WebController {
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("allCards", cardService.getAllCards());
+        model.addAttribute("title","Overview");
         return "home";
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("title","Welcome");
         return "login";
     }
 
     @GetMapping("/card/{type}")
     public String chemical(@RequestParam UUID id, @PathVariable String type, Model model) {
         if (type.equals("ChemicalHazardCard")) {
-            model.addAttribute("chemicalHazardCard", cardService.findOneChemicalHazardCard(id));
+            ChemicalHazardCard chemicalHazardCard = cardService.findOneChemicalHazardCard(id);
+            model.addAttribute("chemicalHazardCard", chemicalHazardCard);
+            model.addAttribute("title",chemicalHazardCard.getCardName());
             return "cards/chemical";
         }
         if (type.equals("PhysicalHazardCard")) {
-            model.addAttribute("physicalHazardCard", cardService.findOnePhysicalHazardCard(id));
+            PhysicalHazardCard physicalHazardCard = cardService.findOnePhysicalHazardCard(id);
+            model.addAttribute("physicalHazardCard", physicalHazardCard);
+            model.addAttribute("title",physicalHazardCard.getCardName());
             return "cards/physical";
         }
         if (type.equals("BiologicalHazardCard")) {
+            BiologicalHazardCard biologicalHazardCard = cardService.findOneBiologicalHazardCard(id);
             model.addAttribute("biologicalHazardCard", cardService.findOneBiologicalHazardCard(id));
+            model.addAttribute("title",biologicalHazardCard.getCardName());
             return "cards/biological";
         }
 
@@ -64,24 +72,28 @@ public class WebController {
     @GetMapping("/cards")
     public String allCards(Model model) {
         model.addAttribute("allCards", cardService.getAllCards());
+        model.addAttribute("title","All Cards");
         return "cards/allCards";
     }
 
     @GetMapping("/cards/chemical")
     public String chemicalCards(Model model) {
         model.addAttribute("chemicalCards", cardService.findAllChemicalHazardCardsForUser(userService.getCurrentUser()));
+        model.addAttribute("title","Chemical Hazard Cards");
         return "cards/chemicals";
     }
 
     @GetMapping("/assessments")
     public String allAssessments(Model model) {
         model.addAttribute("allAssessments", assessmentService.getAllRiskAssessments());
+        model.addAttribute("title","All Assessments");
         return "assessments/allAssessments";
     }
 
     @GetMapping("/assessments/risk")
     public String riskAssessments(Model model) {
         model.addAttribute("riskAssessments", assessmentService.getAllRiskAssessments());
+        model.addAttribute("title","Risk Assessments");
         return "assessments/risk";
     }
 
@@ -92,15 +104,18 @@ public class WebController {
             model.addAttribute("signalWords", SignalWord.values());
             model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
             model.addAttribute("precautionaryStatements", statementService.getAllPrecautionaryStatements());
-            model.addAttribute("pictograms", PictogramType.values());
+            model.addAttribute("pictogramTypes", PictogramType.values());
+            model.addAttribute("title","New Chemical Hazard Card");
             return "cards/newChemical";
         }
         if (type.equals("PhysicalHazardCard")) {
             model.addAttribute("physicalHazardCard", new PhysicalHazardCard());
+            model.addAttribute("title","New Physical Hazard Card");
             return "cards/newPhysical";
         }
         if (type.equals("BiologicalHazardCard")) {
             model.addAttribute("biologicalHazardCard", new BiologicalHazardCard());
+            model.addAttribute("title","New Biological Hazard Card");
             return "cards/newBiological";
         }
 
@@ -120,6 +135,7 @@ public class WebController {
         model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
+        model.addAttribute("title","New Risk Assessment");
         return "assessments/newRiskAssessment";
     }
 }

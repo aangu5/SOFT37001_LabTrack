@@ -4,12 +4,12 @@ public enum PictogramType {
     GHS01("Explosive"),
     GHS02("Flammable"),
     GHS03("Oxidising"),
-    GHS04("Fl4mmable"),
-    GHS05("Fl5mmable"),
-    GHS06("Fl6mmable"),
-    GHS07("Fl7mmable"),
-    GHS08("Fl8mmable"),
-    GHS09("Fl9mmable");
+    GHS04("Gas"),
+    GHS05("Corrosive"),
+    GHS06("Toxic"),
+    GHS07("Harmful"),
+    GHS08("Health Risk"),
+    GHS09("Environment");
 
     private final String displayName;
 
