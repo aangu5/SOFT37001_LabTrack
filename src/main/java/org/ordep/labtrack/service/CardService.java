@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,11 +42,10 @@ public class CardService {
 
     // Chemical Hazard Cards
 
-    public ChemicalHazardCard newChemicalHazardCard(String cardName, UUID userId, String cas, List<UUID> pictogramIDs,
+    public ChemicalHazardCard newChemicalHazardCard(String cardName, UUID userId, String cas, List<PictogramType> pictograms,
                                                     List<UUID> hazardStatementIDs,
                                                     List<UUID> precautionaryStatementIDs, List<String> synonyms, SignalWord signalWord) {
 
-        List<Pictogram> pictograms = pictogramRepository.findByPictogramIdIn(pictogramIDs);
         List<HazardStatement> hazardStatements = statementService.findHazardStatements(hazardStatementIDs);
         List<PrecautionaryStatement> precautionaryStatements =
                 statementService.findPrecautionaryStatements(precautionaryStatementIDs);
@@ -89,11 +89,10 @@ public class CardService {
 
     // Physical Hazard Cards
 
-    public PhysicalHazardCard newPhysicalHazardCard(String cardName, UUID userId, List<UUID> pictogramIds,
+    public PhysicalHazardCard newPhysicalHazardCard(String cardName, UUID userId, List<PictogramType> pictograms,
                                                     List<UUID> symIds,
                                                     List<UUID> hazIds, List<UUID> manIds, List<UUID> sopIds) {
 
-        List<Pictogram> pictograms = pictogramRepository.findByPictogramIdIn(pictogramIds);
         List<Sym> syms = symRepository.findByDataIdIn(symIds);
         List<Haz> hazs = hazRepository.findAllByDataIdIn(hazIds);
         List<Man> men = manRepository.findAllByDataIdIn(manIds);
@@ -137,11 +136,10 @@ public class CardService {
 
     // Biology Hazard Cards
 
-    public BiologicalHazardCard newBiologicalHazardCard(String cardName, UUID userId, List<UUID> pictogramIds, UUID symId,
+    public BiologicalHazardCard newBiologicalHazardCard(String cardName, UUID userId, List<PictogramType> pictograms, UUID symId,
                                                         UUID manId, List<UUID> sopIds, String cat, String dose, String period,
                                                         String state) {
 
-        List<Pictogram> pictograms = pictogramRepository.findByPictogramIdIn(pictogramIds);
         var sym = symRepository.findByDataId(symId);
         var man = manRepository.findByDataId(manId);
         List<Sop> sops = sopRepository.findAllByDataIdIn(sopIds);

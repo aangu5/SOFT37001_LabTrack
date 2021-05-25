@@ -82,7 +82,7 @@ class CardServiceTest {
         List<String> synonmys = Arrays.asList("synonym 1", "synonym 2");
 
         ChemicalHazardCard card = cardService.newChemicalHazardCard("name", userID, "cas",
-                Collections.singletonList(pictogramID),
+                Collections.singletonList(PictogramType.GHS01),
                 Collections.singletonList(uuid1), Collections.singletonList(uuid2), synonmys, SignalWord.DANGER
         );
 
@@ -173,7 +173,7 @@ class CardServiceTest {
         when(userService.findUser(any())).thenReturn(user);
 
         PhysicalHazardCard card = cardService.newPhysicalHazardCard("name", userID,
-                Collections.singletonList(pictogramID),
+                Collections.singletonList(PictogramType.GHS01),
                 Collections.singletonList(uuid1), Collections.singletonList(uuid2), Collections.singletonList(uuid3),
                 Collections.singletonList(uuid4));
 
@@ -258,7 +258,7 @@ class CardServiceTest {
         when(userService.findUser(any())).thenReturn(user);
 
         BiologicalHazardCard card = cardService.newBiologicalHazardCard("name", userID,
-                Collections.singletonList(pictogramID),
+                Collections.singletonList(PictogramType.GHS01),
                 uuid1, uuid2, Collections.singletonList(uuid3), "cat", "dose", "period", "state");
 
         verify(biologicalHazardCardRepository, times(1)).save(any());

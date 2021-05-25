@@ -22,7 +22,7 @@
             font-weight: bold;
         }
 
-        h1 {
+        h1, h2 {
             font-family: montserrat, sans-serif;
         }
 
@@ -74,19 +74,36 @@
           font-weight: bold;
           font-size: 16px;
         }
-        li.unselected {
-          border: 5px solid rgba(255,255,255,0);
-          border-radius: 12px;
-          -moz-border-radius: 12px;
-          margin: 10px;
-          padding: 10px;
-        }
-        li.selected {
+        div.unselected {
+           border: 5px solid rgba(255,255,255,0);
+           border-radius: 12px;
+           -moz-border-radius: 12px;
+           margin: 10px;
+           padding: 10px;
+         }
+        div.selected {
           border: 5px solid #00766C;
           border-radius: 12px;
           -moz-border-radius: 12px;
           margin: 10px;
           padding: 10px;
+        }
+        label.pictogram{
+          margin: 10px;
+          padding: 10px;
+          border-radius: 12px;
+          -moz-border-radius: 12px;
+          display:flex;
+          justify-content: center;
+          flex-direction:column;
+          align-content: center;
+          text-align: center;
+        }
+        .pictogramBox {
+          float: left;
+          margin: 0 auto;
+          width: 100%;
+          margin-top: 10px;
         }
         table {
           background-color:white;
@@ -111,23 +128,13 @@
 <form action="#" method="POST" th:action="@{/card/new/chemical}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
-      <!-- images in here -->
-      <ul>
-        <li class="unselected" th:each="pictogram : ${pictogramTypes}" th:id="${pictogram.name()}"  th:attr="onclick=|changeSelectState('${pictogram.name()}')|">
-          <div th:field="*{pictograms}" th:value="${pictogram}">
-            <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100">
-            <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
-          </div>
-        </li>
-      </ul>
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-      <div style="width: 100%"><h1>New Chemical Hazard Card</h1></div>
       <div style="width: 100%">
         <table>
           <tr>
-            <th>Chemical Name</th>
+            <th>Chemical Name*</th>
             <td class="data">
-              <input th:field="*{cardName}" type="text">
+              <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
             </td>
           </tr>
         </table>
@@ -135,9 +142,9 @@
         <div style="width: 50%">
           <table>
             <tr>
-                <th>CAS</th>
+                <th>CAS*</th>
                 <td class="data">
-                  <input th:field="*{cas}" type="text">
+                  <input th:field="*{cas}" type="text" required pattern="\b[1-9]{1}[0-9]{1,5}-\d{2}-\d\b">
                 </td>
             </tr>
           </table>
@@ -145,17 +152,22 @@
         <div style="width: 50%">
           <table>
             <tr>
-              <th>Signal Word</th>
+              <th>Signal Word*</th>
               <td class="data">
-                <select style="width:100%" class="table" th:field="*{signalWord}">
-                  <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"></option>
+                <select style="width:100%" class="table" th:field="*{signalWord}" required>
+                  <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"</option>
                 </select>
               </td>
             </tr>
           </table>
         </div>
       </div>
-
+      <!-- images in here -->
+      <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
+        <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"/>
+        <input class="pictogramBox" type="checkbox" th:field="*{pictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
+        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+      </label>
       </div>
       <div style="width: 100%">
         <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
@@ -164,45 +176,33 @@
               Statements
             </th>
           </tr>
-          <tr>
+          <tr style="float:left; width: 100%" th:each="statement : ${hazardStatements}">
             <td>
-                  <input id="hazardStatements" type="checkbox" th:field="*{hazardStatements}" th:each="statement : ${hazardStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
-          </td>
+                <input id="hazardStatements" type="checkbox" th:field="*{hazardStatements}"  th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+              </td>
           </tr>
-
           <tr>
             <th>Precautionary Statements</th>
           </tr>
-          <tr>
+          <tr th:each="statement : ${precautionaryStatements}" style="float:left; width: 100%">
             <td>
-                <input id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:each="statement : ${precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+              <input id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
             </td>
           </tr>
         </table>
       </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
+      <input style="display:none" id="submit" type="submit" value="Submit">
+      <label for="submit">
+        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+          <h1 style="padding:10px; color:white">Submit</h1>
+        </div>
+      </label>
     </div>
-    <div style="width: 100%; text-align:center; align-content: center">
-      <input type="submit" value="Submit">
     </div>
+
   </div>
 </form>
 
 </body>
 </html>
-
-<script>
-  var selected = []
-  function changeSelectState(id) {
-    if (selected.includes(id)){
-      selected.pop(id)
-      document.getElementById(id).setAttribute("class", "unselected");
-    } else {
-      selected.push(id)
-      document.getElementById(id).setAttribute("class", "selected");
-    }
-  }
-
-  function submitForm() {
-
-  }
-</script>

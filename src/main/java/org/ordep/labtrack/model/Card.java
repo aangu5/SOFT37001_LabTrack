@@ -2,6 +2,7 @@ package org.ordep.labtrack.model;
 
 import lombok.Data;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
+import org.ordep.labtrack.model.enums.PictogramType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,8 +17,8 @@ public abstract class Card {
     private String cardName;
     @ElementCollection
     private List<String> synonyms;
-    @OneToMany
-    private List<Pictogram> pictograms;
+    @ElementCollection
+    private List<PictogramType> pictograms;
     private boolean status;
     private LocalDateTime dateCreated;
     @ManyToOne
