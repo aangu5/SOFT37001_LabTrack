@@ -67,22 +67,26 @@ class CardServiceTest {
 
         HazardStatement hazardStatement = new HazardStatement(uuid1, "name", "state");
         List<HazardStatement> hazardStatements = Collections.singletonList(hazardStatement);
-        when(statementService.findHazardStatements(any())).thenReturn(hazardStatements);
 
         PrecautionaryStatement precautionaryStatement = new PrecautionaryStatement(uuid2, "name",
                 "state");
         List<PrecautionaryStatement> precautionaryStatements = Collections.singletonList(precautionaryStatement);
-        when(statementService.findPrecautionaryStatements(any())).thenReturn(precautionaryStatements);
 
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
-        when(userService.findUser(any())).thenReturn(user);
+        when(userService.getCurrentUser()).thenReturn(user);
 
-        List<String> synonmys = Arrays.asList("synonym 1", "synonym 2");
+        List<String> synonyms = Arrays.asList("synonym 1", "synonym 2");
 
-        ChemicalHazardCard card = cardService.newChemicalHazardCard("name", userID, "cas",
-                Collections.singletonList(PictogramType.GHS01),
-                Collections.singletonList(uuid1), Collections.singletonList(uuid2), synonmys, SignalWord.DANGER
-        );
+        var input = new ChemicalHazardCard();
+        input.setCardName("name");
+        input.setCas("cas");
+        input.setPictograms(pictograms);
+        input.setHazardStatements(hazardStatements);
+        input.setPrecautionaryStatements(precautionaryStatements);
+        input.setSynonyms(synonyms);
+        input.setSignalWord(SignalWord.DANGER);
+
+        ChemicalHazardCard card = cardService.newChemicalHazardCard(input);
 
         verify(chemicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
@@ -151,27 +155,29 @@ class CardServiceTest {
 
         Sym sym = new Sym(uuid1, "name", "state");
         List<Sym> syms = Collections.singletonList(sym);
-        when(symRepository.findByDataIdIn(any())).thenReturn(syms);
 
         Haz haz = new Haz(uuid2, "name", "state");
         List<Haz> hazs = Collections.singletonList(haz);
-        when(hazRepository.findAllByDataIdIn(any())).thenReturn(hazs);
 
         Man man = new Man(uuid3, "name", "state");
         List<Man> men = Collections.singletonList(man);
-        when(manRepository.findAllByDataIdIn(any())).thenReturn(men);
 
         Sop sop = new Sop(uuid4, "name", "state");
         List<Sop> sops = Collections.singletonList(sop);
-        when(sopRepository.findAllByDataIdIn(any())).thenReturn(sops);
 
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
-        when(userService.findUser(any())).thenReturn(user);
+        when(userService.getCurrentUser()).thenReturn(user);
 
-        PhysicalHazardCard card = cardService.newPhysicalHazardCard("name", userID,
-                Collections.singletonList(PictogramType.GHS01),
-                Collections.singletonList(uuid1), Collections.singletonList(uuid2), Collections.singletonList(uuid3),
-                Collections.singletonList(uuid4));
+        var input = new PhysicalHazardCard();
+        input.setCardName("name");
+        input.setPictograms(pictograms);
+        input.setSyms(syms);
+        input.setHazs(hazs);
+        input.setMen(men);
+        input.setSops(sops);
+        input.setAuthor(user);
+
+        PhysicalHazardCard card = cardService.newPhysicalHazardCard(input);
 
         verify(physicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
@@ -239,21 +245,24 @@ class CardServiceTest {
         List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
 
         Sym sym = new Sym(uuid1, "name", "state");
-        when(symRepository.findByDataId(any())).thenReturn(sym);
 
         Man man = new Man(uuid2, "name", "state");
-        when(manRepository.findByDataId(any())).thenReturn(man);
 
         Sop sop = new Sop(uuid3, "name", "state");
         List<Sop> sops = Collections.singletonList(sop);
-        when(sopRepository.findAllByDataIdIn(any())).thenReturn(sops);
 
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
-        when(userService.findUser(any())).thenReturn(user);
+        when(userService.getCurrentUser()).thenReturn(user);
 
-        BiologicalHazardCard card = cardService.newBiologicalHazardCard("name", userID,
-                Collections.singletonList(PictogramType.GHS01),
-                uuid1, uuid2, Collections.singletonList(uuid3), "cat", "dose", "period", "state");
+        var input = new BiologicalHazardCard();
+        input.setCardName("name");
+        input.setPictograms(pictograms);
+        input.setSym(sym);
+        input.setMan(man);
+        input.setSops(sops);
+        input.setAuthor(user);
+
+        BiologicalHazardCard card = cardService.newBiologicalHazardCard(input);
 
         verify(biologicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());

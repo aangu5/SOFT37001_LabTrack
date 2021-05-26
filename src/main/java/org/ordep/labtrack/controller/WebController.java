@@ -1,9 +1,10 @@
 package org.ordep.labtrack.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.model.BiologicalHazardCard;
 import org.ordep.labtrack.model.ChemicalHazardCard;
+import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.PhysicalHazardCard;
-import org.ordep.labtrack.model.RiskAssessment;
 import org.ordep.labtrack.model.dto.RiskAssessmentDTO;
 import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Slf4j
 @Controller
 public class WebController {
 
@@ -48,19 +50,19 @@ public class WebController {
     @GetMapping("/card/{type}")
     public String chemical(@RequestParam UUID id, @PathVariable String type, Model model) {
         if (type.equals("ChemicalHazardCard")) {
-            ChemicalHazardCard chemicalHazardCard = cardService.findOneChemicalHazardCard(id);
+            var chemicalHazardCard = cardService.findOneChemicalHazardCard(id);
             model.addAttribute("chemicalHazardCard", chemicalHazardCard);
             model.addAttribute("title",chemicalHazardCard.getCardName());
             return "cards/chemical";
         }
         if (type.equals("PhysicalHazardCard")) {
-            PhysicalHazardCard physicalHazardCard = cardService.findOnePhysicalHazardCard(id);
+            var physicalHazardCard = cardService.findOnePhysicalHazardCard(id);
             model.addAttribute("physicalHazardCard", physicalHazardCard);
             model.addAttribute("title",physicalHazardCard.getCardName());
             return "cards/physical";
         }
         if (type.equals("BiologicalHazardCard")) {
-            BiologicalHazardCard biologicalHazardCard = cardService.findOneBiologicalHazardCard(id);
+            var biologicalHazardCard = cardService.findOneBiologicalHazardCard(id);
             model.addAttribute("biologicalHazardCard", cardService.findOneBiologicalHazardCard(id));
             model.addAttribute("title",biologicalHazardCard.getCardName());
             return "cards/biological";
@@ -78,7 +80,8 @@ public class WebController {
 
     @GetMapping("/cards/chemical")
     public String chemicalCards(Model model) {
-        model.addAttribute("chemicalCards", cardService.findAllChemicalHazardCardsForUser(userService.getCurrentUser()));
+        LabTrackUser user = userService.getCurrentUser();
+        model.addAttribute("chemicalCards", cardService.findAllChemicalHazardCardsForUser(user.getUserId()));
         model.addAttribute("title","Chemical Hazard Cards");
         return "cards/chemicals";
     }
@@ -124,7 +127,7 @@ public class WebController {
 
     @PostMapping("/card/new/chemical")
     public String newCard(@ModelAttribute ChemicalHazardCard chemicalHazardCard, Model model) {
-        System.out.println(chemicalHazardCard);
+        log.info("New Chemical Hazard Card: {}", chemicalHazardCard);
         model.addAttribute(chemicalHazardCard);
         return "home";
     }

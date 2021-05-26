@@ -36,13 +36,13 @@ public class UserService {
         userRepository.save(labTrackUser);
     }
 
-    public UUID getCurrentUser() {
+    public LabTrackUser getCurrentUser() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
         LabTrackUser user = userRepository.findByEmailAddress(name);
 
         if (user != null){
-            return user.getUserId();
+            return user;
         }
 
         throw new UserException("Error retrieving user from database: " + name);

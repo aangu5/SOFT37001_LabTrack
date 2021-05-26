@@ -70,7 +70,7 @@ public class APIController {
 
     @PostMapping("/api/assessment/risk/new")
     public String submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, Model model) {
-        System.out.println(riskAssessment.toString());
+        log.info("New Risk Assessment: {}", riskAssessment);
         riskAssessment.setAssessmentId(UUID.randomUUID());
         riskAssessmentRepository.save(riskAssessment);
         return "/home";

@@ -78,9 +78,9 @@ class LabTrackUserServiceTest {
 
         SecurityContextHolder.setContext(context);
 
-        UUID userId = userService.getCurrentUser();
+        LabTrackUser currentUser = userService.getCurrentUser();
 
-        assertEquals(expectedUserID, userId);
+        assertEquals(user, currentUser);
 
         verify(userRepository, times(1)).findByEmailAddress("Steve");
     }
