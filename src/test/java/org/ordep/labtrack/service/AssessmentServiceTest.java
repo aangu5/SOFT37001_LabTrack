@@ -57,10 +57,10 @@ class AssessmentServiceTest {
     @Test
     void newRiskAssessment() {
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
-        Mockito.when(userService.findUser(Mockito.any(UUID.class))).thenReturn(user);
+        Mockito.when(userService.getCurrentUser()).thenReturn(user);
 
         RiskAssessment riskAssessment = new RiskAssessment();
-        assertNotNull(assessmentService.newRiskAssessment(riskAssessment, userID));
+        assertNotNull(assessmentService.newRiskAssessment(riskAssessment));
     }
 
 }

@@ -27,10 +27,10 @@ public class AssessmentService {
         return riskAssessmentRepository.findAll();
     }
 
-    public RiskAssessment newRiskAssessment(RiskAssessment input, UUID userID) {
+    public RiskAssessment newRiskAssessment(RiskAssessment input) {
 
         var riskAssessmentID = UUID.randomUUID();
-        LabTrackUser author = userService.findUser(userID);
+        LabTrackUser author = userService.getCurrentUser();
 
         var riskAssessment = new RiskAssessment();
         riskAssessment.setAssessmentId(riskAssessmentID);
