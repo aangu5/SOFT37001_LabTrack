@@ -63,9 +63,7 @@ class CardServiceTest {
 
     @Test
     void newChemicalHazardCard() throws JsonProcessingException {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS01);
-        List<Pictogram> pictogramList = Collections.singletonList(pictogram);
-        when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
+        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
 
         HazardStatement hazardStatement = new HazardStatement(uuid1, "name", "state");
         List<HazardStatement> hazardStatements = Collections.singletonList(hazardStatement);
@@ -89,7 +87,7 @@ class CardServiceTest {
         verify(chemicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
         assertEquals("cas", card.getCas());
-        assertEquals(pictogramList, card.getPictograms());
+        assertEquals(pictograms, card.getPictograms());
         assertEquals(hazardStatements, card.getHazardStatements());
         assertEquals(precautionaryStatements, card.getPrecautionaryStatements());
         assertEquals(user, card.getAuthor());
@@ -149,9 +147,7 @@ class CardServiceTest {
 
     @Test
     void newPhysicalHazardCard() {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS01);
-        List<Pictogram> pictogramList = Collections.singletonList(pictogram);
-        when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
+        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
 
         Sym sym = new Sym(uuid1, "name", "state");
         List<Sym> syms = Collections.singletonList(sym);
@@ -179,7 +175,7 @@ class CardServiceTest {
 
         verify(physicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
-        assertEquals(pictogramList, card.getPictograms());
+        assertEquals(pictograms, card.getPictograms());
         assertEquals(user, card.getAuthor());
         assertEquals(syms, card.getSyms());
         assertEquals(hazs, card.getHazs());
@@ -240,9 +236,7 @@ class CardServiceTest {
 
     @Test
     void newBiologicalHazardCard() throws JsonProcessingException {
-        Pictogram pictogram = new Pictogram(pictogramID, "pictogram", PictogramType.GHS02);
-        List<Pictogram> pictogramList = Collections.singletonList(pictogram);
-        when(pictogramRepository.findByPictogramIdIn(any())).thenReturn(pictogramList);
+        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
 
         Sym sym = new Sym(uuid1, "name", "state");
         when(symRepository.findByDataId(any())).thenReturn(sym);
@@ -263,7 +257,7 @@ class CardServiceTest {
 
         verify(biologicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
-        assertEquals(pictogramList, card.getPictograms());
+        assertEquals(pictograms, card.getPictograms());
         assertEquals(user, card.getAuthor());
         assertEquals(sym, card.getSym());
         assertEquals(man, card.getMan());
