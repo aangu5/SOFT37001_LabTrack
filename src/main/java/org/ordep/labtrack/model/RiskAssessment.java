@@ -3,6 +3,7 @@ package org.ordep.labtrack.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ordep.labtrack.model.enums.PictogramType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,8 +23,8 @@ public class RiskAssessment {
     @OneToOne
     private LabTrackUser approver;
     private String reaction;
-    @OneToMany
-    private List<Pictogram> pictograms;
+    @ElementCollection
+    private List<PictogramType> pictograms;
     @OneToMany
     private List<HazardStatement> hazardStatements;
     @ElementCollection

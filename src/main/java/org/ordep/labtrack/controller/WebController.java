@@ -1,11 +1,7 @@
 package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.ordep.labtrack.model.BiologicalHazardCard;
-import org.ordep.labtrack.model.ChemicalHazardCard;
-import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.PhysicalHazardCard;
-import org.ordep.labtrack.model.dto.RiskAssessmentDTO;
+import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.PictogramType;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.ordep.labtrack.service.AssessmentService;
@@ -134,7 +130,7 @@ public class WebController {
 
     @GetMapping("/assessment/risk/new")
     public String newRiskAssessment(Model model) {
-        model.addAttribute("riskAssessment", new RiskAssessmentDTO());
+        model.addAttribute("riskAssessment", new RiskAssessment());
         model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());

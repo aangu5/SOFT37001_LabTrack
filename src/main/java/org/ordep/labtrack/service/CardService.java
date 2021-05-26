@@ -20,8 +20,6 @@ public class CardService {
     @Autowired
     private ChemicalHazardCardRepository chemicalHazardCardRepository;
     @Autowired
-    private PictogramRepository pictogramRepository;
-    @Autowired
     private StatementService statementService;
     @Autowired
     private UserService userService;

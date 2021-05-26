@@ -39,8 +39,6 @@ class CardServiceTest {
     @Mock
     private BiologicalHazardCardRepository biologicalHazardCardRepository;
     @Mock
-    private PictogramRepository pictogramRepository;
-    @Mock
     private StatementService statementService;
     @Mock
     private SymRepository symRepository;
