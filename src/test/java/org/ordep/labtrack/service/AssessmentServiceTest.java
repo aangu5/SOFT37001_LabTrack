@@ -20,6 +20,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Collections;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @ExtendWith(MockitoExtension.class)
 class AssessmentServiceTest {
 
@@ -43,4 +45,22 @@ class AssessmentServiceTest {
 
         Assertions.assertEquals(Collections.singletonList(riskAssessment), assessmentService.findAllRiskAssessmentsForUser(userID));
     }
+
+    @Test
+    void getAllRiskAssessments() {
+        RiskAssessment riskAssessment = new RiskAssessment();
+        Mockito.when(riskAssessmentRepository.findAll()).thenReturn(Collections.singletonList(riskAssessment));
+
+        Assertions.assertEquals(Collections.singletonList(riskAssessment), assessmentService.getAllRiskAssessments());
+    }
+
+    @Test
+    void newRiskAssessment() {
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
+        Mockito.when(userService.findUser(Mockito.any(UUID.class))).thenReturn(user);
+
+        RiskAssessment riskAssessment = new RiskAssessment();
+        assertNotNull(assessmentService.newRiskAssessment(riskAssessment, userID));
+    }
+
 }

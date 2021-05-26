@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-public class StatementServiceTest {
+class StatementServiceTest {
     @InjectMocks
     private StatementService statementService;
     @Mock
@@ -28,7 +28,7 @@ public class StatementServiceTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void getAllHazardStatementsTest() throws Exception {
+    void getAllHazardStatementsTest() throws Exception {
         HazardStatement hazardStatement = objectMapper.readValue(new ClassPathResource("/json/HazardStatement.json").getInputStream(), HazardStatement.class);
         Mockito.when(hazardStatementRepository.findAll()).thenReturn(Collections.singletonList(hazardStatement));
 
@@ -36,7 +36,7 @@ public class StatementServiceTest {
     }
 
     @Test
-    public void getAllPrecautionaryStatementsTest() throws Exception {
+    void getAllPrecautionaryStatementsTest() throws Exception {
         PrecautionaryStatement precautionaryStatement = objectMapper.readValue(new ClassPathResource("/json/PrecautionaryStatement.json").getInputStream(), PrecautionaryStatement.class);
         Mockito.when(precautionaryStatementRepository.findAll()).thenReturn(Collections.singletonList(precautionaryStatement));
 
@@ -44,7 +44,7 @@ public class StatementServiceTest {
     }
 
     @Test
-    public void findHazardStatements() throws Exception {
+    void findHazardStatements() throws Exception {
         HazardStatement hazardStatement = objectMapper.readValue(new ClassPathResource("/json/HazardStatement.json").getInputStream(), HazardStatement.class);
         Mockito.when(hazardStatementRepository.findByStatementIdIn(Mockito.anyList())).thenReturn(Collections.singletonList(hazardStatement));
 
@@ -54,7 +54,7 @@ public class StatementServiceTest {
     }
 
     @Test
-    public void findPrecautionaryStatements() throws Exception {
+    void findPrecautionaryStatements() throws Exception {
         PrecautionaryStatement precautionaryStatement = objectMapper.readValue(new ClassPathResource("/json/PrecautionaryStatement.json").getInputStream(), PrecautionaryStatement.class);
         Mockito.when(precautionaryStatementRepository.findByStatementIdIn(Mockito.anyList())).thenReturn(Collections.singletonList(precautionaryStatement));
 

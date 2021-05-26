@@ -1,7 +1,7 @@
 package org.ordep.labtrack.service;
 
 import org.ordep.labtrack.data.UserRepository;
-import org.ordep.labtrack.exception.UserNotFoundException;
+import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class UserService {
         Optional<LabTrackUser> optional = userRepository.findById(userID);
 
         if (optional.isEmpty()) {
-            throw new UserNotFoundException(userID);
+            throw new UserException(userID);
         }
 
         return optional.get();
@@ -36,7 +36,7 @@ public class UserService {
         userRepository.save(labTrackUser);
     }
 
-    public UUID getCurrentUser(){
+    public UUID getCurrentUser() {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
 
         LabTrackUser user = userRepository.findByEmailAddress(name);
@@ -45,6 +45,6 @@ public class UserService {
             return user.getUserId();
         }
 
-        return null;
+        throw new UserException("Error retrieving user from database: " + name);
     }
 }

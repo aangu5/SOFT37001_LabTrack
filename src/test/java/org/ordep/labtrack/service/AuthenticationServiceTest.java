@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.ordep.labtrack.data.AuthenticationRepository;
 import org.ordep.labtrack.model.AuthenticationEntity;
+import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.enums.Role;
 
 import java.util.Collections;
@@ -12,7 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 class AuthenticationServiceTest {
 
@@ -41,5 +45,11 @@ class AuthenticationServiceTest {
         Mockito.when(authenticationRepository.getAuthenticationEntityByUsername(anyString())).thenReturn(auth);
 
         assertEquals(auth, authenticationService.loadUserByUsername("user"));
+    }
+
+    @Test
+    void registerUser() {
+        authenticationService.registerUser(new AuthenticationEntity());
+        verify(authenticationRepository, times(1)).save(any());
     }
 }
