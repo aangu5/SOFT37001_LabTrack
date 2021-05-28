@@ -75,7 +75,7 @@
             <a href="/cards/biological"><div class="button"><h2>View Biological Hazard Cards</h2></div></a>
             <a href="/cards/physical"><div class="button"><h2>View Physical Hazard Cards</h2></div></a>
         </div>
-        <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
+        <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center" th:if="${!allAssessments.isEmpty()}">
             <tr style="font-size: 18px;">
                 <th>Type</th>
                 <th>Name</th>
@@ -84,12 +84,16 @@
             </tr>
             <tr th:each="assessment : ${allAssessments}">
                 <td th:text="${assessment.class.simpleName}">Type</td>
-                <td><a th:text="${assessment.cardName}" th:href="@{/assessment/{type}(id=${assessment.assessmentId}, type=${assessment.class.simpleName})}">Assessment Name</a></td>
-                <td th:text="${assessment.createdDate}">Date Created</td>
+                <td><a th:text="${assessment.assessmentName}" th:href="@{/assessment/(id=${assessment.assessmentId})}">Assessment Name</a></td>
+                <td>Date Created</td>
                 <td th:text="${assessment.author.displayName}">Author</td>
 
             </tr>
         </table>
+
+        <div th:if="${allAssessments.isEmpty()}" style="width: 100%; height: 100%; display: flex; justify-content: center;">
+            <h2 style="margin-top: 100px;" >You don't have any Risk Assessments. Try creating some?</h2>
+        </div>
         </div>
     </div>
 </div>

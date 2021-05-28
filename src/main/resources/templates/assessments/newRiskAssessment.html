@@ -104,42 +104,36 @@
             </div>
             <div style="width: 100%">
                 <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
-                    <tr>
+                    <tr th:if="${!chemicalHazardCards.isEmpty()}">
                         <th><label for="chemicalHazardCards">Chemical Hazard Cards</label>
                         </th>
                     </tr>
-                    <tr>
+                    <tr th:if="${!chemicalHazardCards.isEmpty()}">
                         <td>
                             <input id="chemicalHazardCards" type="checkbox" th:field="*{chemicalHazardCards}" th:each="card : ${chemicalHazardCards}" th:text="${card.getCardName()}" th:value="${card.getCardId()}"/>
                         </td>
                     </tr>
 
-                    <tr>
-                        <th><label for="biologicalHazardCards">Biological Hazard Cards
+                    <tr th:if="${!biologicalHazardCards.isEmpty()}">
+                        <th><label for="biologicalHazardCards">Biological Hazard Cards</label>
                         </th>
                     </tr>
-                    <tr>
+                    <tr th:if="${!biologicalHazardCards.isEmpty()}">
                         <td>
-                            <select id="biologicalHazardCards" style="width: 100%">
-                                <option value = "" selected="selected">None</option>
-                                <option th:each="card : ${biologicalHazardCards}"
-                                        th:text="${card.getCardName()}" th:field="chemicalHazardCards"></option>
-                            </select>
+                            <input id="biologicalHazardCards" type="checkbox" th:field="*{biologicalHazardCards}" th:each="card : ${biologicalHazardCards}" th:text="${card.getCardName()}" th:value="${card.getCardId()}"/>
                         </td>
                     </tr>
-                    <tr>
-                        <th><label for="physicalHazardCards">Physical Hazard Cards
+
+                    <tr th:if="${!physicalHazardCards.isEmpty()}">
+                        <th><label for="physicalHazardCards">Physical Hazard Cards</label>
                         </th>
                     </tr>
-                    <tr>
+                    <tr th:if="${!physicalHazardCards.isEmpty()}">
                         <td>
-                            <select id="physicalHazardCards" style="width: 100%">
-                                <option value = "" selected="selected">None</option>
-                                <option th:each="card : ${physicalHazardCards}"
-                                        th:text="${card.getCardName()}"></option>
-                            </select>
+                            <input id="physicalHazardCards" type="checkbox" th:field="*{physicalHazardCards}" th:each="card : ${physicalHazardCards}" th:text="${card.getCardName()}" th:value="${card.getCardId()}"/>
                         </td>
                     </tr>
+
                 </table>
             </div>
         </div>

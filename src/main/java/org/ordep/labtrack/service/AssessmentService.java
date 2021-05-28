@@ -5,6 +5,7 @@ import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.RiskAssessment;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +39,9 @@ public class AssessmentService {
         riskAssessment.setAuthor(author);
         riskAssessment.setReaction(input.getReaction());
         riskAssessment.setRisks(input.getRisks());
+        riskAssessment.setDateCreated(LocalDateTime.now());
+
+        riskAssessmentRepository.save(riskAssessment);
 
         return riskAssessment;
     }

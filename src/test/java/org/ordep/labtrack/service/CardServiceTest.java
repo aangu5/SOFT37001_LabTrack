@@ -73,15 +73,13 @@ class CardServiceTest {
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
         when(userService.getCurrentUser()).thenReturn(user);
 
-        List<String> synonyms = Arrays.asList("synonym 1", "synonym 2");
-
         var input = new ChemicalHazardCard();
         input.setCardName("name");
         input.setCas("cas");
         input.setPictograms(pictograms);
         input.setHazardStatements(hazardStatements);
         input.setPrecautionaryStatements(precautionaryStatements);
-        input.setSynonyms(synonyms);
+        input.setSynonyms("synonyms");
         input.setSignalWord(SignalWord.DANGER);
 
         ChemicalHazardCard card = cardService.newChemicalHazardCard(input);

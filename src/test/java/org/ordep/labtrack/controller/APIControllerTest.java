@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.ordep.labtrack.model.RiskAssessment;
 import org.ordep.labtrack.service.AssessmentService;
 import org.ordep.labtrack.service.AuthenticationService;
+import org.ordep.labtrack.service.CardService;
 import org.ordep.labtrack.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -41,6 +42,8 @@ class APIControllerTest {
     private PasswordEncoder passwordEncoder;
     @MockBean
     private AssessmentService assessmentService;
+    @MockBean
+    private CardService cardService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -68,7 +71,7 @@ class APIControllerTest {
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
                 .param("username", "user")
                 .param("password", "Password1!"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isMovedTemporarily());
 
         verify(authenticationService, times(0)).registerUser(any());
         verify(userService, times(0)).registerUser(any());
@@ -80,7 +83,7 @@ class APIControllerTest {
         mockMvc.perform(post("/api/register")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
                 .param("password", "Password1!"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isMovedTemporarily());
 
         verify(authenticationService, times(0)).registerUser(any());
         verify(userService, times(0)).registerUser(any());
@@ -93,7 +96,7 @@ class APIControllerTest {
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
                 .param("username", "user@email.com")
                 .param("password", "pass"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isMovedTemporarily());
 
         verify(authenticationService, times(0)).registerUser(any());
         verify(userService, times(0)).registerUser(any());
@@ -105,7 +108,7 @@ class APIControllerTest {
         mockMvc.perform(post("/api/register")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
                 .param("username", "user@email.com"))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isMovedTemporarily());
 
         verify(authenticationService, times(0)).registerUser(any());
         verify(userService, times(0)).registerUser(any());

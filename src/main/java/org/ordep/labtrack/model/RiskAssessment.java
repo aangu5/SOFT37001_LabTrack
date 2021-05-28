@@ -3,6 +3,7 @@ package org.ordep.labtrack.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.model.enums.PictogramType;
 
 import javax.persistence.*;
@@ -40,6 +41,7 @@ public class RiskAssessment {
     private List<Sop> sops;
     private String signature;
     private LocalDateTime dateSigned;
+    private LocalDateTime dateCreated;
     private boolean approved;
 
     @OneToMany
@@ -48,5 +50,12 @@ public class RiskAssessment {
     private List<ChemicalHazardCard> chemicalHazardCards;
     @OneToMany
     private List<BiologicalHazardCard> biologicalHazardCards;
+
+    public String getFormattedDate() {
+        if (dateCreated != null) {
+            return LabTrackUtilities.formatDate(dateCreated);
+        }
+        return null;
+    }
 
 }

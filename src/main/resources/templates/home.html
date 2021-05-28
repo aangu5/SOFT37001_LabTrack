@@ -60,18 +60,17 @@
             <h1>Your Risk Assessments</h1>
             <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-radius:6px; -moz-border-radius:6px; text-align: center">
                 <tr style="font-size: 18px;">
-                    <th>Card Name</th>
+                    <th>Type</th>
+                    <th>Name</th>
                     <th>Date Created</th>
                     <th>Author</th>
-                    <th>Status</th>
-                    <th>Type</th>
                 </tr>
-                <tr th:each="card : ${allCards}">
-                    <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-                    <td th:text="${card.getDateCreated()}">Date Created</td>
-                    <td th:text="${card.author.displayName}">Author</td>
-                    <td th:text="${card.status}">Status</td>
-                    <td th:text="${card.class.simpleName}">Type</td>
+                <tr th:each="assessment : ${allAssessments}">
+                    <td th:text="${assessment.class.simpleName}">Type</td>
+                    <td><a th:text="${assessment.assessmentName}" th:href="@{/assessment/(id=${assessment.assessmentId})}">Assessment Name</a></td>
+                    <td>Date Created</td>
+                    <td th:text="${assessment.author.displayName}">Author</td>
+
                 </tr>
             </table>
         </div>

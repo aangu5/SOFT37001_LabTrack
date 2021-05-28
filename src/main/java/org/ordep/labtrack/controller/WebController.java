@@ -33,6 +33,7 @@ public class WebController {
     @GetMapping("/home")
     public String home(Model model) {
         model.addAttribute("allCards", cardService.getAllCards());
+        model.addAttribute("allAssessments", assessmentService.getAllRiskAssessments());
         model.addAttribute("title","Overview");
         return "home";
     }
@@ -93,7 +94,7 @@ public class WebController {
     public String riskAssessments(Model model) {
         model.addAttribute("riskAssessments", assessmentService.getAllRiskAssessments());
         model.addAttribute("title","Risk Assessments");
-        return "assessments/risk";
+        return "assessments/riskAssessments";
     }
 
     @GetMapping("/card/{type}/new")
@@ -119,13 +120,6 @@ public class WebController {
         }
 
         return null;
-    }
-
-    @PostMapping("/card/new/chemical")
-    public String newCard(@ModelAttribute ChemicalHazardCard chemicalHazardCard, Model model) {
-        log.info("New Chemical Hazard Card: {}", chemicalHazardCard);
-        model.addAttribute(chemicalHazardCard);
-        return "home";
     }
 
     @GetMapping("/assessment/risk/new")

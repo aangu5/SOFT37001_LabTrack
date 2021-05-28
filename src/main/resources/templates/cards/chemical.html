@@ -99,10 +99,10 @@
             <div style="background-color: white; height:50%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
                 <!-- images in here -->
                 <div th:each="pictogram : ${chemicalHazardCard.getPictograms()}">
-                    <img th:alt="${pictogram.getPictogramName()}"
-                         th:src="@{${'/images/' + pictogram.getImage().name() +'.png'}}"
+                    <img th:alt="${pictogram.name()}"
+                         th:src="@{${'/images/' + pictogram.name() +'.png'}}"
                          width="100">
-                    <p th:text="${pictogram.pictogramName}"></p>
+                    <p th:text="${pictogram.getDisplayName()}"></p>
                 </div>
             </div>
         </div>
@@ -116,7 +116,7 @@
                     </tr>
 
                     <div th:each="hazardStatement : ${chemicalHazardCard.getHazardStatements()}">
-                        <tr>
+                        <tr style="float:left; width: 100%" >
                             <td th:text="${hazardStatement.getStatementName()}"></td>
                         </tr>
                     </div>
@@ -129,7 +129,7 @@
 
                     </tr>
                     <div th:each="precautionaryStatement : ${chemicalHazardCard.getPrecautionaryStatements()}">
-                        <tr>
+                        <tr style="float:left; width: 100%" >
                             <td th:text="${precautionaryStatement.getStatementName()}"></td>
                         </tr>
                     </div>
