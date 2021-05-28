@@ -15,8 +15,7 @@ public abstract class Card {
     @Id
     private UUID cardId;
     private String cardName;
-    @ElementCollection
-    private List<String> synonyms;
+    private String synonyms;
     @ElementCollection
     private List<PictogramType> pictograms;
     private boolean status;

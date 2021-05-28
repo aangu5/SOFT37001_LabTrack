@@ -83,6 +83,22 @@ public class WebController {
         return "cards/chemicals";
     }
 
+    @GetMapping("/cards/biological")
+    public String biologicalCards(Model model) {
+        LabTrackUser user = userService.getCurrentUser();
+        model.addAttribute("biologicalCards", cardService.findAllBiologicalHazardCardsForUser(user.getUserId()));
+        model.addAttribute("title","Biological Hazard Cards");
+        return "cards/biologicals";
+    }
+
+    @GetMapping("/cards/physical")
+    public String physicalCards(Model model) {
+        LabTrackUser user = userService.getCurrentUser();
+        model.addAttribute("physicalCards", cardService.findAllPhysicalHazardCardsForUser(user.getUserId()));
+        model.addAttribute("title","Physical Hazard Cards");
+        return "cards/physicals";
+    }
+
     @GetMapping("/assessments")
     public String allAssessments(Model model) {
         model.addAttribute("allAssessments", assessmentService.getAllRiskAssessments());
@@ -130,5 +146,11 @@ public class WebController {
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
         model.addAttribute("title","New Risk Assessment");
         return "assessments/newRiskAssessment";
+    }
+
+    @GetMapping("/error")
+    public String error(Model model) {
+        model.addAttribute("title","Error");
+        return "error";
     }
 }

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>New Biological Hazard Card</title>
+  <style>
+    ul {
+      font-size: 24px;
+      font-family: montserrat, sans-serif;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      margin: 0 0 20px 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: black;
+      font-weight: bold;
+    }
+
+    h1, h2 {
+      font-family: montserrat, sans-serif;
+    }
+
+    p {
+      font-family: montserrat, sans-serif;
+      font-weight: bold;
+    }
+    td.data {
+      text-align: left;
+      background-color: #E0E0E0;
+      border-radius: 6px;
+      -moz-border-radius: 6px;
+      width: 100%;
+      padding-left: 15px;
+      padding-top: 0px;
+      padding:0px;
+      vertical-align: top;
+    }
+
+    th {
+      padding: 20px;
+      text-align: center;
+      background-color: #64D8CB;
+      border-radius: 6px;
+      -moz-border-radius: 6px;
+      align-content: flex-start;
+      white-space: nowrap;
+    }
+
+    img.pictogram {
+      height: 100px;
+      margin: 10px;
+    }
+
+    input[type="text"], select.table{
+      border: 0px;
+      background-color: rgba(0,0,0,0);
+      height:100%;
+      width: calc(100% - 10px);
+      border-radius:20px;
+      padding: 0px;
+      padding-left: 10px;
+      font-family: montserrat, sans-serif;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    option.table{
+      font-weight: bold;
+      font-size: 16px;
+    }
+    div.unselected {
+      border: 5px solid rgba(255,255,255,0);
+      border-radius: 12px;
+      -moz-border-radius: 12px;
+      margin: 10px;
+      padding: 10px;
+    }
+    div.selected {
+      border: 5px solid #00766C;
+      border-radius: 12px;
+      -moz-border-radius: 12px;
+      margin: 10px;
+      padding: 10px;
+    }
+    label.pictogram{
+      margin: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      -moz-border-radius: 12px;
+      display:flex;
+      justify-content: center;
+      flex-direction:column;
+      align-content: center;
+      text-align: center;
+    }
+    .pictogramBox {
+      float: left;
+      margin: 0 auto;
+      width: 100%;
+      margin-top: 10px;
+    }
+    table {
+      background-color:white;
+      height: 1px;
+      width: calc(100% - 30px);
+      font-family: montserrat,sans-serif;
+      font-weight: bold;
+      margin: 0px;
+      border-spacing: 20px 20px;
+      border-radius:6px;
+      -moz-border-radius:6px;
+      align-content:flex-start;
+      margin-right: -5px;
+    }
+
+  </style>
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<form action="#" method="POST" th:action="@{/api/biological/new}" th:object="${biologicalHazardCard}">
+  <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+      <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+        <div style="width: 100%">
+          <table>
+            <tr>
+              <th>Card Name*</th>
+              <td class="data">
+                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+              </td>
+            </tr>
+            <tr>
+              <th>Synonyms</th>
+              <td class="data">
+                <input th:field="*{synonyms}" type="text" minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+              </td>
+            </tr>
+            <tr>
+              <th>Card Name*</th>
+              <td class="data">
+                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <!-- images in here -->
+      <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
+        <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"/>
+        <input class="pictogramBox" type="checkbox" th:field="*{pictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
+        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+      </label>
+    </div>
+    <div style="width: 100%">
+      <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
+        <tr th:if="${!hazardStatements.isEmpty()}">
+          <th>Hazard
+            Statements
+          </th>
+        </tr>
+        <tr th:if="${!hazardStatements.isEmpty()}" style="float:left; width: 100%">
+          <td style="width: 100%">
+            <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
+              <div th:each="statement : ${hazardStatements}">
+                <input style="float: left; text-align: left" id="hazardStatements" type="checkbox" th:field="*{hazardStatements}"  th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr th:if="${!precautionaryStatements.isEmpty()}">
+          <th>Precautionary Statements</th>
+        </tr>
+        <tr style="float:left; width: 100%">
+          <td style="width: 100%">
+            <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
+              <div th:each="statement : ${precautionaryStatements}">
+                <input style="float: left; text-align: left" id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
+      <input style="display:none" id="submit" type="submit" value="Submit">
+      <label for="submit">
+        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+          <h1 style="padding:10px; color:white">Submit</h1>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  </div>
+</form>
+
+</body>
+</html>
