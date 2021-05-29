@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Credentials</title>
+</head>
+<body style="margin: 0">
+<div th:replace="components/header">Header</div>
+
+<div class="divider">
+    <form class="form-sign-up" method="post" action="/api/register">
+        <h2 class="form-sign-up-heading">Sign up</h2>
+        <p>
+            <label for="username-sign-up" class="sr-only">Email</label>
+            <input type="text" id="username-sign-up" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+        </p>
+        <p>
+            <label for="password-sign-up" class="sr-only">Password</label>
+            <input type="password" id="password-sign-up" name="password" class="form-control" placeholder="Password" required="">
+        </p>
+        <p>
+            <label for="displayName" class="sr-only">Display Name</label>
+            <input type="text" id="displayName" name="displayName" class="form-control" placeholder="DisplayName" required="">
+        </p>
+        <button type="submit">Sign up</button>
+    </form>
+</div>
+
+</body>
+</html>

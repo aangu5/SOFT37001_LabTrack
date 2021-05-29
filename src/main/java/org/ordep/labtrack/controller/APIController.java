@@ -2,10 +2,7 @@ package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.exception.UserException;
-import org.ordep.labtrack.model.AuthenticationEntity;
-import org.ordep.labtrack.model.ChemicalHazardCard;
-import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.RiskAssessment;
+import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.service.AssessmentService;
 import org.ordep.labtrack.service.AuthenticationService;
@@ -23,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static org.ordep.labtrack.configuration.Constants.HOME_URL;
 import static org.ordep.labtrack.configuration.LabTrackUtilities.EMAIL_REGEX;
 import static org.ordep.labtrack.configuration.LabTrackUtilities.PASSWORD_REGEX;
 
@@ -89,11 +87,23 @@ public class APIController {
     }
 
     @PostMapping("/api/assessment/risk/new")
-    public String submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, Model model) {
+    public void submitRiskAssessment(@ModelAttribute RiskAssessment riskAssessment, HttpServletResponse httpServletResponse) {
         log.info("New Risk Assessment: {}", riskAssessment);
-        riskAssessment.setAssessmentId(UUID.randomUUID());
+
         assessmentService.newRiskAssessment(riskAssessment);
-        return "/home";
+
+        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setStatus(200);
+    }
+
+    @PostMapping("/api/assessment/coshh/new")
+    public void submitCoshhAssessment(@ModelAttribute CoshhAssessment coshhAssessment, HttpServletResponse httpServletResponse) {
+        log.info("New Coshh Assessment: {}", coshhAssessment);
+
+        assessmentService.newCoshhAssessment(coshhAssessment);
+
+        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setStatus(302);
     }
 
     @PostMapping("/api/chemical/new")
@@ -102,7 +112,7 @@ public class APIController {
         model.addAttribute(chemicalHazardCard);
         cardService.newChemicalHazardCard(chemicalHazardCard);
 
-        httpServletResponse.setHeader("Location", "/home");
+        httpServletResponse.setHeader("Location", HOME_URL);
         httpServletResponse.setStatus(302);
 
     }

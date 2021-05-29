@@ -2,30 +2,24 @@ package org.ordep.labtrack.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
-import org.ordep.labtrack.model.enums.PictogramType;
+import org.ordep.labtrack.model.enums.ChemicalPictogram;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class RiskAssessment {
-    @Id
-    private UUID assessmentId;
-    private String assessmentName;
-    @OneToOne
-    private LabTrackUser author;
-    @OneToOne
-    private LabTrackUser approver;
+public class RiskAssessment extends Assessment {
+
     private String reaction;
     @ElementCollection
-    private List<PictogramType> pictograms;
+    private List<ChemicalPictogram> pictograms;
     @OneToMany
     private List<HazardStatement> hazardStatements;
     @ElementCollection
@@ -40,9 +34,6 @@ public class RiskAssessment {
     @OneToMany
     private List<Sop> sops;
     private String signature;
-    private LocalDateTime dateSigned;
-    private LocalDateTime dateCreated;
-    private boolean approved;
 
     @OneToMany
     private List<PhysicalHazardCard> physicalHazardCards;
@@ -50,12 +41,5 @@ public class RiskAssessment {
     private List<ChemicalHazardCard> chemicalHazardCards;
     @OneToMany
     private List<BiologicalHazardCard> biologicalHazardCards;
-
-    public String getFormattedDate() {
-        if (dateCreated != null) {
-            return LabTrackUtilities.formatDate(dateCreated);
-        }
-        return null;
-    }
 
 }

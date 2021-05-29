@@ -1,7 +1,9 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
+import org.ordep.labtrack.model.enums.PhysicalPictogram;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -13,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class PhysicalHazardCard extends Card {
-    @OneToMany
-    private List<Sym> syms;
+    @ElementCollection
+    private List<PhysicalPictogram> symbols;
     @OneToMany
     private List<Haz> hazs;
     @OneToMany

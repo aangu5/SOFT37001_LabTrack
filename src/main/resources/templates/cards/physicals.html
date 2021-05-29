@@ -70,11 +70,27 @@
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-between;">
     <div style="width:100%">
+      <div class="button" id="all-cards" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
+        <a href="/cards/physical">
+          <h2>All Cards</h2>
+        </a>
+      </div>
+      <div class="button" id="my-cards" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
+        <a href="/cards/physical?view=mine">
+          <h2>My Cards</h2>
+        </a>
+      </div>
+      <div class="button" id="to-approve" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
+        <a href="/cards/physical?view=approve">
+          <h2>Cards to Approve</h2>
+        </a>
+      </div>
       <div class="button" style="margin-bottom: 0px; margin-left:auto; margin-right: 17px ">
         <a href="/card/physicalHazardCard/new">
           <h2>New Physical Hazard Card</h2>
         </a>
       </div>
+
     </div>
     <table th:if="${!physicalCards.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
@@ -98,6 +114,16 @@
   </div>
 </div>
 </div>
-
+<script>
+  let url = window.location.href;
+  console.log(url);
+  if (url.endsWith("?view=mine")) {
+    document.getElementById("my-cards").style.opacity = 0.5;
+  } else if (url.endsWith("?view=approve")) {
+    document.getElementById("to-approve").style.opacity = 0.5;
+  } else {
+    document.getElementById("all-cards").style.opacity = 0.5;
+  }
+</script>
 </body>
 </html>

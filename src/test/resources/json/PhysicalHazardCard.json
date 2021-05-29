@@ -2,8 +2,8 @@
   "cardId": "9aa735cf-71ab-4e32-ba61-3be346d72ec1",
   "cardName": "name",
   "synonyms": null,
-  "pictograms": [
-    "GHS01"
+  "symbols": [
+    "PHS01"
   ],
   "status": true,
   "dateCreated": null,
@@ -13,13 +13,6 @@
     "emailAddress": "email@mail.com",
     "loggedIn": false
   },
-  "syms": [
-    {
-      "dataId": "c8fdb523-9278-45f6-9cc3-d5b913c47275",
-      "symName": "name",
-      "symState": "state"
-    }
-  ],
   "hazs": [
     {
       "dataId": "5d83af65-e06e-4e1b-8bdd-c2539426f700",

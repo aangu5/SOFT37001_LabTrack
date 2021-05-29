@@ -2,57 +2,32 @@
 <html lang="en" style="height:100%"><head>
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
+    <link href="/style.css" rel="stylesheet">
     <title>LabTrack Home</title>
-    <style>
-        ul {
-            font-size: 24px;
-            font-family: montserrat;
-            list-style-type:none;
-            padding: 0px;
-            margin: 0px;
-        }
-        li {
-            margin: 0 0 20px 0;
-        }
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-        h1 {
-            font-family: montserrat;
-        }
-        th {
-            background-color:#64D8CB;
-            padding: 8px;
-        }
-        td {
-            background-color: #E0E0E0;
-            padding: 8px;
-        }
-    </style>
 </head>
 
 <body style="margin: 0px; height: 100%">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
+
 <div style="background-color:grey; margin-left: 275px; margin-top: 60px; display: flex;">
+    <h1 th:if="${allCards.isEmpty() && allAssessments.isEmpty() && allCoshhAssessments.isEmpty()}">You don't have any items available to view yet.</h1>
     <div style="background-color:white; display: flex; flex-wrap: wrap; height: 100%; float: right; justify-content: center; align-content:flex-start;">
         <div style="background-color:white; width: 50%; text-align: center; min-width: 600px; margin: 0px;">
             <h1>Your Cards</h1>
             <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
                 <tr style="font-size: 18px;">
-                    <th>Card Name</th>
-                    <th>Date Created</th>
-                    <th>Author</th>
-                    <th>Type</th>
+                    <th class="overview">Card Name</th>
+                    <th class="overview">Date Created</th>
+                    <th class="overview">Author</th>
+                    <th class="overview">Type</th>
                 </tr>
                 <tr th:each="card : ${allCards}">
-                    <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-                    <td th:text="${card.getFormattedDate()}">Date Created</td>
-                    <td th:text="${card.author.displayName}">Author</td>
-                    <td th:text="${card.class.simpleName}">Type</td>
+                    <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+                    <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
+                    <td class="overview" th:text="${card.author.displayName}">Author</td>
+                    <td class="overview" th:text="${card.class.simpleName}">Type</td>
                 </tr>
             </table>
         </div>
@@ -60,55 +35,36 @@
             <h1>Your Risk Assessments</h1>
             <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-radius:6px; -moz-border-radius:6px; text-align: center">
                 <tr style="font-size: 18px;">
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th>Date Created</th>
-                    <th>Author</th>
+                    <th class="overview">Type</th>
+                    <th class="overview">Name</th>
+                    <th class="overview">Date Created</th>
+                    <th class="overview">Author</th>
                 </tr>
                 <tr th:each="assessment : ${allAssessments}">
-                    <td th:text="${assessment.class.simpleName}">Type</td>
-                    <td><a th:text="${assessment.assessmentName}" th:href="@{/assessment/(id=${assessment.assessmentId})}">Assessment Name</a></td>
-                    <td>Date Created</td>
-                    <td th:text="${assessment.author.displayName}">Author</td>
+                    <td class="overview" th:text="${assessment.class.simpleName}">Type</td>
+                    <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/(id=${assessment.assessmentId})}">Assessment Name</a></td>
+                    <td class="overview">Date Created</td>
+                    <td class="overview" th:text="${assessment.author.displayName}">Author</td>
 
                 </tr>
             </table>
         </div>
-        <div style="background-color:white; width: 50%; float: left; text-align: center;min-width: 600px;">
+        <div style="background-color:white; width: 50%; float: left; text-align: center;min-width: 600px;" th:if="${!allCoshhAssessments.isEmpty()}">
             <h1>Your COSHH Declarations</h1>
             <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-radius:6px; -moz-border-radius:6px; text-align: center">
                 <tr style="font-size: 18px;">
-                    <th>Card Name</th>
-                    <th>Date Created</th>
-                    <th>Author</th>
-                    <th>Status</th>
-                    <th>Type</th>
+                    <th class="overview">Card Name</th>
+                    <th class="overview">Date Created</th>
+                    <th class="overview">Author</th>
+                    <th class="overview">Status</th>
+                    <th class="overview">Type</th>
                 </tr>
-                <tr th:each="card : ${allCards}">
-                    <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-                    <td th:text="${card.getDateCreated()}">Date Created</td>
-                    <td th:text="${card.author.displayName}">Author</td>
-                    <td th:text="${card.status}">Status</td>
-                    <td th:text="${card.class.simpleName}">Type</td>
-                </tr>
-            </table>
-        </div>
-        <div style="background-color:white; width: 50%; float: right; text-align: center; min-width: 600px;">
-            <h1>Latest Asset Management Changes</h1>
-            <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; border-radius:6px; -moz-border-radius:6px; text-align: center">
-                <tr style="font-size: 18px;">
-                    <th>Card Name</th>
-                    <th>Date Created</th>
-                    <th>Author</th>
-                    <th>Status</th>
-                    <th>Type</th>
-                </tr>
-                <tr th:each="card : ${allCards}">
-                    <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-                    <td th:text="${card.getDateCreated()}">Date Created</td>
-                    <td th:text="${card.author.displayName}">Author</td>
-                    <td th:text="${card.status}">Status</td>
-                    <td th:text="${card.class.simpleName}">Type</td>
+                <tr th:each="coshh : ${allCoshhAssessments}">
+                    <td class="overview"><a th:text="${coshh.assessmentName}" th:href="@{/assessment(id=${coshh.assessmentId})}">Assessment Name</a></td>
+                    <td class="overview" th:text="${coshh.getFormattedCreatedDate()}">Date Created</td>
+                    <td class="overview" th:text="${coshh.author.displayName}">Author</td>
+                    <td class="overview" th:text="${coshh.isActive()}">Author</td>
+                    <td class="overview" th:text="${coshh.class.simpleName}">Type</td>
                 </tr>
             </table>
         </div>

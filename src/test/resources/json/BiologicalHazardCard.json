@@ -2,9 +2,7 @@
   "cardId": "d811a416-29ae-427c-ad3c-00d3f7e656eb",
   "cardName": "name",
   "synonyms": null,
-  "pictograms": [
-    "GHS01"
-  ],
+  "hazardous": true,
   "status": true,
   "dateCreated": null,
   "author": {
@@ -12,11 +10,6 @@
     "displayName": "display name",
     "emailAddress": "email@mail.com",
     "loggedIn": false
-  },
-  "sym": {
-    "dataId": "c8fdb523-9278-45f6-9cc3-d5b913c47275",
-    "symName": "name",
-    "symState": "state"
   },
   "cat": "cat",
   "dose": "dose",

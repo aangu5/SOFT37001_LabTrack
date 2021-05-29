@@ -49,8 +49,8 @@
         }
         div.button {
             height: 50px;
-            width: 400px;
-            margin: 17px;
+            width: 350px;
+            margin-bottom:17px;
             background-color:#64D8CB;
             display: flex;
             justify-content: center;
@@ -69,14 +69,29 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-between;">
-    <div style="width:100%">
-      <div class="button" style="margin-bottom: 0px; margin-left:auto; margin-right: 17px ">
+    <div style="width:100%; display:flex; flex-wrap: wrap; justify-content: space-between; margin:17px; margin-bottom:0px;">
+      <div class="button" id="all-cards">
+        <a href="/cards/chemical">
+          <h2>All Cards</h2>
+        </a>
+      </div>
+      <div class="button" id="my-cards">
+        <a href="/cards/chemical?view=mine">
+          <h2>My Cards</h2>
+        </a>
+      </div>
+      <div class="button" id="to-approve">
+        <a href="/cards/chemical?view=approve">
+          <h2>Cards to Approve</h2>
+        </a>
+      </div>
+      <div class="button">
         <a href="/card/ChemicalHazardCard/new">
           <h2>New Chemical Hazard Card</h2>
         </a>
       </div>
     </div>
-    <table th:if="${!chemicalCards.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
+    <table th:if="${!chemicalCards.isEmpty()}" style="margin: 15px; margin-top:0px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
         <th>Card Name</th>
         <th>Date Created</th>
@@ -92,12 +107,23 @@
     </table>
 
     <div th:if="${chemicalCards.isEmpty()}" style="width: 100%; height: 100%; display: flex; justify-content: center;">
-      <h2 style="margin-top: 100px;" >You don't have any cards. Try creating some?</h2>
+      <h2 style="margin-top: 100px;" >There are no cards to display here...</h2>
     </div>
 
   </div>
 </div>
 </div>
+<script>
+  let url = window.location.href;
+  console.log(url);
+  if (url.endsWith("?view=mine")) {
+    document.getElementById("my-cards").style.opacity = 0.5;
+  } else if (url.endsWith("?view=approve")) {
+    document.getElementById("to-approve").style.opacity = 0.5;
+  } else {
+    document.getElementById("all-cards").style.opacity = 0.5;
+  }
+</script>
 
 </body>
 </html>

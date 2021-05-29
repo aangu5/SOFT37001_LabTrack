@@ -1,6 +1,6 @@
 package org.ordep.labtrack.model.enums;
 
-public enum PictogramType {
+public enum ChemicalPictogram {
     GHS01("Explosive"),
     GHS02("Flammable"),
     GHS03("Oxidising"),
@@ -13,7 +13,7 @@ public enum PictogramType {
 
     private final String displayName;
 
-    PictogramType(String displayName) {
+    ChemicalPictogram(String displayName) {
         this.displayName = displayName;
     }
 

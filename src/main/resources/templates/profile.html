@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
+  <title>LabTrack Home</title>
+  <link href="/style.css" rel="stylesheet">
+</head>
+
+<body style="margin: 0px; height: 100%">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+
+<div style="background-color:grey; margin-left: 275px; margin-top: 60px; display: flex;">
+  <div style="background-color:white; display: flex; flex-wrap: wrap; height: 100%; width:100%; float: right; justify-content: center; align-content:flex-start;">
+    <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+      <tr>
+        <th class="rounded">User ID</th>
+        <td class="data" th:text="${user.getUserId().toString()}"/>
+      </tr>
+      <tr>
+        <th class="rounded">Display Name</thc>
+        <td class="data" th:text="${user.getDisplayName()}"/>
+      </tr>
+      <tr>
+        <th class="rounded">Email Address</th>
+        <td class="data" th:text="${user.getEmailAddress()}"/>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

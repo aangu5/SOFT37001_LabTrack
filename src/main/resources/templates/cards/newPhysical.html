@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <title>New Biological Hazard Card</title>
+  <title>New Physical Hazard Card</title>
   <style>
     ul {
       font-size: 24px;
@@ -125,12 +125,11 @@
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
-<form action="#" method="POST" th:action="@{/api/biological/new}" th:object="${biologicalHazardCard}">
+<form action="#" method="POST" th:action="@{/api/physical/new}" th:object="${physicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
       <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
         <div style="width: 100%">
-
           <table>
             <tr>
               <th>Card Name*</th>
@@ -138,48 +137,15 @@
                 <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
               </td>
             </tr>
-            <tr>
-              <th>Hazardous</th>
-              <td class="data" style="background-color:white;">
-                <label>
-                  <img src="/images/BHS01.png" width="100"/>
-                  <input type="checkbox">
-                </label>
-              </td>
-            </tr>
-            <tr>
-              <th>Synonyms</th>
-              <td class="data">
-                <input th:field="*{synonyms}" type="text" minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>Cat</th>
-              <td class="data">
-                <input th:field="*{cat}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>Dose</th>
-              <td class="data">
-                <input th:field="*{dose}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>Period</th>
-              <td class="data">
-                <input th:field="*{period}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>State</th>
-              <td class="data">
-                <input th:field="*{state}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
           </table>
         </div>
       </div>
+      <!-- images in here -->
+      <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
+        <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
+        <input class="pictogramBox" type="checkbox" th:field="*{symbols}" th:id="${pictogram.name()}" th:value="${symbols}"/>
+        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+      </label>
     </div>
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
       <input style="display:none" id="submit" type="submit" value="Submit">

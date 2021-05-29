@@ -1,6 +1,8 @@
 package org.ordep.labtrack.service;
 
+import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
+import org.ordep.labtrack.model.CoshhAssessment;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.RiskAssessment;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.UUID;
 @Service
 public class AssessmentService {
     private final RiskAssessmentRepository riskAssessmentRepository;
+    private final CoshhAssessmentRepository coshhAssessmentRepository;
     private final UserService userService;
 
-    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, UserService userService){
+    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, CoshhAssessmentRepository coshhAssessmentRepository, UserService userService){
         this.riskAssessmentRepository = riskAssessmentRepository;
+        this.coshhAssessmentRepository = coshhAssessmentRepository;
         this.userService = userService;
     }
 
@@ -44,5 +48,28 @@ public class AssessmentService {
         riskAssessmentRepository.save(riskAssessment);
 
         return riskAssessment;
+    }
+
+    public List<CoshhAssessment> findAllCoshhAssessmentsForUser(UUID userID) {
+        LabTrackUser currentUser = userService.findUser(userID);
+        return coshhAssessmentRepository.findCoshhAssessmentByAuthor(currentUser);
+    }
+
+    public List<CoshhAssessment> getAllCoshhAssessments(){
+        return coshhAssessmentRepository.findAll();
+    }
+
+    public CoshhAssessment newCoshhAssessment(CoshhAssessment coshhAssessment) {
+
+        var riskAssessmentID = UUID.randomUUID();
+        LabTrackUser author = userService.getCurrentUser();
+
+        coshhAssessment.setAssessmentId(riskAssessmentID);
+        coshhAssessment.setAuthor(author);
+        coshhAssessment.setDateCreated(LocalDateTime.now());
+
+        coshhAssessmentRepository.save(coshhAssessment);
+
+        return coshhAssessment;
     }
 }

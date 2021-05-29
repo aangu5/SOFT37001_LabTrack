@@ -12,58 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Chemical Hazard Card</title>
-    <style>
-        ul {
-            font-size: 24px;
-            font-family: montserrat, sans-serif;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            margin: 0 0 20px 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-
-        h1, h2 {
-            font-family: montserrat, sans-serif;
-        }
-
-        p {
-            font-family: montserrat, sans-serif;
-            font-weight: bold;
-        }
-
-        th {
-            background-color:#64D8CB;
-            padding: 8px;
-        }
-        td {
-            background-color: #E0E0E0;
-            padding: 8px;
-        }
-        div.button {
-            height: 50px;
-            width: 400px;
-            margin: 17px;
-            background-color:#64D8CB;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom:0px;
-        }
-
-        img.pictogram {
-            height: 100px;
-            margin: 10px;
-        }
-    </style>
+    <link href="/style.css" rel="stylesheet">
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
@@ -78,18 +27,18 @@
         </div>
         <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center" th:if="${!allCards.isEmpty()}">
             <tr style="font-size: 18px;">
-                <th>Card Name</th>
-                <th>Date Created</th>
-                <th>Author</th>
-                <th>Status</th>
-                <th>Type</th>
+                <th class="overview">Card Name</th>
+                <th class="overview">Date Created</th>
+                <th class="overview">Author</th>
+                <th class="overview">Status</th>
+                <th class="overview">Type</th>
             </tr>
             <tr th:each="card : ${allCards}">
-                <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-                <td th:text="${card.getFormattedDate()}">Date Created</td>
-                <td th:text="${card.author.displayName}">Author</td>
-                <td th:text="${card.status}">Status</td>
-                <td th:text="${card.class.simpleName}">Type</td>
+                <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+                <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
+                <td class="overview" th:text="${card.author.displayName}">Author</td>
+                <td class="overview" th:text="${card.status}">Status</td>
+                <td class="overview" th:text="${card.class.simpleName}">Type</td>
             </tr>
         </table>
 

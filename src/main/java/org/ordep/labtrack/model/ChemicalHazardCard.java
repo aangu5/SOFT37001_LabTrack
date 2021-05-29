@@ -1,12 +1,10 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
+import org.ordep.labtrack.model.enums.ChemicalPictogram;
 import org.ordep.labtrack.model.enums.SignalWord;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,6 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class ChemicalHazardCard extends Card {
+
+    @ElementCollection
+    private List<ChemicalPictogram> pictograms;
     private String cas;
     @Enumerated(EnumType.STRING)
     private SignalWord signalWord;

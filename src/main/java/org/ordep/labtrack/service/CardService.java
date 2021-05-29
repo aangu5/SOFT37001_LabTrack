@@ -5,6 +5,8 @@ import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static org.ordep.labtrack.configuration.Constants.PAGE_COUNT;
 
 @Slf4j
 @Service
@@ -27,8 +31,6 @@ public class CardService {
     private PhysicalHazardCardRepository physicalHazardCardRepository;
     @Autowired
     private BiologicalHazardCardRepository biologicalHazardCardRepository;
-    @Autowired
-    private SymRepository symRepository;
     @Autowired
     private HazRepository hazRepository;
     @Autowired
@@ -56,9 +58,10 @@ public class CardService {
         return chemicalHazardCardRepository.findAll();
     }
 
-    public List<ChemicalHazardCard> findAllChemicalHazardCardsForUser(UUID userID) {
+    public List<ChemicalHazardCard> findAllChemicalHazardCardsForUser(UUID userID, int page) {
         LabTrackUser user = userService.findUser(userID);
-        return chemicalHazardCardRepository.findChemicalHazardCardsByAuthor(user);
+        Pageable pageable = PageRequest.of(page, PAGE_COUNT);
+        return chemicalHazardCardRepository.findChemicalHazardCardsByAuthor(user, pageable);
     }
 
     public ChemicalHazardCard findOneChemicalHazardCard(UUID cardId) {

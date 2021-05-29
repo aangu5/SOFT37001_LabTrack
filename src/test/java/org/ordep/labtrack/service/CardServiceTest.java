@@ -11,9 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
-import org.ordep.labtrack.model.enums.PictogramType;
+import org.ordep.labtrack.model.enums.ChemicalPictogram;
+import org.ordep.labtrack.model.enums.PhysicalPictogram;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.PageRequest;
 
 import java.io.IOException;
 import java.util.*;
@@ -41,8 +43,6 @@ class CardServiceTest {
     @Mock
     private StatementService statementService;
     @Mock
-    private SymRepository symRepository;
-    @Mock
     private HazRepository hazRepository;
     @Mock
     private ManRepository manRepository;
@@ -61,7 +61,7 @@ class CardServiceTest {
 
     @Test
     void newChemicalHazardCard() throws JsonProcessingException {
-        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
+        List<ChemicalPictogram> pictograms = Collections.singletonList(ChemicalPictogram.GHS01);
 
         HazardStatement hazardStatement = new HazardStatement(uuid1, "name", "state");
         List<HazardStatement> hazardStatements = Collections.singletonList(hazardStatement);
@@ -114,9 +114,9 @@ class CardServiceTest {
                         "/json/ChemicalHazardCard.json").getInputStream(),
                 ChemicalHazardCard.class));
 
-        when(chemicalHazardCardRepository.findChemicalHazardCardsByAuthor(any())).thenReturn(cards);
+        when(chemicalHazardCardRepository.findChemicalHazardCardsByAuthor(any(), any())).thenReturn(cards);
 
-        List<ChemicalHazardCard> output = cardService.findAllChemicalHazardCardsForUser(userID);
+        List<ChemicalHazardCard> output = cardService.findAllChemicalHazardCardsForUser(userID, 1);
 
         assertEquals(cards, output);
     }
@@ -147,10 +147,7 @@ class CardServiceTest {
 
     @Test
     void newPhysicalHazardCard() {
-        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
-
-        Sym sym = new Sym(uuid1, "name", "state");
-        List<Sym> syms = Collections.singletonList(sym);
+        List<PhysicalPictogram> pictograms = Collections.singletonList(PhysicalPictogram.PHS01);
 
         Haz haz = new Haz(uuid2, "name", "state");
         List<Haz> hazs = Collections.singletonList(haz);
@@ -166,8 +163,7 @@ class CardServiceTest {
 
         var input = new PhysicalHazardCard();
         input.setCardName("name");
-        input.setPictograms(pictograms);
-        input.setSyms(syms);
+        input.setSymbols(pictograms);
         input.setHazs(hazs);
         input.setMen(men);
         input.setSops(sops);
@@ -177,9 +173,8 @@ class CardServiceTest {
 
         verify(physicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
-        assertEquals(pictograms, card.getPictograms());
         assertEquals(user, card.getAuthor());
-        assertEquals(syms, card.getSyms());
+        assertEquals(pictograms, card.getSymbols());
         assertEquals(hazs, card.getHazs());
         assertEquals(men, card.getMen());
         assertEquals(sops, card.getSops());
@@ -238,9 +233,6 @@ class CardServiceTest {
 
     @Test
     void newBiologicalHazardCard() throws JsonProcessingException {
-        List<PictogramType> pictograms = Collections.singletonList(PictogramType.GHS01);
-
-        Sym sym = new Sym(uuid1, "name", "state");
 
         Man man = new Man(uuid2, "name", "state");
 
@@ -252,8 +244,7 @@ class CardServiceTest {
 
         var input = new BiologicalHazardCard();
         input.setCardName("name");
-        input.setPictograms(pictograms);
-        input.setSym(sym);
+        input.setHazardous(true);
         input.setMan(man);
         input.setSops(sops);
         input.setAuthor(user);
@@ -262,9 +253,8 @@ class CardServiceTest {
 
         verify(biologicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
-        assertEquals(pictograms, card.getPictograms());
         assertEquals(user, card.getAuthor());
-        assertEquals(sym, card.getSym());
+        assertEquals(true, card.isHazardous());
         assertEquals(man, card.getMan());
         assertEquals(sops, card.getSops());
         System.out.println(objectMapper.writeValueAsString(card));

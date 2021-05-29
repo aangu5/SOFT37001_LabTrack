@@ -14,8 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class BiologicalHazardCard extends Card {
-    @OneToOne
-    private Sym sym;
+    private boolean hazardous;
     private String cat;
     private String dose;
     private String period;
