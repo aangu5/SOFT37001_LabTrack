@@ -1,13 +1,13 @@
 package org.ordep.labtrack.model.enums;
 
-public enum SignalWord {
-    NONE("None"),
-    WARNING("Warning"),
-    DANGER("Danger");
+public enum CardType {
+    BIOLOGICAL("Biological"),
+    CHEMICAL("Chemical"),
+    PHYSICAL("Physical");
 
     private final String displayName;
 
-    SignalWord(String displayName){
+    CardType(String displayName){
         this.displayName = displayName;
     }
 

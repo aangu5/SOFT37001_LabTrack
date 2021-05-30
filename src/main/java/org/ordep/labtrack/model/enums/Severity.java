@@ -1,13 +1,15 @@
 package org.ordep.labtrack.model.enums;
 
-public enum SignalWord {
-    NONE("None"),
-    WARNING("Warning"),
-    DANGER("Danger");
+public enum Severity {
+    VERY_LOW("Very Low"),
+    LOW("Low"),
+    MEDIUM("Medium"),
+    HIGH("High"),
+    VERY_HIGH("Very High");
 
     private final String displayName;
 
-    SignalWord(String displayName){
+    Severity(String displayName){
         this.displayName = displayName;
     }
 

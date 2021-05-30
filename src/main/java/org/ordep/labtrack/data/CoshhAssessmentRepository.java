@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface CoshhAssessmentRepository extends PagingAndSortingRepository<CoshhAssessment, UUID> {
     List<CoshhAssessment> findCoshhAssessmentByAuthor(LabTrackUser author);
     List<CoshhAssessment> findAll();
+    List<CoshhAssessment> findAllByApproved(boolean approved);
 }

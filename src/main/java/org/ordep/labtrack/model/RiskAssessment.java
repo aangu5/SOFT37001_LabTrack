@@ -1,16 +1,16 @@
 package org.ordep.labtrack.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.model.enums.ChemicalPictogram;
+import org.ordep.labtrack.model.enums.FrequencyOfTask;
+import org.ordep.labtrack.model.enums.Severity;
 
 import javax.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,9 +25,12 @@ public class RiskAssessment extends Assessment {
     @ElementCollection
     private List<String> risks;
     private String numberOfExposures;
-    private String frequencyOfTask;
-    private String severity;
-    private String likelihood;
+    @Enumerated(EnumType.STRING)
+    private FrequencyOfTask frequencyOfTask;
+    @Enumerated(EnumType.STRING)
+    private Severity severity;
+    @Enumerated(EnumType.STRING)
+    private Severity likelihood;
     private String riskRating;
     @OneToMany
     private List<PrecautionaryStatement> precautionaryStatements;

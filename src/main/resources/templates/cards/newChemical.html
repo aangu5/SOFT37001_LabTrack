@@ -119,13 +119,15 @@
           margin-right: -5px;
         }
 
+
+
     </style>
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
-<form action="#" method="POST" th:action="@{/api/chemical/new}" th:object="${chemicalHazardCard}">
+<form action="#" method="POST" th:action="@{/api/card/chemical/new}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
@@ -155,7 +157,7 @@
               <th>Signal Word*</th>
               <td class="data">
                 <select style="width:100%" class="table" th:field="*{signalWord}" required>
-                  <option class="table" th:each="i : ${signalWords}" th:text="${i}" th:value="${i}"</option>
+                  <option class="table" th:each="i : ${signalWords}" th:text="${i.getDisplayName()}" th:value="${i}"</option>
                 </select>
               </td>
             </tr>

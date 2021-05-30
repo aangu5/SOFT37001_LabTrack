@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface RiskAssessmentRepository extends PagingAndSortingRepository<RiskAssessment, UUID> {
     List<RiskAssessment> findRiskAssessmentByAuthor(LabTrackUser author);
     List<RiskAssessment> findAll();
+    List<RiskAssessment> findAllByApproved(boolean approved);
 }

@@ -53,13 +53,15 @@ h1, h2 {
 
 div.button {
     height: 50px;
-    width: 400px;
     margin: 17px;
     background-color:#64D8CB;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom:0px;
+    margin-right:0px;
+    padding-left:15px;
+    padding-right:15px;
 }
 
 img.pictogram {
@@ -67,3 +69,41 @@ img.pictogram {
     margin: 10px;
 }
 
+h1, h2 {
+    font-family: montserrat, sans-serif;
+}
+
+input[type="text"], select.table{
+    border: 0px;
+    background-color: rgba(0,0,0,0);
+    height:100%;
+    width: calc(100% - 10px);
+    border-radius:20px;
+    padding: 0px;
+    padding-left: 10px;
+    font-family: montserrat, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+option.table{
+    font-weight: bold;
+    font-size: 16px;
+}
+
+div::-webkit-scrollbar {
+    width: 12px;
+}
+
+
+div::-webkit-scrollbar-track{
+    background: #E0E0E0;
+    -webkit-border-radius: 6px;
+}
+
+
+div::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background:#26A69A;
+}

@@ -58,10 +58,8 @@ class APIControllerTest {
         .contentType("application/x-www-form-urlencoded;charset=UTF-8")
         .param("username", "user@email.com")
         .param("password", "Password1!"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isMovedTemporarily());
 
-        verify(authenticationService, times(1)).registerUser(any());
-        verify(userService, times(1)).registerUser(any());
     }
 
     @Test

@@ -2,6 +2,7 @@ package org.ordep.labtrack.model;
 
 import lombok.Data;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
+import org.ordep.labtrack.model.enums.CardType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,8 +15,9 @@ public abstract class Card {
     private UUID cardId;
     private String cardName;
     private String synonyms;
-    private boolean status;
     private LocalDateTime dateCreated;
+    @Enumerated(EnumType.STRING)
+    private CardType cardType;
     @ManyToOne
     private LabTrackUser author;
 
@@ -26,7 +28,10 @@ public abstract class Card {
         return null;
     }
 
-    public String isActive() {
-        return status ? "Active" : "Inactive";
+    public String getType() {
+        if (cardType != null) {
+            return cardType.getDisplayName();
+        }
+        return "Unknown Type";
     }
 }

@@ -10,5 +10,7 @@ import java.util.UUID;
 public interface BiologicalHazardCardRepository extends PagingAndSortingRepository<BiologicalHazardCard, UUID> {
     List<BiologicalHazardCard> findAll();
 
+    List<BiologicalHazardCard> findAllByOrderByDateCreatedDesc();
+
     List<BiologicalHazardCard> findBiologicalHazardCardsByAuthor(LabTrackUser user);
 }

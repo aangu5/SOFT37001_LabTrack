@@ -2,25 +2,26 @@ package org.ordep.labtrack.service;
 
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
-import org.ordep.labtrack.model.CoshhAssessment;
-import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.RiskAssessment;
+import org.ordep.labtrack.exception.CardNotFoundException;
+import org.ordep.labtrack.model.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AssessmentService {
     private final RiskAssessmentRepository riskAssessmentRepository;
     private final CoshhAssessmentRepository coshhAssessmentRepository;
     private final UserService userService;
+    private final AuthenticationService authenticationService;
 
-    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, CoshhAssessmentRepository coshhAssessmentRepository, UserService userService){
+    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, CoshhAssessmentRepository coshhAssessmentRepository, UserService userService, AuthenticationService authenticationService){
         this.riskAssessmentRepository = riskAssessmentRepository;
         this.coshhAssessmentRepository = coshhAssessmentRepository;
         this.userService = userService;
+        this.authenticationService = authenticationService;
     }
 
     public List<RiskAssessment> findAllRiskAssessmentsForUser(UUID userID) {
@@ -29,25 +30,46 @@ public class AssessmentService {
     }
 
     public List<RiskAssessment> getAllRiskAssessments(){
-        return riskAssessmentRepository.findAll();
+        List<RiskAssessment> output = riskAssessmentRepository.findAll();
+        output.sort(Comparator.comparing(RiskAssessment::getDateCreated).reversed());
+        return output;
     }
 
-    public RiskAssessment newRiskAssessment(RiskAssessment input) {
+    public RiskAssessment newRiskAssessment(RiskAssessment riskAssessment) {
 
         var riskAssessmentID = UUID.randomUUID();
         LabTrackUser author = userService.getCurrentUser();
 
-        var riskAssessment = new RiskAssessment();
         riskAssessment.setAssessmentId(riskAssessmentID);
-        riskAssessment.setAssessmentName(input.getAssessmentName());
         riskAssessment.setAuthor(author);
-        riskAssessment.setReaction(input.getReaction());
-        riskAssessment.setRisks(input.getRisks());
         riskAssessment.setDateCreated(LocalDateTime.now());
 
         riskAssessmentRepository.save(riskAssessment);
 
         return riskAssessment;
+    }
+
+    public RiskAssessment findOneRiskAssessment(UUID assessmentId) {
+        Optional<RiskAssessment> optional = riskAssessmentRepository.findById(assessmentId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw new CardNotFoundException(assessmentId);
+    }
+
+    public List<RiskAssessment> findAllRiskAssessmentsToApprove() {
+
+        LabTrackUser currentUser = userService.getCurrentUser();
+
+        if (authenticationService.canUserApprove(currentUser)) {
+            return riskAssessmentRepository.findAllByApproved(false);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateRiskAssessment(RiskAssessment riskAssessment) {
+        riskAssessmentRepository.save(riskAssessment);
     }
 
     public List<CoshhAssessment> findAllCoshhAssessmentsForUser(UUID userID) {
@@ -56,7 +78,9 @@ public class AssessmentService {
     }
 
     public List<CoshhAssessment> getAllCoshhAssessments(){
-        return coshhAssessmentRepository.findAll();
+        List<CoshhAssessment> output = coshhAssessmentRepository.findAll();
+        output.sort(Comparator.comparing(CoshhAssessment::getDateCreated).reversed());
+        return output;
     }
 
     public CoshhAssessment newCoshhAssessment(CoshhAssessment coshhAssessment) {
@@ -71,5 +95,15 @@ public class AssessmentService {
         coshhAssessmentRepository.save(coshhAssessment);
 
         return coshhAssessment;
+    }
+
+    public List<CoshhAssessment> findAllCoshhAssessmentsToApprove() {
+        LabTrackUser currentUser = userService.getCurrentUser();
+
+        if (authenticationService.canUserApprove(currentUser)) {
+            return coshhAssessmentRepository.findAllByApproved(false);
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

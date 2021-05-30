@@ -10,5 +10,7 @@ import java.util.UUID;
 public interface PhysicalHazardCardRepository extends PagingAndSortingRepository<PhysicalHazardCard, UUID> {
     List<PhysicalHazardCard> findAll();
 
+    List<PhysicalHazardCard> findAllByOrderByDateCreatedDesc();
+
     List<PhysicalHazardCard> findPhysicalHazardCardsByAuthor(LabTrackUser user);
 }

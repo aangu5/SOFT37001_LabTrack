@@ -16,11 +16,7 @@
             <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
                 <tr>
                     <th  class="rounded">Card Type</th>
-                    <td class="data" th:text="${chemicalHazardCard.class.simpleName}">Barclays</td>
-                </tr>
-                <tr>
-                    <th class="rounded">Status</th>
-                    <td class="data" th:text="${chemicalHazardCard.isActive()}">Active</td>
+                    <td class="data" th:text="${chemicalHazardCard.getType()}">Barclays</td>
                 </tr>
                 <tr>
                     <th class="rounded">Date Created</th>
@@ -37,7 +33,7 @@
                 </tr>
                 <tr>
                     <th class="rounded">Signal Word</th>
-                    <td class="data" th:text="${chemicalHazardCard.signalWord.name()}">"Bananas"</td>
+                    <td class="data" th:text="${chemicalHazardCard.signalWord.getDisplayName()}">"Bananas"</td>
                 </tr>
             </table>
         </div>

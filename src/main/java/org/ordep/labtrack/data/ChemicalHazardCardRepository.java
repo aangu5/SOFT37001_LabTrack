@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface ChemicalHazardCardRepository extends PagingAndSortingRepository<ChemicalHazardCard, UUID> {
     List<ChemicalHazardCard> findAll();
+    List<ChemicalHazardCard> findAllByOrderByDateCreatedDesc();
 
     List<ChemicalHazardCard> findChemicalHazardCardsByAuthor(LabTrackUser user, Pageable pageable);
 }

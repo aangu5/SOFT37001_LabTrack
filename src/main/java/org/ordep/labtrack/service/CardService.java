@@ -4,16 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.CardType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.ordep.labtrack.configuration.Constants.PAGE_COUNT;
 
@@ -46,8 +44,8 @@ public class CardService {
 
         chemicalHazardCard.setCardId(UUID.randomUUID());
         chemicalHazardCard.setAuthor(user);
-        chemicalHazardCard.setStatus(true);
         chemicalHazardCard.setDateCreated(LocalDateTime.now());
+        chemicalHazardCard.setCardType(CardType.CHEMICAL);
 
         chemicalHazardCardRepository.save(chemicalHazardCard);
         log.info("Chemical Hazard Card created: {}", chemicalHazardCard);
@@ -79,9 +77,9 @@ public class CardService {
         LabTrackUser user = userService.getCurrentUser();
 
         physicalHazardCard.setCardId(UUID.randomUUID());
-        physicalHazardCard.setStatus(true);
         physicalHazardCard.setAuthor(user);
         physicalHazardCard.setDateCreated(LocalDateTime.now());
+        physicalHazardCard.setCardType(CardType.PHYSICAL);
 
         physicalHazardCardRepository.save(physicalHazardCard);
         log.info("Physical Hazard Card created: {}", physicalHazardCard);
@@ -112,9 +110,9 @@ public class CardService {
         LabTrackUser user = userService.getCurrentUser();
 
         biologicalHazardCard.setCardId(UUID.randomUUID());
-        biologicalHazardCard.setStatus(true);
         biologicalHazardCard.setAuthor(user);
         biologicalHazardCard.setDateCreated(LocalDateTime.now());
+        biologicalHazardCard.setCardType(CardType.BIOLOGICAL);
 
         biologicalHazardCardRepository.save(biologicalHazardCard);
         log.info("Biological Hazard Card created: {}", biologicalHazardCard);
@@ -142,10 +140,11 @@ public class CardService {
     public List<Card> getAllCards() {
         List<Card> output = new ArrayList<>();
 
-        output.addAll(chemicalHazardCardRepository.findAll());
-        output.addAll(physicalHazardCardRepository.findAll());
-        output.addAll(biologicalHazardCardRepository.findAll());
+        output.addAll(chemicalHazardCardRepository.findAllByOrderByDateCreatedDesc());
+        output.addAll(physicalHazardCardRepository.findAllByOrderByDateCreatedDesc());
+        output.addAll(biologicalHazardCardRepository.findAllByOrderByDateCreatedDesc());
 
+        output.sort(Comparator.comparing(Card::getDateCreated).reversed());
         return output;
     }
 

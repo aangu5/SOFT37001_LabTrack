@@ -3,34 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Risk Assessment</title>
+  <link href="/style.css" rel="stylesheet">
   <style>
-    ul {
-      font-size: 24px;
-      font-family: montserrat, sans-serif;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      margin: 0 0 20px 0;
-    }
-
-    a {
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-    }
-
-    h1 {
-      font-family: montserrat, sans-serif;
-    }
-
-    p {
-      font-family: montserrat, sans-serif;
-      font-weight: bold;
-    }
-
     td.data {
       text-align: left;
       background-color: #E0E0E0;
@@ -41,42 +15,8 @@
       padding-top: 0px;
       padding:0px;
       vertical-align: top;
-    }
-
-    th {
-      padding: 20px;
-      text-align: center;
-      background-color: #64D8CB;
-      border-radius: 6px;
-      -moz-border-radius: 6px;
-      align-content: flex-start;
-      white-space: nowrap;
-    }
-
-    img.pictogram {
-      height: 100px;
-      margin: 10px;
-    }
-
-    input[type="text"], select.table{
-      border: 0px;
-      background-color: rgba(0,0,0,0);
       height:100%;
-      width: calc(100% - 10px);
-      border-radius:20px;
-      padding: 0px;
-      padding-left: 10px;
-      font-family: montserrat, sans-serif;
-      font-weight: bold;
-      font-size: 16px;
     }
-
-    option.table{
-      font-weight: bold;
-      font-size: 16px;
-    }
-
-
   </style>
 </head>
 <body style="margin: 0px">
@@ -89,54 +29,43 @@
       <div style="width: 100%">
         <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
           <tr>
-            <th>Assessment Name</th>
+            <th class="rounded">Assessment Name</th>
             <td class="data">
               <input th:field="*{assessmentName}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Supplier Name</th>
+            <th class="rounded">Supplier Name</th>
             <td class="data">
               <input th:field="*{supplierName}" type="text">
             </td>
           </tr>
           <tr>
-            <th>CAS</th>
+            <th class="rounded">CAS</th>
             <td class="data">
               <input th:field="*{cas}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Quantity Ordered</th>
+            <th class="rounded">Quantity Ordered</th>
             <td class="data">
               <input th:field="*{quantityOrdered}" type="text">
             </td>
-          </tr>
-        </table>
-      </div>
-      <div style="width: 100%">
-        <table style="background-color:white; margin: 15px; width: 100%; font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
           <tr th:if="${!hazardStatements.isEmpty()}">
-            <th>Hazard
-              Statements
-            </th>
-          </tr>
-          <tr th:if="${!hazardStatements.isEmpty()}" style="float:left; width: 100%">
-            <td style="width: 100%">
-              <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="statement : ${hazardStatements}">
+            <th class="rounded">Hazard Statements
+            <td class="data" style="height:200px; width: 100%">
+              <div style="overflow-y: scroll; max-height: 200px; height: 200px; width: 100%">
+                <div style="margin:10px;"  th:each="statement : ${hazardStatements}">
                   <input style="float: left; text-align: left" id="hazardStatements" type="checkbox" th:field="*{hazardStatements}"  th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
                 </div>
               </div>
             </td>
           </tr>
           <tr th:if="${!precautionaryStatements.isEmpty()}">
-            <th>Precautionary Statements</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
-              <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="statement : ${precautionaryStatements}">
+            <th class="rounded">Precautionary Statements</th>
+            <td class="data" style="width: 100%">
+              <div style="overflow-y: scroll; max-height: 200px; height: 200px; width: 100%">
+                <div style="margin:10px;"   th:each="statement : ${precautionaryStatements}">
                   <input style="float: left; text-align: left" id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
                 </div>
               </div>
@@ -144,12 +73,10 @@
           </tr>
 
           <tr th:if="${hazardToHealths.length != 0}">
-            <th>Hazards To Health</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
+            <th class="rounded">Hazards To Health</th>
+            <td class="data" style="width: 100%">
               <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="hazard : ${hazardToHealths}">
+                <div style="margin:10px;" th:each="hazard : ${hazardToHealths}">
                   <input style="float: left; text-align: left" id="hazard" type="checkbox" th:field="*{hazardToHealths}" th:text="${hazard.getDisplayName()}" th:value="${hazard}"/>
                 </div>
               </div>
@@ -157,12 +84,10 @@
           </tr>
 
           <tr th:if="${routeOfExposures.length != 0}">
-            <th>Routes of Exposure</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
+            <th class="rounded">Routes of Exposure</th>
+            <td class="data" style="width: 100%">
               <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="route : ${routeOfExposures}">
+                <div style="margin:10px;" th:each="route : ${routeOfExposures}">
                   <input style="float: left; text-align: left" id="route" type="checkbox" th:field="*{routeOfExposures}" th:text="${route.getDisplayName()}" th:value="${route}"/>
                 </div>
               </div>
@@ -170,12 +95,10 @@
           </tr>
 
           <tr th:if="${precautions.length != 0}">
-            <th>Precautions</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
+            <th class="rounded">Precautions</th>
+            <td class="data" style="width: 100%">
               <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="precaution : ${precautions}">
+                <div style="margin:10px;" th:each="precaution : ${precautions}">
                   <input style="float: left; text-align: left" id="precaution" type="checkbox" th:field="*{precautions}" th:text="${precaution.getDisplayName()}" th:value="${precaution}"/>
                 </div>
               </div>
@@ -183,43 +106,41 @@
           </tr>
 
           <tr th:if="${protectiveEquipments.length != 0}">
-            <th>Protective Equipment</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
+            <th class="rounded">Protective Equipment</th>
+            <td class="data" style="width: 100%">
               <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="equipment : ${protectiveEquipments}">
+                <div style="margin:10px;" th:each="equipment : ${protectiveEquipments}">
                   <input style="float: left; text-align: left" id="equipment" type="checkbox" th:field="*{protectiveEquipments}" th:text="${equipment.getDisplayName()}" th:value="${equipment}"/>
                 </div>
               </div>
             </td>
           </tr>
           <tr>
-            <th>Storage Information</th>
+            <th class="rounded">Storage Information</th>
             <td class="data">
               <input th:field="*{storageInformation}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Disposal Method</th>
+            <th class="rounded">Disposal Method</th>
             <td class="data">
               <input th:field="*{disposalMethod}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Action in case of Spillage</th>
+            <th class="rounded">Action in case of Spillage</th>
             <td class="data">
               <input th:field="*{actionInCaseOfSpillage}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Fire Precaution</th>
+            <th class="rounded">Fire Precaution</th>
             <td class="data">
               <input th:field="*{firePrecaution}" type="text">
             </td>
           </tr>
           <tr>
-            <th>Fire Aid Precaution</th>
+            <th class="rounded">Fire Aid Precaution</th>
             <td class="data">
               <input th:field="*{fireAidAction}" type="text">
             </td>

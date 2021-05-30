@@ -3,10 +3,7 @@ package org.ordep.labtrack.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.*;
-import org.ordep.labtrack.service.AssessmentService;
-import org.ordep.labtrack.service.CardService;
-import org.ordep.labtrack.service.StatementService;
-import org.ordep.labtrack.service.UserService;
+import org.ordep.labtrack.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,12 +23,14 @@ public class WebController {
     private final StatementService statementService;
     private final UserService userService;
     private final AssessmentService assessmentService;
+    private final AuthenticationService authenticationService;
 
-    public WebController(CardService cardService, StatementService statementService, UserService userService, AssessmentService assessmentService) {
+    public WebController(CardService cardService, StatementService statementService, UserService userService, AssessmentService assessmentService, AuthenticationService authenticationService) {
         this.cardService = cardService;
         this.statementService = statementService;
         this.userService = userService;
         this.assessmentService = assessmentService;
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/home")
@@ -100,7 +99,7 @@ public class WebController {
                                 Model model) {
         List<ChemicalHazardCard> cards;
 
-        if (view.equals("mine")) {
+        if (view.equals("self")) {
             LabTrackUser user = userService.getCurrentUser();
             cards = cardService.findAllChemicalHazardCardsForUser(user.getUserId(), page);
         } else if (view.equals(APPROVE)) {
@@ -118,7 +117,7 @@ public class WebController {
     public String biologicalCards(@RequestParam(defaultValue = "none") String view, Model model) {
         List<BiologicalHazardCard> cards;
 
-        if (view.equals("mine")) {
+        if (view.equals("self")) {
             LabTrackUser user = userService.getCurrentUser();
             cards = cardService.findAllBiologicalHazardCardsForUser(user.getUserId());
         } else if (view.equals(APPROVE)) {
@@ -136,11 +135,9 @@ public class WebController {
     public String physicalCards(@RequestParam(defaultValue = "none") String view, Model model) {
         List<PhysicalHazardCard> cards;
 
-        if (view.equals("mine")) {
+        if (view.equals("self")) {
             LabTrackUser user = userService.getCurrentUser();
             cards = cardService.findAllPhysicalHazardCardsForUser(user.getUserId());
-        } else if (view.equals(APPROVE)) {
-            cards = new ArrayList<>();
         } else {
             cards = cardService.findAllPhysicalHazardCards();
         }
@@ -158,8 +155,19 @@ public class WebController {
     }
 
     @GetMapping("/assessments/risk")
-    public String riskAssessments(Model model) {
-        model.addAttribute("riskAssessments", assessmentService.getAllRiskAssessments());
+    public String riskAssessments(@RequestParam(defaultValue = "none") String view, Model model) {
+        List<RiskAssessment> assessments;
+
+        if (view.equals("self")) {
+            LabTrackUser user = userService.getCurrentUser();
+            assessments = assessmentService.findAllRiskAssessmentsForUser(user.getUserId());
+        } else if (view.equals("approve")) {
+            assessments = assessmentService.findAllRiskAssessmentsToApprove();
+        } else {
+            assessments = assessmentService.getAllRiskAssessments();
+        }
+
+        model.addAttribute("riskAssessments", assessments);
         model.addAttribute(PAGE_TITLE,"Risk Assessments");
         return "assessments/riskAssessments";
     }
@@ -196,13 +204,26 @@ public class WebController {
         model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
+        model.addAttribute("frequencies", FrequencyOfTask.values());
+        model.addAttribute("severities", Severity.values());
+        model.addAttribute("likelihoods", Likelihood.values());
         model.addAttribute(PAGE_TITLE,"New Risk Assessment");
         return "assessments/newRiskAssessment";
     }
 
     @GetMapping("/assessments/coshh")
-    public String coshhAssessments(Model model) {
-        model.addAttribute("coshhAssessments", assessmentService.getAllCoshhAssessments());
+    public String coshhAssessments(@RequestParam(defaultValue = "none") String view, Model model) {
+        List<CoshhAssessment> assessments;
+
+        if (view.equals("self")) {
+            LabTrackUser user = userService.getCurrentUser();
+            assessments = assessmentService.findAllCoshhAssessmentsForUser(user.getUserId());
+        } else if (view.equals("approve")){
+            assessments = assessmentService.findAllCoshhAssessmentsToApprove();
+        } else {
+            assessments = assessmentService.getAllCoshhAssessments();
+        }
+        model.addAttribute("coshhAssessments", assessments);
         model.addAttribute(PAGE_TITLE, "COSHH Assessments");
 
         return "assessments/coshhAssessments";
@@ -220,6 +241,16 @@ public class WebController {
 
         model.addAttribute(PAGE_TITLE,"New COSHH Assessment");
         return "assessments/newCoshhAssessment";
+    }
+
+    @GetMapping("/assessment/risk")
+    public String riskAssessment(@RequestParam UUID id, Model model) {
+        LabTrackUser user = userService.getCurrentUser();
+        var riskAssessment = assessmentService.findOneRiskAssessment(id);
+        model.addAttribute("riskAssessment", riskAssessment);
+        model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
+        model.addAttribute(PAGE_TITLE,riskAssessment.getAssessmentName());
+        return "assessments/riskAssessment";
     }
 
     @GetMapping("/error")

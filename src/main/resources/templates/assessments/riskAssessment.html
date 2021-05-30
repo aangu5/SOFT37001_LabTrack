@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Risk Assessment</title>
+  <link href="/style.css" rel="stylesheet">
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+    <div style="width: 100%">
+      <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+        <tr>
+          <th class="rounded">Reaction</th>
+          <td class="data" th:text="${riskAssessment.getReaction()}">Reaction</td>
+        </tr>
+        <tr>
+          <th class="rounded">Date Created</th>
+          <td class="data" th:text="${riskAssessment.getFormattedCreatedDate()}">11/04/2021</td>
+        </tr>
+        <tr>
+          <th class="rounded">Author</th>
+          <td class="data" th:text="${riskAssessment.author.displayName}">Stephen 'Conical Flask' Turner
+          </td>
+        </tr>
+        <tr>
+          <th class="rounded">Status</th>
+          <td class="data" th:text="${riskAssessment.isActive()}">Stephen 'Conical Flask' Turner
+          </td>
+        </tr>
+        <tr>
+          <th class="rounded">Number of Exposures</th>
+          <td class="data" th:text="${riskAssessment.numberOfExposures}">Exposures</td>
+        </tr>
+        <tr>
+          <th class="rounded">Frequency of Task</th>
+          <td class="data" th:text="${riskAssessment.frequencyOfTask.getDisplayName()}">"Frequency"</td>
+        </tr>
+        <tr>
+          <th class="rounded">Severity</th>
+          <td class="data" th:text="${riskAssessment.severity.getDisplayName()}">"Severity"</td>
+        </tr>
+        <tr>
+          <th class="rounded">Likelihood</th>
+          <td class="data" th:text="${riskAssessment.likelihood.getDisplayName()}">"Likelihood"</td>
+        </tr>
+      </table>
+    </div>
+    <div style="width: 100%">
+      <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
+        <div th:if="${!riskAssessment.getChemicalHazardCards().isEmpty()}">
+          <tr>
+            <th class="rounded" th:colspan="${riskAssessment.getChemicalHazardCards().size()}">Chemical Hazard Cards
+            </th>
+          </tr>
+
+          <div th:each="chemicalHazardCard : ${riskAssessment.getChemicalHazardCards()}">
+            <tr style="float:left; width: 100%" >
+              <td> <a th:text="${chemicalHazardCard.getCardName()}" th:href="@{/card/ChemicalHazardCard(id=${chemicalHazardCard.getCardId()})}"></a></td>
+            </tr>
+          </div>
+
+        </div>
+
+        <div th:if="${!riskAssessment.getBiologicalHazardCards().isEmpty()}">
+          <tr>
+            <th class="rounded" th:colspan="${riskAssessment.getBiologicalHazardCards().size()}">Biological Hazard Cards
+            </th>
+          </tr>
+
+          <div th:each="biologicalHazardCard : ${riskAssessment.getBiologicalHazardCards()}">
+            <tr style="float:left; width: 100%" >
+              <td><a th:text="${biologicalHazardCard.getCardName()}" th:href="@{/card/BiologicalHazardCard(id=${biologicalHazardCard.getCardId()})}"></a></td>
+            </tr>
+          </div>
+        </div>
+
+        <div th:if="${!riskAssessment.getPhysicalHazardCards().isEmpty()}">
+          <tr>
+            <th class="rounded" th:colspan="${riskAssessment.getPhysicalHazardCards().size()}">Physical Hazard Cards
+            </th>
+          </tr>
+
+          <div th:each="physicalHazardCard : ${riskAssessment.getPhysicalHazardCards()}">
+            <tr style="float:left; width: 100%" >
+              <td><a th:text="${physicalHazardCard.getCardName()}" th:href="@{/card/PhysicalHazardCard(id=${physicalHazardCard.getCardId()})}"></a></td>
+            </tr>
+          </div>
+
+        </div>
+      </table>
+    </div>
+  </div>
+  <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!riskAssessment.approved && canUserApprove}">
+    <input style="display:none" id="approve" onclick="submitApproval()">
+    <label for="approve">
+      <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+        <h1 style="padding:10px; color:white">Approve</h1>
+      </div>
+    </label>
+  </div>
+</div>
+<script th:inline="javascript">
+
+  function submitApproval() {
+    let assessmentId =/*[[${riskAssessment.getAssessmentId()}]]*/'abc';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "/api/assessment/risk/approve?assessmentId=" + assessmentId, true);
+    xhr.send();
+  }
+
+</script>
+
+</body>
+</html>

@@ -28,17 +28,17 @@
         <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center" th:if="${!allCards.isEmpty()}">
             <tr style="font-size: 18px;">
                 <th class="overview">Card Name</th>
+                <th class="overview">Type</th>
+                <th class="overview">Synonyms</th>
                 <th class="overview">Date Created</th>
                 <th class="overview">Author</th>
-                <th class="overview">Status</th>
-                <th class="overview">Type</th>
             </tr>
             <tr th:each="card : ${allCards}">
                 <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+                <td class="overview" th:text="${card.getType()}">Type</td>
+                <td class="overview" th:text="${card.synonyms}">Synonyms</td>
                 <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
                 <td class="overview" th:text="${card.author.displayName}">Author</td>
-                <td class="overview" th:text="${card.status}">Status</td>
-                <td class="overview" th:text="${card.class.simpleName}">Type</td>
             </tr>
         </table>
 

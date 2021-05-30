@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Biological Hazard Cards</title>
+
 </head>
 <body>
 
@@ -11,57 +11,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <style>
-    ul {
-      font-size: 24px;
-      font-family: montserrat, sans-serif;
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    li {
-      margin: 0 0 20px 0;
-    }
-
-    a {
-      text-decoration: none;
-      color: black;
-      font-weight: bold;
-    }
-
-    h1, h2 {
-      font-family: montserrat, sans-serif;
-    }
-
-    p {
-      font-family: montserrat, sans-serif;
-      font-weight: bold;
-    }
-
-    th {
-      background-color:#64D8CB;
-      padding: 8px;
-    }
-    td {
-      background-color: #E0E0E0;
-      padding: 8px;
-    }
-    div.button {
-      height: 50px;
-      width: 400px;
-      margin: 17px;
-      background-color:#64D8CB;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    img.pictogram {
-      height: 100px;
-      margin: 10px;
-    }
-  </style>
+  <title>Biological Hazard Cards</title>
+  <link href="/style.css" rel="stylesheet">
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
@@ -69,23 +20,18 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-between;">
-    <div style="width:100%">
-      <div class="button" id="all-cards" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
+      <div class="button" id="all-cards">
         <a href="/cards/biological">
           <h2>All Cards</h2>
         </a>
       </div>
-      <div class="button" id="my-cards" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
-        <a href="/cards/biological?view=mine">
+      <div class="button" id="my-cards">
+        <a href="/cards/biological?view=self">
           <h2>My Cards</h2>
         </a>
       </div>
-      <div class="button" id="to-approve" style="margin-bottom: 0px; margin-left:17px; margin-right: auto ">
-        <a href="/cards/biological?view=approve">
-          <h2>Cards to Approve</h2>
-        </a>
-      </div>
-      <div class="button" style="margin-bottom: 0px; margin-left:auto; margin-right: 17px ">
+      <div class="button">
         <a href="/card/BiologicalHazardCard/new">
           <h2>New Biological Hazard Card</h2>
         </a>
@@ -93,16 +39,16 @@
     </div>
     <table th:if="${!biologicalCards.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
-        <th>Card Name</th>
-        <th>Date Created</th>
-        <th>Author</th>
-        <th>Status</th>
+        <th  class="overview">Card Name</th>
+        <th class="overview">Date Created</th>
+        <th class="overview">Author</th>
+        <th class="overview">Synonyms</th>
       </tr>
       <tr th:each="card : ${biologicalCards}">
-        <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-        <td th:text="${card.getFormattedDate()}">Date Created</td>
-        <td th:text="${card.author.displayName}">Author</td>
-        <td th:text="${card.status}">Status</td>
+        <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+        <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
+        <td class="overview" th:text="${card.author.displayName}">Author</td>
+        <td class="overview" th:text="${card.synonyms}">Synonyms</td>
       </tr>
     </table>
 
@@ -116,10 +62,8 @@
 <script>
   let url = window.location.href;
   console.log(url);
-  if (url.endsWith("?view=mine")) {
+  if (url.endsWith("?view=self")) {
     document.getElementById("my-cards").style.opacity = 0.5;
-  } else if (url.endsWith("?view=approve")) {
-    document.getElementById("to-approve").style.opacity = 0.5;
   } else {
     document.getElementById("all-cards").style.opacity = 0.5;
   }

@@ -1,128 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Chemical Hazard Cards</title>
-</head>
-<body>
+    <meta charset="UTF-8">
+    <title>Chemical Hazard Cards</title>
+    <link href="/style.css" rel="stylesheet">
 
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <style>
-        ul {
-            font-size: 24px;
-            font-family: montserrat, sans-serif;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            margin: 0 0 20px 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-
-        h1, h2 {
-            font-family: montserrat, sans-serif;
-        }
-
-        p {
-            font-family: montserrat, sans-serif;
-            font-weight: bold;
-        }
-
-        th {
-            background-color:#64D8CB;
-            padding: 8px;
-        }
-        td {
-            background-color: #E0E0E0;
-            padding: 8px;
-        }
-        div.button {
-            height: 50px;
-            width: 350px;
-            margin-bottom:17px;
-            background-color:#64D8CB;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        img.pictogram {
-            height: 100px;
-            margin: 10px;
-        }
-    </style>
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
-  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: space-between;">
-    <div style="width:100%; display:flex; flex-wrap: wrap; justify-content: space-between; margin:17px; margin-bottom:0px;">
-      <div class="button" id="all-cards">
-        <a href="/cards/chemical">
-          <h2>All Cards</h2>
-        </a>
-      </div>
-      <div class="button" id="my-cards">
-        <a href="/cards/chemical?view=mine">
-          <h2>My Cards</h2>
-        </a>
-      </div>
-      <div class="button" id="to-approve">
-        <a href="/cards/chemical?view=approve">
-          <h2>Cards to Approve</h2>
-        </a>
-      </div>
-      <div class="button">
-        <a href="/card/ChemicalHazardCard/new">
-          <h2>New Chemical Hazard Card</h2>
-        </a>
-      </div>
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
+        <div class="button" id="all-cards">
+            <a href="/cards/chemical">
+                <h2>All Cards</h2>
+            </a>
+        </div>
+        <div class="button" id="my-cards">
+            <a href="/cards/chemical?view=self">
+                <h2>My Cards</h2>
+            </a>
+        </div>
+        <div class="button">
+            <a href="/card/ChemicalHazardCard/new">
+                <h2>New Chemical Hazard Card</h2>
+            </a>
+        </div>
     </div>
-    <table th:if="${!chemicalCards.isEmpty()}" style="margin: 15px; margin-top:0px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
-      <tr style="font-size: 18px;">
-        <th>Card Name</th>
-        <th>Date Created</th>
-        <th>Author</th>
-        <th>Status</th>
-      </tr>
-      <tr th:each="card : ${chemicalCards}">
-        <td><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
-        <td th:text="${card.getFormattedDate()}">Date Created</td>
-        <td th:text="${card.author.displayName}">Author</td>
-        <td th:text="${card.status}">Status</td>
-      </tr>
+    <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center"
+           th:if="${!chemicalCards.isEmpty()}">
+        <tr style="font-size: 18px;">
+            <th class="overview">Card Name</th>
+            <th class="overview">Date Created</th>
+            <th class="overview">Author</th>
+            <th class="overview">Synonyms</th>
+        </tr>
+        <tr th:each="card : ${chemicalCards}">
+            <td class="overview"><a th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}"
+                                    th:text="${card.cardName}">Card
+                Name</a></td>
+            <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
+            <td class="overview" th:text="${card.author.displayName}">Author</td>
+            <td class="overview" th:text="${card.synonyms}">Synonyms</td>
+        </tr>
     </table>
 
-    <div th:if="${chemicalCards.isEmpty()}" style="width: 100%; height: 100%; display: flex; justify-content: center;">
-      <h2 style="margin-top: 100px;" >There are no cards to display here...</h2>
+    <div style="width: 100%; height: 100%; display: flex; justify-content: center;" th:if="${chemicalCards.isEmpty()}">
+        <h2 style="margin-top: 100px;">There are no cards to display here...</h2>
     </div>
 
-  </div>
-</div>
 </div>
 <script>
-  let url = window.location.href;
-  console.log(url);
-  if (url.endsWith("?view=mine")) {
-    document.getElementById("my-cards").style.opacity = 0.5;
-  } else if (url.endsWith("?view=approve")) {
-    document.getElementById("to-approve").style.opacity = 0.5;
-  } else {
-    document.getElementById("all-cards").style.opacity = 0.5;
-  }
+    let url = window.location.href;
+    console.log(url);
+    if (url.endsWith("?view=self")) {
+        document.getElementById("my-cards").style.opacity = 0.5;
+    } else {
+        document.getElementById("all-cards").style.opacity = 0.5;
+    }
 </script>
 
 </body>

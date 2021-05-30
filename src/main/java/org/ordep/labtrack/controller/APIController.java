@@ -49,17 +49,26 @@ public class APIController {
         var userID = UUID.randomUUID();
 
         String username = data.getFirst("username");
-        String password = data.getFirst("password");
+        String password1 = data.getFirst("password-1");
+        String password2 = data.getFirst("password-2");
 
-        if (username == null || !username.matches(EMAIL_REGEX)) {
+        if (username == null || password1 == null) {
+            throw new UserException("Null value for username or password for user: " + username);
+        }
+
+        if (!password1.equals(password2)) {
+            throw new UserException("Passwords do not match for user: " + username);
+        }
+
+        if (!username.matches(EMAIL_REGEX)) {
             throw new UserException("Email does not meet requirements for user: " + username);
         }
 
-        if (password == null ||  !password.matches(PASSWORD_REGEX)) {
+        if (!password1.matches(PASSWORD_REGEX)) {
             throw new UserException("Password does not meet requirements for user:" + username);
         }
 
-        String hashedPassword = passwordEncoder.encode(data.getFirst("password"));
+        String hashedPassword = passwordEncoder.encode(password1);
 
         var authenticationEntity = new AuthenticationEntity();
         authenticationEntity.setUserId(userID);
@@ -96,6 +105,22 @@ public class APIController {
         httpServletResponse.setStatus(200);
     }
 
+    @PostMapping("/api/assessment/risk/approve")
+    public void approveRiskAssessment(@RequestParam UUID assessmentId, HttpServletResponse httpServletResponse) {
+
+        var assessment = assessmentService.findOneRiskAssessment(assessmentId);
+        var user = userService.getCurrentUser();
+
+        log.info("Risk Assessment approval: {} by {}", assessment, user);
+
+        if (authenticationService.canUserApprove(user)) {
+            assessment.setApproved(true);
+            assessment.setApprover(user);
+
+            assessmentService.updateRiskAssessment(assessment);
+        }
+    }
+
     @PostMapping("/api/assessment/coshh/new")
     public void submitCoshhAssessment(@ModelAttribute CoshhAssessment coshhAssessment, HttpServletResponse httpServletResponse) {
         log.info("New Coshh Assessment: {}", coshhAssessment);
@@ -106,11 +131,33 @@ public class APIController {
         httpServletResponse.setStatus(302);
     }
 
-    @PostMapping("/api/chemical/new")
-    public void newCard(@ModelAttribute ChemicalHazardCard chemicalHazardCard, Model model, HttpServletResponse httpServletResponse) {
+    @PostMapping("/api/card/chemical/new")
+    public void newChemicalHazardCard(@ModelAttribute ChemicalHazardCard chemicalHazardCard, Model model, HttpServletResponse httpServletResponse) {
         log.info("New Chemical Hazard Card: {}", chemicalHazardCard);
         model.addAttribute(chemicalHazardCard);
         cardService.newChemicalHazardCard(chemicalHazardCard);
+
+        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setStatus(302);
+
+    }
+
+    @PostMapping("/api/card/biological/new")
+    public void newBiologicalHazardCard(@ModelAttribute BiologicalHazardCard biologicalHazardCard, Model model, HttpServletResponse httpServletResponse) {
+        log.info("New Biological Hazard Card: {}", biologicalHazardCard);
+        model.addAttribute(biologicalHazardCard);
+        cardService.newBiologicalHazardCard(biologicalHazardCard);
+
+        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setStatus(302);
+
+    }
+
+    @PostMapping("/api/card/physical/new")
+    public void newPhysicalHazardCard(@ModelAttribute PhysicalHazardCard physicalHazardCard, Model model, HttpServletResponse httpServletResponse) {
+        log.info("New Biological Hazard Card: {}", physicalHazardCard);
+        model.addAttribute(physicalHazardCard);
+        cardService.newPhysicalHazardCard(physicalHazardCard);
 
         httpServletResponse.setHeader("Location", HOME_URL);
         httpServletResponse.setStatus(302);
