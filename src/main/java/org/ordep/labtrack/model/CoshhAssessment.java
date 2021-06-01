@@ -8,6 +8,7 @@ import org.ordep.labtrack.model.enums.RouteOfExposure;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -38,6 +39,6 @@ public class CoshhAssessment extends Assessment {
     private String actionInCaseOfSpillage;
     private String firePrecaution;
     private String fireAidAction;
-    @OneToMany
+    @ManyToMany
     private List<LabTrackUser> signedUsers;
 }

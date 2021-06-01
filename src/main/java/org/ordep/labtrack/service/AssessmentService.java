@@ -2,9 +2,8 @@ package org.ordep.labtrack.service;
 
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
-import org.ordep.labtrack.exception.CardNotFoundException;
+import org.ordep.labtrack.exception.AssessmentNotFoundException;
 import org.ordep.labtrack.model.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -54,7 +53,7 @@ public class AssessmentService {
         if (optional.isPresent()) {
             return optional.get();
         }
-        throw new CardNotFoundException(assessmentId);
+        throw new AssessmentNotFoundException(assessmentId);
     }
 
     public List<RiskAssessment> findAllRiskAssessmentsToApprove() {
@@ -105,5 +104,30 @@ public class AssessmentService {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    public CoshhAssessment findOneCoshhAssessment(UUID assessmentId) {
+        Optional<CoshhAssessment> optional = coshhAssessmentRepository.findById(assessmentId);
+        if (optional.isPresent()) {
+            return optional.get();
+        }
+        throw new AssessmentNotFoundException(assessmentId);
+    }
+
+    public boolean canUserSignAssessment(CoshhAssessment assessment, LabTrackUser user) {
+        return (!hasUserSignedAssessment(assessment, user) && assessment.isApproved());
+    }
+
+    public boolean canUserSignAssessment(UUID assessmentId) {
+        var assessment = findOneCoshhAssessment(assessmentId);
+        return canUserSignAssessment(assessment, userService.getCurrentUser());
+    }
+
+    public boolean hasUserSignedAssessment(CoshhAssessment assessment, LabTrackUser user) {
+        return assessment.getSignedUsers().contains(user);
+    }
+
+    public void updateCoshhAssessment(CoshhAssessment coshhAssessment) {
+        coshhAssessmentRepository.save(coshhAssessment);
     }
 }

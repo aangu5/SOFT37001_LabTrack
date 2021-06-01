@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COSHH Assessment</title>
+    <link href="/style.css" rel="stylesheet">
+
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+        <div style="width: 100%">
+            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+                <tr>
+                    <th class="rounded">Supplier Name</th>
+                    <td class="data" th:text="${coshhAssessment.getSupplierName()}">Supplier Name</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Date Created</th>
+                    <td class="data" th:text="${coshhAssessment.getFormattedCreatedDate()}">11/04/2021</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Author</th>
+                    <td class="data" th:text="${coshhAssessment.author.displayName}">Stephen 'Conical Flask' Turner
+                    </td>
+                </tr>
+                <tr>
+                    <th class="rounded">Status</th>
+                    <td class="data" th:text="${coshhAssessment.isActive()}">Stephen 'Conical Flask' Turner
+                    </td>
+                </tr>
+                <tr th:if="${coshhAssessment.approved}">
+                    <th class="rounded">Approved By</th>
+                    <td class="data" th:text="${coshhAssessment.getApprover().getDisplayName()}">Stephen 'Conical Flask' Turner
+                    </td>
+                </tr>
+                <tr th:if="${coshhAssessment.approved}">
+                    <th class="rounded">Approved On</th>
+                    <td class="data" th:text="${coshhAssessment.getFormattedApprovedDate()}">Stephen 'Conical Flask' Turner
+                    </td>
+                </tr>
+                <tr>
+                    <th class="rounded">CAS</th>
+                    <td class="data" th:text="${coshhAssessment.getCas()}">cas</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Quantity Ordered</th>
+                    <td class="data" th:text="${coshhAssessment.getQuantityOrdered()}">"Quantity"</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Storage Information</th>
+                    <td class="data" th:text="${coshhAssessment.getStorageInformation()}">Storage Information</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Disposal Method</th>
+                    <td class="data" th:text="${coshhAssessment.getDisposalMethod()}">Disposal Method</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Action in Case of Spillage</th>
+                    <td class="data" th:text="${coshhAssessment.getActionInCaseOfSpillage()}">Action in Case of Spillage</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Fire Precaution</th>
+                    <td class="data" th:text="${coshhAssessment.getFirePrecaution()}">Fire Precaution</td>
+                </tr>
+                <tr>
+                    <th class="rounded">Fire Aid Action</th>
+                    <td class="data" th:text="${coshhAssessment.getFireAidAction()}">Fire Aid Action</td>
+                </tr>
+            </table>
+        </div>
+        <div style="width: 100%">
+            <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
+                <div th:if="${!coshhAssessment.getHazardStatements().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getHazardStatements().size()}">Hazard Statements
+                        </th>
+                    </tr>
+
+                    <div th:each="statement : ${coshhAssessment.getHazardStatements()}">
+                        <tr style="float:left; width: 100%" >
+                            <td> <a th:text="${statement.getStatementName()}"></a></td>
+                        </tr>
+                    </div>
+
+                </div>
+
+                <div th:if="${!coshhAssessment.getPrecautionaryStatements().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getPrecautionaryStatements().size()}">Precautionary Statements
+                        </th>
+                    </tr>
+
+                    <div th:each="statement : ${coshhAssessment.getPrecautionaryStatements()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${statement.getStatementName()}"></a></td>
+                        </tr>
+                    </div>
+                </div>
+
+                <div th:if="${!coshhAssessment.getHazardToHealths().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getHazardToHealths().size()}">Hazards to Health
+                        </th>
+                    </tr>
+
+                    <div th:each="hazard : ${coshhAssessment.getHazardToHealths()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${hazard.getDisplayName()}"/></td>
+                        </tr>
+                    </div>
+                </div>
+
+                <div th:if="${!coshhAssessment.getRouteOfExposures().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getRouteOfExposures().size()}">Hazards to Health
+                        </th>
+                    </tr>
+
+                    <div th:each="route : ${coshhAssessment.getRouteOfExposures()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${route.getDisplayName()}"/></td>
+                        </tr>
+                    </div>
+                </div>
+
+                <div th:if="${!coshhAssessment.getPrecautions().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getPrecautions().size()}">Hazards to Health
+                        </th>
+                    </tr>
+
+                    <div th:each="precaution : ${coshhAssessment.getPrecautions()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${precaution.getDisplayName()}"/></td>
+                        </tr>
+                    </div>
+                </div>
+
+                <div th:if="${!coshhAssessment.getProtectiveEquipments().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getProtectiveEquipments().size()}">Hazards to Health
+                        </th>
+                    </tr>
+
+                    <div th:each="equipment : ${coshhAssessment.getProtectiveEquipments()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${equipment.getDisplayName()}"/></td>
+                        </tr>
+                    </div>
+                </div>
+
+                <div th:if="${!coshhAssessment.getSignedUsers().isEmpty()}">
+                    <tr>
+                        <th class="rounded" th:colspan="${coshhAssessment.getSignedUsers().size()}">Signed Users
+                        </th>
+                    </tr>
+
+                    <div th:each="user : ${coshhAssessment.getSignedUsers()}">
+                        <tr style="float:left; width: 100%" >
+                            <td><a th:text="${user.getDisplayName()}"/></td>
+                        </tr>
+                    </div>
+                </div>
+            </table>
+        </div>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!coshhAssessment.approved && canUserApprove}">
+        <input style="display:none" id="approve" onclick="submitApproval()">
+        <label for="approve">
+            <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+                <h1 style="padding:10px; color:white">Approve</h1>
+            </div>
+        </label>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${canUserSign}">
+        <input style="display:none" id="sign" onclick="signCard()">
+        <label for="sign">
+            <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+                <h1 style="padding:10px; color:white">Sign</h1>
+            </div>
+        </label>
+    </div>
+</div>
+
+<script th:inline="javascript">
+
+    function submitApproval() {
+        let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/api/assessment/coshh/approve?assessmentId=" + assessmentId, true);
+        xhr.send();
+        location.reload();
+    }
+
+    function signCard() {
+        let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "/api/assessment/coshh/sign?assessmentId=" + assessmentId, true);
+        xhr.send();
+        location.reload();
+    }
+
+</script>
+
+
+</body>
+</html>

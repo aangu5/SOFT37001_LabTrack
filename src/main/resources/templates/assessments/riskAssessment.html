@@ -35,15 +35,15 @@
           <th class="rounded">Number of Exposures</th>
           <td class="data" th:text="${riskAssessment.numberOfExposures}">Exposures</td>
         </tr>
-        <tr>
+        <tr th:if="${riskAssessment.frequencyOfTask != null}">
           <th class="rounded">Frequency of Task</th>
           <td class="data" th:text="${riskAssessment.frequencyOfTask.getDisplayName()}">"Frequency"</td>
         </tr>
-        <tr>
+        <tr th:if="${riskAssessment.severity != null}">
           <th class="rounded">Severity</th>
           <td class="data" th:text="${riskAssessment.severity.getDisplayName()}">"Severity"</td>
         </tr>
-        <tr>
+        <tr th:if="${riskAssessment.likelihood != null}">
           <th class="rounded">Likelihood</th>
           <td class="data" th:text="${riskAssessment.likelihood.getDisplayName()}">"Likelihood"</td>
         </tr>

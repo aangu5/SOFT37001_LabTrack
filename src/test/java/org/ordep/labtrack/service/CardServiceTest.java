@@ -2,11 +2,14 @@ package org.ordep.labtrack.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
@@ -55,6 +58,7 @@ class CardServiceTest {
 
     @BeforeEach
     void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
     }
 
     // Chemistry Hazard Card
@@ -310,26 +314,28 @@ class CardServiceTest {
 
     // Other Methods
 
-//    @Test
-//    void getAllCards() throws IOException {
-//        List<ChemicalHazardCard> chemicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
-//                "/json/ChemicalHazardCard.json").getInputStream(), ChemicalHazardCard.class));
-//        List<PhysicalHazardCard> physicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
-//                "/json/PhysicalHazardCard.json").getInputStream(), PhysicalHazardCard.class));
-//        List<BiologicalHazardCard> biologicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
-//                "/json/BiologicalHazardCard.json").getInputStream(), BiologicalHazardCard.class));
-//
-//        List<Card> expected = new ArrayList<>();
-//        expected.addAll(chemicalCards);
-//        expected.addAll(physicalCards);
-//        expected.addAll(biologicalCards);
-//
-//        when(chemicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(chemicalCards);
-//        when(physicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(physicalCards);
-//        when(biologicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(biologicalCards);
-//
-//        List<Card> actual = cardService.getAllCards();
-//
-//        assertEquals(expected, actual);
-//    }
+    @Test
+    void getAllCards() throws IOException {
+        List<ChemicalHazardCard> chemicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/ChemicalHazardCard.json").getInputStream(), ChemicalHazardCard.class));
+        List<PhysicalHazardCard> physicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/PhysicalHazardCard.json").getInputStream(), PhysicalHazardCard.class));
+        List<BiologicalHazardCard> biologicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/BiologicalHazardCard.json").getInputStream(), BiologicalHazardCard.class));
+
+        List<Card> expected = new ArrayList<>();
+        expected.addAll(chemicalCards);
+        expected.addAll(physicalCards);
+        expected.addAll(biologicalCards);
+
+        when(chemicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(chemicalCards);
+        when(physicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(physicalCards);
+        when(biologicalHazardCardRepository.findAllByOrderByDateCreatedDesc()).thenReturn(biologicalCards);
+
+        expected.sort(Comparator.comparing(Card::getDateCreated).reversed());
+
+        List<Card> actual = cardService.getAllCards();
+
+        assertEquals(expected, actual);
+    }
 }

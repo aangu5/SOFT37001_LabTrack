@@ -36,12 +36,13 @@
         <th class="overview">Name</th>
         <th class="overview">Date Created</th>
         <th class="overview">Author</th>
+          <th class="overview">Signed</th>
       </tr>
       <tr th:each="assessment : ${coshhAssessments}">
         <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/coshh(id=${assessment.assessmentId})}">Assessment Name</a></td>
         <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
         <td class="overview" th:text="${assessment.author.displayName}">Author</td>
-
+          <td class="overview" th:text="${assessment.signedUsers.contains(user)}"></td>
       </tr>
     </table>
 

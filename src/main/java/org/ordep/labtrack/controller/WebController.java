@@ -224,9 +224,24 @@ public class WebController {
             assessments = assessmentService.getAllCoshhAssessments();
         }
         model.addAttribute("coshhAssessments", assessments);
+        model.addAttribute("user", userService.getCurrentUser());
         model.addAttribute(PAGE_TITLE, "COSHH Assessments");
 
         return "assessments/coshhAssessments";
+    }
+
+    @GetMapping("/assessment/coshh")
+    public String coshhAssessment(@RequestParam(defaultValue = "none") UUID id, Model model) {
+        LabTrackUser user = userService.getCurrentUser();
+
+        var assessment = assessmentService.findOneCoshhAssessment(id);
+        model.addAttribute("coshhAssessment", assessment);
+        model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
+        model.addAttribute("canUserSign", assessmentService.canUserSignAssessment(id));
+
+        model.addAttribute(PAGE_TITLE, assessment.getAssessmentName());
+
+        return "assessments/coshhAssessment";
     }
 
     @GetMapping("/assessment/coshh/new")

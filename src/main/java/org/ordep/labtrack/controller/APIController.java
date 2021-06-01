@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -115,6 +116,7 @@ public class APIController {
 
         if (authenticationService.canUserApprove(user)) {
             assessment.setApproved(true);
+            assessment.setDateApproved(LocalDateTime.now());
             assessment.setApprover(user);
 
             assessmentService.updateRiskAssessment(assessment);
@@ -129,6 +131,41 @@ public class APIController {
 
         httpServletResponse.setHeader("Location", HOME_URL);
         httpServletResponse.setStatus(302);
+    }
+
+    @PostMapping("/api/assessment/coshh/approve")
+    public void approveCoshhAssessment(@RequestParam UUID assessmentId, HttpServletResponse httpServletResponse) {
+
+        var assessment = assessmentService.findOneCoshhAssessment(assessmentId);
+        var user = userService.getCurrentUser();
+
+        log.info("Coshh Assessment approval: {} by {}", assessment, user);
+
+        if (authenticationService.canUserApprove(user)) {
+            assessment.setApproved(true);
+            assessment.setDateApproved(LocalDateTime.now());
+            assessment.setApprover(user);
+
+            assessmentService.updateCoshhAssessment(assessment);
+        }
+    }
+
+    @PostMapping("/api/assessment/coshh/sign")
+    public void signCoshhAssessment(@RequestParam UUID assessmentId, HttpServletResponse httpServletResponse) {
+
+        var assessment = assessmentService.findOneCoshhAssessment(assessmentId);
+        var user = userService.getCurrentUser();
+
+        if (assessmentService.canUserSignAssessment(assessment, user)) {
+
+            log.info("Coshh Assessment signed: {} by {}", assessment, user);
+
+            var users = assessment.getSignedUsers();
+            users.add(user);
+            assessment.setSignedUsers(users);
+
+            assessmentService.updateCoshhAssessment(assessment);
+        }
     }
 
     @PostMapping("/api/card/chemical/new")
