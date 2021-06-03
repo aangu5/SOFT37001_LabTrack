@@ -1,0 +1,72 @@
+{
+  "assessmentId": "40758470-c75c-4dce-ba29-c4b47125bdf7",
+  "assessmentName": "Acetic Acid (testing)",
+  "author": {
+    "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
+    "displayName": "Angus Cheney",
+    "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
+    "loggedIn": false
+  },
+  "approver": {
+    "userId": "4fb37ffc-49c3-4b3a-8d33-12099cdaf8ac",
+    "displayName": "Reece Edwards",
+    "emailAddress": "reece.edwards2019@ntu.ac.uk",
+    "loggedIn": false
+  },
+  "dateCreated": "2019-07-18T11:22:15",
+  "dateApproved": "2019-07-19T11:22:15",
+  "approved": true,
+  "supplierName": "Fisher",
+  "cas": "128 - nmds",
+  "quantityOrdered": "1",
+  "hazardStatements": [
+    {
+      "statementId": "cc75e6e2-4fd2-446c-97fe-041313ad4bf6",
+      "statementName": "H201 – Explosive; mass explosion hazard.",
+      "statementState": "State"
+    },
+    {
+      "statementId": "a3be2f78-d694-48c8-9ac6-b4c1455a29fa",
+      "statementName": "H203 – Explosive; fire, blast or projection hazard.",
+      "statementState": "State"
+    }
+  ],
+  "precautionaryStatements": [
+    {
+      "statementId": "339790a2-fd1b-42e5-8e45-aeae91072cc8",
+      "statementName": "P103 – Read carefully and follow all instructions.",
+      "statementState": "State"
+    },
+    {
+      "statementId": "45f2985c-8a6e-45a7-923d-883345dab196",
+      "statementName": "P210 – Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
+      "statementState": "State"
+    }
+  ],
+  "hazardToHealths": [
+    "EXPLOSIVE",
+    "FLAMMABLE"
+  ],
+  "routeOfExposures": [
+    "INGESTION"
+  ],
+  "precautions": [
+    "CONTAINMENT_2"
+  ],
+  "protectiveEquipments": [
+    "LATEX_GLOVES"
+  ],
+  "storageInformation": null,
+  "disposalMethod": null,
+  "actionInCaseOfSpillage": null,
+  "firePrecaution": null,
+  "fireAidAction": null,
+  "signedUsers": [
+    {
+      "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
+      "displayName": "Angus Cheney",
+      "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
+      "loggedIn": false
+    }
+  ]
+}

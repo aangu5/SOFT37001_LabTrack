@@ -1,0 +1,111 @@
+{
+  "assessmentId": "d1296646-9963-4516-8450-c27c603bbc62",
+  "assessmentName": "Autoclaving (Biohazard Waste Disposal)",
+  "author": {
+    "userId": "5a0f9243-19b0-4549-9747-43f0f903b073",
+    "displayName": "Steve",
+    "emailAddress": "angus.cheney2019@ntu.ac.uk",
+    "loggedIn": false
+  },
+  "approver": {
+    "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
+    "displayName": "Angus Cheney",
+    "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
+    "loggedIn": false
+  },
+  "dateCreated": "2019-07-18T11:22:15",
+  "dateApproved": null,
+  "approved": true,
+  "reaction": "",
+  "pictograms": [],
+  "hazardStatements": [],
+  "risks": [],
+  "numberOfExposures": "",
+  "frequencyOfTask": "DAILY",
+  "severity": "LOW",
+  "likelihood": "VERY_LOW",
+  "riskRating": null,
+  "precautionaryStatements": [],
+  "sops": [],
+  "signature": null,
+  "physicalHazardCards": [
+    {
+      "cardId": "e8613e04-0862-4ce8-a5e3-74052caaccbf",
+      "cardName": "Microwaving",
+      "synonyms": null,
+      "dateCreated": "2019-07-18T11:22:15",
+      "cardType": "PHYSICAL",
+      "author": {
+        "userId": "4fb37ffc-49c3-4b3a-8d33-12099cdaf8ac",
+        "displayName": "Reece Edwards",
+        "emailAddress": "reece.edwards2019@ntu.ac.uk",
+        "loggedIn": false
+      },
+      "symbols": [],
+      "hazs": [],
+      "men": [],
+      "sops": []
+    }
+  ],
+  "chemicalHazardCards": [
+    {
+      "cardId": "50e60faa-950c-48a4-bd67-419acffa6e15",
+      "cardName": "Ethanol",
+      "synonyms": null,
+      "dateCreated": "2019-07-18T11:22:15",
+      "cardType": "CHEMICAL",
+      "author": {
+        "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
+        "displayName": "Angus Cheney",
+        "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
+        "loggedIn": false
+      },
+      "pictograms": [
+        "GHS02",
+        "GHS07"
+      ],
+      "cas": "64-17-5",
+      "signalWord": "DANGER",
+      "hazardStatements": [
+        {
+          "statementId": "4b6dc7d8-a3e3-4424-a698-1abbb4b43875",
+          "statementName": "H225 – Highly flammable liquid and vapour.",
+          "statementState": "State"
+        },
+        {
+          "statementId": "c7fd044a-db1d-4cf8-878e-8f6ca47c2b9c",
+          "statementName": "H319 – Causes serious eye irritation.",
+          "statementState": "State"
+        }
+      ],
+      "precautionaryStatements": [
+        {
+          "statementId": "45f2985c-8a6e-45a7-923d-883345dab196",
+          "statementName": "P210 – Keep away from heat, hot surfaces, sparks, open flames and other ignition sources. No smoking.",
+          "statementState": "State"
+        },
+        {
+          "statementId": "be0827cf-880c-4dd9-b944-01c890d4e5a5",
+          "statementName": "P280 – Wear protective gloves/protective clothing/eye protection/face protection/hearing protection/…",
+          "statementState": "State"
+        },
+        {
+          "statementId": "999db597-b304-4dae-b6d0-a648edce3e54",
+          "statementName": "P305 + P351 + P338 – IF IN EYES: Rinse cautiously with water for several minutes. Remove contact lenses, if present and easy to do. Continue rinsing.",
+          "statementState": "State"
+        },
+        {
+          "statementId": "defef738-7cd4-4b8d-a5fa-2e4e061face4",
+          "statementName": "P337 + P313 – If eye irritation persists: Get medical advice/ attention.",
+          "statementState": "State"
+        },
+        {
+          "statementId": "249ff108-67d2-4efc-b07a-ac9dd8dcb2c9",
+          "statementName": "P403 + P235 – Store in a well-ventilated place. Keep cool.",
+          "statementState": "State"
+        }
+      ]
+    }
+  ],
+  "biologicalHazardCards": []
+}
