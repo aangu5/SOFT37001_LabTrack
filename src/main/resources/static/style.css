@@ -108,3 +108,9 @@ div::-webkit-scrollbar-thumb {
     background:#26A69A;
 }
 
+div.scrollbox {
+    overflow-y: scroll;
+    max-height: 200px;
+    width: 100%
+}
+

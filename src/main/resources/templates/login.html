@@ -85,15 +85,15 @@
             <h2 class="form-sign-up-heading">Sign up</h2>
             <p>
                 <label for="username-sign-up" class="sr-only">Email</label>
-                <input type="text" id="username-sign-up" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+                <input type="text" id="username-sign-up" name="username" class="form-control" placeholder="Username" required th:pattern="${emailRegex}" autofocus="">
             </p>
             <p>
                 <label for="password-sign-up-1" class="sr-only">Password</label>
-                <input type="password" id="password-sign-up-1" name="password-1" class="form-control" placeholder="Password" required="">
+                <input type="password" id="password-sign-up-1" name="password-1" class="form-control" placeholder="Password" required th:pattern="${passwordRegex}">
             </p>
             <p>
                 <label for="password-sign-up-2" class="sr-only">Confirm Password</label>
-                <input type="password" id="password-sign-up-2" name="password-2" class="form-control" placeholder="Confirm Password" required="">
+                <input type="password" id="password-sign-up-2" name="password-2" class="form-control" placeholder="Confirm Password" required th:pattern="${passwordRegex}">
             </p>
             <p>
                 <label for="displayName" class="sr-only">Display Name</label>

@@ -7,8 +7,10 @@ import org.ordep.labtrack.model.enums.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,20 +28,44 @@ public class AuthenticationService implements UserDetailsService {
         return authenticationRepository.getAuthenticationEntityByUsername(username);
     }
 
-    public void registerUser(AuthenticationEntity authenticationEntity) {
+    public AuthenticationEntity getAuthenticationEntity(String username) {
+        return authenticationRepository.getAuthenticationEntityByUsername(username);
+    }
+
+    public void saveAuthenticationEntity(AuthenticationEntity authenticationEntity) {
         authenticationRepository.save(authenticationEntity);
     }
 
     public boolean canUserApprove(LabTrackUser user) {
+        List<Role> roles = getUserRoles(user);
+
+        return roles.contains(Role.ADMIN) || roles.contains(Role.LECTURER);
+    }
+
+    public List<Role> getUserRoles(LabTrackUser user) {
         Optional<AuthenticationEntity> optional = authenticationRepository.findById(user.getUserId());
 
         if (optional.isEmpty()) {
-            return false;
+            return new ArrayList<>();
         }
 
         AuthenticationEntity entity = optional.get();
-        List<Role> roles = entity.getRoles();
+        return entity.getRoles();
+    }
 
-        return roles.contains(Role.ADMIN) || roles.contains(Role.LECTURER);
+    public Role getHighestRole(LabTrackUser user){
+        List<Role> roles = getUserRoles(user);
+        if (roles.contains(Role.ADMIN)) {
+            return Role.ADMIN;
+        }
+        else if (roles.contains(Role.LECTURER)){
+            return Role.LECTURER;
+        }
+        else if (roles.contains(Role.STUDENT)){
+            return Role.STUDENT;
+        }
+        else {
+            return Role.USER;
+        }
     }
 }

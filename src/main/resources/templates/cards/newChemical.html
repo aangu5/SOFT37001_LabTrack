@@ -3,33 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>New Chemical Hazard Card</title>
+  <link href="/style.css" rel="stylesheet">
   <style>
-        ul {
-            font-size: 24px;
-            font-family: montserrat, sans-serif;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        li {
-            margin: 0 0 20px 0;
-        }
-
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-
-        h1, h2 {
-            font-family: montserrat, sans-serif;
-        }
-
-        p {
-            font-family: montserrat, sans-serif;
-            font-weight: bold;
-        }
         td.data {
           text-align: left;
           background-color: #E0E0E0;
@@ -40,53 +15,6 @@
           padding-top: 0px;
           padding:0px;
           vertical-align: top;
-        }
-
-        th {
-            padding: 20px;
-            text-align: center;
-            background-color: #64D8CB;
-            border-radius: 6px;
-            -moz-border-radius: 6px;
-            align-content: flex-start;
-            white-space: nowrap;
-        }
-
-        img.pictogram {
-            height: 100px;
-            margin: 10px;
-        }
-
-        input[type="text"], select.table{
-          border: 0px;
-          background-color: rgba(0,0,0,0);
-          height:100%;
-          width: calc(100% - 10px);
-          border-radius:20px;
-          padding: 0px;
-          padding-left: 10px;
-          font-family: montserrat, sans-serif;
-          font-weight: bold;
-          font-size: 16px;
-        }
-
-        option.table{
-          font-weight: bold;
-          font-size: 16px;
-        }
-        div.unselected {
-           border: 5px solid rgba(255,255,255,0);
-           border-radius: 12px;
-           -moz-border-radius: 12px;
-           margin: 10px;
-           padding: 10px;
-         }
-        div.selected {
-          border: 5px solid #00766C;
-          border-radius: 12px;
-          -moz-border-radius: 12px;
-          margin: 10px;
-          padding: 10px;
         }
         label.pictogram{
           margin: 10px;
@@ -105,20 +33,6 @@
           width: 100%;
           margin-top: 10px;
         }
-        table {
-          background-color:white;
-          height: 1px;
-          width: calc(100% - 30px);
-          font-family: montserrat,sans-serif;
-          font-weight: bold;
-          margin: 0px;
-          border-spacing: 20px 20px;
-          border-radius:6px;
-          -moz-border-radius:6px;
-          align-content:flex-start;
-          margin-right: -5px;
-        }
-
 
 
     </style>
@@ -131,30 +45,22 @@
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="width: 100%; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-      <div style="width: 100%">
-        <table>
+
+      <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
           <tr>
-            <th>Card Name*</th>
+            <th class="rounded">Card Name*</th>
             <td class="data">
               <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
             </td>
           </tr>
-        </table>
-        </div>
-        <div style="width: 50%">
-          <table>
             <tr>
-                <th>CAS*</th>
+                <th class="rounded">CAS*</th>
                 <td class="data">
                   <input th:field="*{cas}" type="text" required pattern="\b[1-9]{1}[0-9]{1,5}-\d{2}-\d\b">
                 </td>
             </tr>
-          </table>
-        </div>
-        <div style="width: 50%">
-          <table>
             <tr>
-              <th>Signal Word*</th>
+              <th class="rounded">Signal Word*</th>
               <td class="data">
                 <select style="width:100%" class="table" th:field="*{signalWord}" required>
                   <option class="table" th:each="i : ${signalWords}" th:text="${i.getDisplayName()}" th:value="${i}"</option>
@@ -163,42 +69,33 @@
             </tr>
           </table>
         </div>
-      </div>
       <!-- images in here -->
       <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
         <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"/>
         <input class="pictogramBox" type="checkbox" th:field="*{pictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
         <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
       </label>
-      </div>
-      <div style="width: 100%">
-        <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; ">
-          <tr th:if="${!hazardStatements.isEmpty()}">
-            <th>Hazard
-              Statements
-            </th>
-          </tr>
-          <tr th:if="${!hazardStatements.isEmpty()}" style="float:left; width: 100%">
-            <td style="width: 100%">
-              <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="statement : ${hazardStatements}">
-                  <input style="float: left; text-align: left" id="hazardStatements" type="checkbox" th:field="*{hazardStatements}"  th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
-                  </div>
-                </div>
-              </td>
-          </tr>
-          <tr th:if="${!precautionaryStatements.isEmpty()}">
-            <th>Precautionary Statements</th>
-          </tr>
-          <tr style="float:left; width: 100%">
-            <td style="width: 100%">
-              <div style="overflow-y: scroll; max-height: 100px; height: 100px; width: 100%">
-                <div th:each="statement : ${precautionaryStatements}">
-                  <input style="float: left; text-align: left" id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
-                </div>
+      <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+        <tr th:if="${!hazardStatements.isEmpty()}">
+          <th class="rounded">Hazard Statements</th>
+          <td class="data" style="width: 100%">
+            <div class="scrollbox">
+              <div style="margin:10px;"   th:each="statement : ${hazardStatements}">
+                <input style="float: left; text-align: left" id="hazardStatements" type="checkbox" th:field="*{hazardStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
               </div>
-            </td>
-          </tr>
+            </div>
+          </td>
+        </tr>
+        <tr th:if="${!precautionaryStatements.isEmpty()}">
+          <th class="rounded">Precautionary Statements</th>
+          <td class="data" style="width: 100%">
+            <div class="scrollbox">
+              <div style="margin:10px;"   th:each="statement : ${precautionaryStatements}">
+                <input style="float: left; text-align: left" id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+              </div>
+            </div>
+          </td>
+        </tr>
         </table>
       </div>
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">

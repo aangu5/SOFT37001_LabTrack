@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.ordep.labtrack.data.AuthenticationRepository;
 import org.ordep.labtrack.model.AuthenticationEntity;
-import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.enums.Role;
 
 import java.util.Collections;
@@ -49,7 +48,7 @@ class AuthenticationServiceTest {
 
     @Test
     void registerUser() {
-        authenticationService.registerUser(new AuthenticationEntity());
+        authenticationService.saveAuthenticationEntity(new AuthenticationEntity());
         verify(authenticationRepository, times(1)).save(any());
     }
 }

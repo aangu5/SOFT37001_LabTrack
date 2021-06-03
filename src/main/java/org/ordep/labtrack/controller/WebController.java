@@ -1,6 +1,7 @@
 package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ordep.labtrack.configuration.Constants;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.*;
 import org.ordep.labtrack.service.*;
@@ -45,14 +46,25 @@ public class WebController {
     @GetMapping("/profile")
     public String profile(Model model) {
         model.addAttribute(PAGE_TITLE,"My Profile");
-        model.addAttribute("user",userService.getCurrentUser());
+        LabTrackUser currentUser = userService.getCurrentUser();
+        model.addAttribute("user",currentUser);
+        model.addAttribute("role",authenticationService.getHighestRole(currentUser));
 
         return "profile";
     }
 
+    @GetMapping("/profile/changePassword")
+    public String changePassword(Model model) {
+        model.addAttribute("passwordRegex", Constants.PASSWORD_REGEX);
+        return "changePassword";
+    }
+
     @GetMapping("/login")
     public String login(Model model) {
+        model.addAttribute("emailRegex", Constants.EMAIL_REGEX);
+        model.addAttribute("passwordRegex", Constants.PASSWORD_REGEX);
         model.addAttribute(PAGE_TITLE,"Welcome");
+
         return "login";
     }
 

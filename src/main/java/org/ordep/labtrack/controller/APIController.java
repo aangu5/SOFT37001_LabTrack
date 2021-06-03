@@ -22,8 +22,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.ordep.labtrack.configuration.Constants.HOME_URL;
-import static org.ordep.labtrack.configuration.LabTrackUtilities.EMAIL_REGEX;
-import static org.ordep.labtrack.configuration.LabTrackUtilities.PASSWORD_REGEX;
+import static org.ordep.labtrack.configuration.Constants.REDIRECT_LOCATION;
+import static org.ordep.labtrack.configuration.Constants.EMAIL_REGEX;
+import static org.ordep.labtrack.configuration.Constants.PASSWORD_REGEX;
 
 @Slf4j
 @RestController
@@ -78,7 +79,7 @@ public class APIController {
         authenticationEntity.setActive(true);
         authenticationEntity.setRoles(Collections.singletonList(Role.USER));
 
-        authenticationService.registerUser(authenticationEntity);
+        authenticationService.saveAuthenticationEntity(authenticationEntity);
 
         var labTrackUser = new LabTrackUser();
         labTrackUser.setUserId(userID);
@@ -89,6 +90,43 @@ public class APIController {
         userService.registerUser(labTrackUser);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/api/changePassword")
+    public ResponseEntity<Void> changePassword(@RequestBody MultiValueMap<String, String> data) {
+        LabTrackUser currentUser = userService.getCurrentUser();
+
+        log.info("Changing user password for user: {}", currentUser.getUserId());
+
+        String oldPassword = data.getFirst("old-password");
+        String newPassword1 = data.getFirst("new-password-1");
+        String newPassword2 = data.getFirst("new-password-2");
+
+        if (oldPassword == null || newPassword1 == null) {
+            throw new UserException("Null value for username or password for user: " + currentUser.getDisplayName());
+        }
+
+        if (!newPassword1.equals(newPassword2)) {
+            throw new UserException("Passwords do not match for user: " + currentUser.getDisplayName());
+        }
+
+        if (!newPassword1.matches(PASSWORD_REGEX)) {
+            throw new UserException("Password does not meet requirements for user:" + currentUser.getDisplayName());
+        }
+
+        var userDetails = authenticationService.getAuthenticationEntity(currentUser.getEmailAddress());
+
+        if (!passwordEncoder.matches(oldPassword, userDetails.getPassword())) {
+            throw new UserException("Invalid current password for user: " + currentUser.getDisplayName());
+        }
+
+        String hashedPassword = passwordEncoder.encode(newPassword1);
+
+        userDetails.setPassword(hashedPassword);
+
+        authenticationService.saveAuthenticationEntity(userDetails);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/api/risks")
@@ -102,7 +140,7 @@ public class APIController {
 
         assessmentService.newRiskAssessment(riskAssessment);
 
-        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
         httpServletResponse.setStatus(200);
     }
 
@@ -129,7 +167,7 @@ public class APIController {
 
         assessmentService.newCoshhAssessment(coshhAssessment);
 
-        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
         httpServletResponse.setStatus(302);
     }
 
@@ -174,7 +212,7 @@ public class APIController {
         model.addAttribute(chemicalHazardCard);
         cardService.newChemicalHazardCard(chemicalHazardCard);
 
-        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
         httpServletResponse.setStatus(302);
 
     }
@@ -185,7 +223,7 @@ public class APIController {
         model.addAttribute(biologicalHazardCard);
         cardService.newBiologicalHazardCard(biologicalHazardCard);
 
-        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
         httpServletResponse.setStatus(302);
 
     }
@@ -196,7 +234,7 @@ public class APIController {
         model.addAttribute(physicalHazardCard);
         cardService.newPhysicalHazardCard(physicalHazardCard);
 
-        httpServletResponse.setHeader("Location", HOME_URL);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
         httpServletResponse.setStatus(302);
 
     }

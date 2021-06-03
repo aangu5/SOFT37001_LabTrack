@@ -20,14 +20,25 @@
         <td class="data" th:text="${user.getUserId().toString()}"/>
       </tr>
       <tr>
-        <th class="rounded">Display Name</thc>
+        <th class="rounded">Display Name</th>
         <td class="data" th:text="${user.getDisplayName()}"/>
       </tr>
       <tr>
         <th class="rounded">Email Address</th>
         <td class="data" th:text="${user.getEmailAddress()}"/>
       </tr>
+      <tr>
+        <th class="rounded">Role</th>
+        <td class="data" th:text="${role.getDisplayName()}"/>
+      </tr>
     </table>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
+      <a href="/profile/changePassword">
+        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 250px">
+          <h1 style="padding:10px; color:white">Change Password</h1>
+        </div>
+      </a>
+    </div>
   </div>
 </div>
 </body>

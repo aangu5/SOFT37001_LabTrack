@@ -71,7 +71,7 @@ class APIControllerTest {
                 .param("password", "Password1!"))
                 .andExpect(status().isMovedTemporarily());
 
-        verify(authenticationService, times(0)).registerUser(any());
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
         verify(userService, times(0)).registerUser(any());
     }
 
@@ -83,7 +83,7 @@ class APIControllerTest {
                 .param("password", "Password1!"))
                 .andExpect(status().isMovedTemporarily());
 
-        verify(authenticationService, times(0)).registerUser(any());
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
         verify(userService, times(0)).registerUser(any());
     }
 
@@ -96,7 +96,7 @@ class APIControllerTest {
                 .param("password", "pass"))
                 .andExpect(status().isMovedTemporarily());
 
-        verify(authenticationService, times(0)).registerUser(any());
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
         verify(userService, times(0)).registerUser(any());
     }
 
@@ -108,7 +108,7 @@ class APIControllerTest {
                 .param("username", "user@email.com"))
                 .andExpect(status().isMovedTemporarily());
 
-        verify(authenticationService, times(0)).registerUser(any());
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
         verify(userService, times(0)).registerUser(any());
     }
 
