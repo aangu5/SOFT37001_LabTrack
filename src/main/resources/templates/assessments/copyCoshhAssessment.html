@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Risk Assessment</title>
+  <link href="/style.css" rel="stylesheet">
+  <style>
+    td.data {
+      text-align: left;
+      background-color: #E0E0E0;
+      border-radius: 6px;
+      -moz-border-radius: 6px;
+      width: 100%;
+      padding-left: 15px;
+      padding-top: 0px;
+      padding:0px;
+      vertical-align: top;
+      height:100%;
+    }
+  </style>
+</head>
+<body style="margin: 0px">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+<form method="POST" th:action="@{/api/assessment/coshh/new}" th:object="${coshhAssessment}">
+  <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
+      <div style="width: 100%">
+        <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
+          <tr>
+            <th class="rounded">Assessment Name</th>
+            <td class="data">
+              <input th:field="*{assessmentName}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Supplier Name</th>
+            <td class="data">
+              <input th:field="*{supplierName}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">CAS</th>
+            <td class="data">
+              <input th:field="*{cas}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Quantity Ordered</th>
+            <td class="data">
+              <input th:field="*{quantityOrdered}" type="text">
+            </td>
+          <tr th:if="${!hazardStatements.isEmpty()}">
+            <th class="rounded">Hazard Statements
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;"  th:each="statement : ${hazardStatements}">
+                  <input style="float: left; text-align: left" id="hazardStatements" type="checkbox" th:field="*{hazardStatements}"  th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr th:if="${!precautionaryStatements.isEmpty()}">
+            <th class="rounded">Precautionary Statements</th>
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;"   th:each="statement : ${precautionaryStatements}">
+                  <input style="float: left; text-align: left" id="precautionaryStatements" type="checkbox" th:field="*{precautionaryStatements}" th:text="${statement.getStatementName()}" th:value="${statement.getStatementId()}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr th:if="${hazardToHealths.length != 0}">
+            <th class="rounded">Hazards To Health</th>
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;" th:each="hazard : ${hazardToHealths}">
+                  <input style="float: left; text-align: left" id="hazard" type="checkbox" th:field="*{hazardToHealths}" th:text="${hazard.getDisplayName()}" th:value="${hazard}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr th:if="${routeOfExposures.length != 0}">
+            <th class="rounded">Routes of Exposure</th>
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;" th:each="route : ${routeOfExposures}">
+                  <input style="float: left; text-align: left" id="route" type="checkbox" th:field="*{routeOfExposures}" th:text="${route.getDisplayName()}" th:value="${route}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr th:if="${precautions.length != 0}">
+            <th class="rounded">Precautions</th>
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;" th:each="precaution : ${precautions}">
+                  <input style="float: left; text-align: left" id="precaution" type="checkbox" th:field="*{precautions}" th:text="${precaution.getDisplayName()}" th:value="${precaution}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+
+          <tr th:if="${protectiveEquipments.length != 0}">
+            <th class="rounded">Protective Equipment</th>
+            <td class="data" style="width: 100%">
+              <div class="scrollbox">
+                <div style="margin:10px;" th:each="equipment : ${protectiveEquipments}">
+                  <input style="float: left; text-align: left" id="equipment" type="checkbox" th:field="*{protectiveEquipments}" th:text="${equipment.getDisplayName()}" th:value="${equipment}"/>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Storage Information</th>
+            <td class="data">
+              <input th:field="*{storageInformation}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Disposal Method</th>
+            <td class="data">
+              <input th:field="*{disposalMethod}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Action in case of Spillage</th>
+            <td class="data">
+              <input th:field="*{actionInCaseOfSpillage}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Fire Precaution</th>
+            <td class="data">
+              <input th:field="*{firePrecaution}" type="text">
+            </td>
+          </tr>
+          <tr>
+            <th class="rounded">Fire Aid Precaution</th>
+            <td class="data">
+              <input th:field="*{fireAidAction}" type="text">
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
+      <input style="display:none" id="submit" type="submit" value="Submit">
+      <label for="submit">
+        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+          <h1 style="padding:10px; color:white">Submit</h1>
+        </div>
+      </label>
+    </div>
+  </div>
+</form>
+
+</body>
+</html>

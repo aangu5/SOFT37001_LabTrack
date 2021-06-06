@@ -9,7 +9,6 @@ import org.ordep.labtrack.model.enums.RouteOfExposure;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -22,9 +21,9 @@ public class CoshhAssessment extends Assessment {
     private String supplierName;
     private String cas;
     private String quantityOrdered;
-    @OneToMany
+    @ManyToMany
     private List<HazardStatement> hazardStatements;
-    @OneToMany
+    @ManyToMany
     private List<PrecautionaryStatement> precautionaryStatements;
     @ElementCollection
     private List<HazardToHealth> hazardToHealths;

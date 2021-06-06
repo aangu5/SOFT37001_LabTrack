@@ -71,6 +71,10 @@ public class AssessmentService {
         riskAssessmentRepository.save(riskAssessment);
     }
 
+    public void deleteRiskAssessment(RiskAssessment riskAssessment) {
+        riskAssessmentRepository.delete(riskAssessment);
+    }
+
     public List<CoshhAssessment> findAllCoshhAssessmentsForUser(UUID userID) {
         LabTrackUser currentUser = userService.findUser(userID);
         return coshhAssessmentRepository.findCoshhAssessmentByAuthor(currentUser);
@@ -114,6 +118,11 @@ public class AssessmentService {
         throw new AssessmentNotFoundException(assessmentId);
     }
 
+    public void deleteCoshhAssessment(CoshhAssessment coshhAssessment) {
+        coshhAssessmentRepository.delete(coshhAssessment);
+    }
+
+
     public boolean canUserSignAssessment(CoshhAssessment assessment, LabTrackUser user) {
         return (!hasUserSignedAssessment(assessment, user) && assessment.isApproved());
     }
@@ -129,5 +138,16 @@ public class AssessmentService {
 
     public void updateCoshhAssessment(CoshhAssessment coshhAssessment) {
         coshhAssessmentRepository.save(coshhAssessment);
+    }
+
+    public List<Assessment> getAllAssessments() {
+        List<Assessment> assessments = new ArrayList<>();
+
+        assessments.addAll(riskAssessmentRepository.findAll());
+        assessments.addAll(coshhAssessmentRepository.findAll());
+
+        assessments.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        return assessments;
     }
 }

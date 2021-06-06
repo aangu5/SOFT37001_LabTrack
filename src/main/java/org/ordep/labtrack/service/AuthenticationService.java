@@ -1,18 +1,19 @@
 package org.ordep.labtrack.service;
 
 import org.ordep.labtrack.data.AuthenticationRepository;
+import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.AuthenticationEntity;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.enums.Role;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthenticationService implements UserDetailsService {
@@ -26,6 +27,15 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return authenticationRepository.getAuthenticationEntityByUsername(username);
+    }
+
+    public AuthenticationEntity findUserById(UUID userId) {
+        var auth = authenticationRepository.findById(userId);
+
+        if (auth.isPresent()) {
+            return auth.get();
+        }
+        throw new UserException("User not found for ID: " + userId);
     }
 
     public AuthenticationEntity getAuthenticationEntity(String username) {
@@ -51,6 +61,10 @@ public class AuthenticationService implements UserDetailsService {
 
         AuthenticationEntity entity = optional.get();
         return entity.getRoles();
+    }
+
+    public List<AuthenticationEntity> getAllUsers(){
+        return authenticationRepository.findAll();
     }
 
     public Role getHighestRole(LabTrackUser user){

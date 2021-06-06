@@ -14,4 +14,10 @@ public class Constants {
     public static final String PAGE_TITLE = "title";
     public static final String APPROVE = "approve";
     public static final String REDIRECT_LOCATION = "Location";
+
+    // Model fields
+    public static final String HAZARD_STATEMENTS = "hazardStatements";
+    public static final String PRECAUTIONARY_STATEMENTS = "precautionaryStatements";
+    public static final String RISK_ASSESSMENT = "riskAssessment";
+    public static final String COSHH_ASSESSMENT = "coshhAssessment";
 }

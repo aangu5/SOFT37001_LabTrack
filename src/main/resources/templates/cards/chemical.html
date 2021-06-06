@@ -13,6 +13,12 @@
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
         <div style="width: 50%">
+            <div class="button">
+                <a onclick="shareAssessment()" class="popup">
+                    <h2>Share Card</h2>
+                    <span class="popuptext" id="clipboard">Text copied to clipboard</span>
+                </a>
+            </div>
             <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
                 <tr>
                     <th  class="rounded">Card Type</th>
@@ -86,4 +92,15 @@
 </div>
 
 </body>
+<script>
+
+    async function shareAssessment() {
+        let textToCopy = window.location.href;
+        console.log(textToCopy);
+        await navigator.clipboard.writeText(textToCopy);
+        let popup = document.getElementById("clipboard");
+        popup.classList.toggle("show");
+
+    }
+</script>
 </html>

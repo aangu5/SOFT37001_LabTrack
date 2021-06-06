@@ -16,6 +16,7 @@ import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.ChemicalPictogram;
 import org.ordep.labtrack.model.enums.PhysicalPictogram;
+import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
@@ -74,7 +75,7 @@ class CardServiceTest {
                 "state");
         List<PrecautionaryStatement> precautionaryStatements = Collections.singletonList(precautionaryStatement);
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new ChemicalHazardCard();
@@ -162,7 +163,7 @@ class CardServiceTest {
         Sop sop = new Sop(uuid4, "name", "state");
         List<Sop> sops = Collections.singletonList(sop);
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new PhysicalHazardCard();
@@ -243,7 +244,7 @@ class CardServiceTest {
         Sop sop = new Sop(uuid3, "name", "state");
         List<Sop> sops = Collections.singletonList(sop);
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new BiologicalHazardCard();

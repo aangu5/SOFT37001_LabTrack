@@ -175,7 +175,7 @@ class APIControllerTest {
     void submitRiskAssessment() throws Exception {
         mockMvc.perform(post("/api/assessment/risk/new")
                 .flashAttr("riskAssessment", new RiskAssessment()))
-                .andExpect(status().isOk());
+                .andExpect(status().isFound());
 
         verify(assessmentService, times(1)).newRiskAssessment(any());
     }

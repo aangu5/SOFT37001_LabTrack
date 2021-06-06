@@ -2,6 +2,7 @@ package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.configuration.Constants;
+import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.*;
 import org.ordep.labtrack.service.*;
@@ -13,8 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.ordep.labtrack.configuration.Constants.APPROVE;
-import static org.ordep.labtrack.configuration.Constants.PAGE_TITLE;
+import static org.ordep.labtrack.configuration.Constants.*;
 
 @Slf4j
 @Controller
@@ -49,14 +49,36 @@ public class WebController {
         LabTrackUser currentUser = userService.getCurrentUser();
         model.addAttribute("user",currentUser);
         model.addAttribute("role",authenticationService.getHighestRole(currentUser));
-
+        model.addAttribute("permitted",authenticationService.canUserApprove(currentUser));
         return "profile";
     }
 
-    @GetMapping("/profile/changePassword")
+    @GetMapping("/profile/change-password")
     public String changePassword(Model model) {
         model.addAttribute("passwordRegex", Constants.PASSWORD_REGEX);
+        model.addAttribute(PAGE_TITLE,"Change Password");
         return "changePassword";
+    }
+
+    @GetMapping("/users")
+    public String manageUsers(Model model){
+        model.addAttribute(PAGE_TITLE,"View Users");
+        model.addAttribute("permitted",authenticationService.canUserApprove(userService.getCurrentUser()));
+        List<LabTrackUser> users = userService.getAllUsers();
+        model.addAttribute("users", users);
+        return "users";
+    }
+
+    @GetMapping("/user")
+    public String viewUser(@RequestParam UUID id, Model model){
+        var user = userService.findUser(id);
+        var userRole = userService.getCurrentUser().getRoles().get(0);
+        model.addAttribute("senior",LabTrackUtilities.isUserSenior(user.getRoles().get(0),userRole));
+        model.addAttribute("user", user);
+        model.addAttribute("role", userRole);
+        model.addAttribute("roles", LabTrackUtilities.getJuniorRoles(userRole));
+        model.addAttribute(PAGE_TITLE,"View User: " + user.getDisplayName());
+        return "user";
     }
 
     @GetMapping("/login")
@@ -161,7 +183,7 @@ public class WebController {
 
     @GetMapping("/assessments")
     public String allAssessments(Model model) {
-        model.addAttribute("allAssessments", assessmentService.getAllRiskAssessments());
+        model.addAttribute("allAssessments", assessmentService.getAllAssessments());
         model.addAttribute(PAGE_TITLE,"All Assessments");
         return "assessments/allAssessments";
     }
@@ -189,8 +211,8 @@ public class WebController {
         if (type.equalsIgnoreCase("ChemicalHazardCard")) {
             model.addAttribute("chemicalHazardCard", new ChemicalHazardCard());
             model.addAttribute("signalWords", SignalWord.values());
-            model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
-            model.addAttribute("precautionaryStatements", statementService.getAllPrecautionaryStatements());
+            model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
+            model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
             model.addAttribute("pictogramTypes", ChemicalPictogram.values());
             model.addAttribute(PAGE_TITLE,"New Chemical Hazard Card");
             return "cards/newChemical";
@@ -212,7 +234,7 @@ public class WebController {
 
     @GetMapping("/assessment/risk/new")
     public String newRiskAssessment(Model model) {
-        model.addAttribute("riskAssessment", new RiskAssessment());
+        model.addAttribute(RISK_ASSESSMENT, new RiskAssessment());
         model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
@@ -247,9 +269,10 @@ public class WebController {
         LabTrackUser user = userService.getCurrentUser();
 
         var assessment = assessmentService.findOneCoshhAssessment(id);
-        model.addAttribute("coshhAssessment", assessment);
+        model.addAttribute(COSHH_ASSESSMENT, assessment);
         model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
         model.addAttribute("canUserSign", assessmentService.canUserSignAssessment(id));
+        model.addAttribute("isUserOwner", assessment.getAuthor() == user);
 
         model.addAttribute(PAGE_TITLE, assessment.getAssessmentName());
 
@@ -258,9 +281,9 @@ public class WebController {
 
     @GetMapping("/assessment/coshh/new")
     public String newCoshhAssessment(Model model) {
-        model.addAttribute("coshhAssessment", new CoshhAssessment());
-        model.addAttribute("precautionaryStatements", statementService.getAllPrecautionaryStatements());
-        model.addAttribute("hazardStatements", statementService.getAllHazardStatements());
+        model.addAttribute(COSHH_ASSESSMENT, new CoshhAssessment());
+        model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
+        model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
         model.addAttribute("hazardToHealths", HazardToHealth.values());
         model.addAttribute("routeOfExposures", RouteOfExposure.values());
         model.addAttribute("precautions", Precaution.values());
@@ -270,14 +293,73 @@ public class WebController {
         return "assessments/newCoshhAssessment";
     }
 
+    @GetMapping("/assessment/coshh/copy")
+    public String copyCoshhAssessment(@RequestParam UUID id, Model model) {
+        var coshhAssessment = assessmentService.findOneCoshhAssessment(id);
+        coshhAssessment.setAssessmentId(null);
+        model.addAttribute(COSHH_ASSESSMENT, coshhAssessment);
+
+        model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
+        model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
+        model.addAttribute("hazardToHealths", HazardToHealth.values());
+        model.addAttribute("routeOfExposures", RouteOfExposure.values());
+        model.addAttribute("precautions", Precaution.values());
+        model.addAttribute("protectiveEquipments", ProtectiveEquipment.values());
+
+        model.addAttribute(PAGE_TITLE, "Copy: " + coshhAssessment.getAssessmentName());
+
+        return "assessments/copyCoshhAssessment";
+
+    }
+
+    @GetMapping("/assessment/coshh/delete")
+    public String deleteCoshhAssessment(@RequestParam UUID id, Model model) {
+
+        var coshhAssessment = assessmentService.findOneCoshhAssessment(id);
+
+        model.addAttribute(COSHH_ASSESSMENT, coshhAssessment);
+        model.addAttribute(PAGE_TITLE, "Delete: " + coshhAssessment.getAssessmentName());
+        return "assessments/deleteCoshhAssessment";
+    }
+
     @GetMapping("/assessment/risk")
     public String riskAssessment(@RequestParam UUID id, Model model) {
         LabTrackUser user = userService.getCurrentUser();
         var riskAssessment = assessmentService.findOneRiskAssessment(id);
-        model.addAttribute("riskAssessment", riskAssessment);
+        model.addAttribute(RISK_ASSESSMENT, riskAssessment);
         model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
+        model.addAttribute("isUserOwner", riskAssessment.getAuthor() == user);
         model.addAttribute(PAGE_TITLE,riskAssessment.getAssessmentName());
         return "assessments/riskAssessment";
+    }
+
+    @GetMapping("/assessment/risk/copy")
+    public String copyRiskAssessment(@RequestParam UUID id, Model model) {
+        var riskAssessment = assessmentService.findOneRiskAssessment(id);
+        riskAssessment.setAssessmentId(null);
+        model.addAttribute(RISK_ASSESSMENT, riskAssessment);
+
+        model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
+        model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
+        model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
+        model.addAttribute("frequencies", FrequencyOfTask.values());
+        model.addAttribute("severities", Severity.values());
+        model.addAttribute("likelihoods", Likelihood.values());
+
+        model.addAttribute(PAGE_TITLE, "Copy: " + riskAssessment.getAssessmentName());
+
+        return "assessments/copyRiskAssessment";
+
+    }
+
+    @GetMapping("/assessment/risk/delete")
+    public String deleteRiskAssessment(@RequestParam UUID id, Model model) {
+
+        var riskAssessment = assessmentService.findOneRiskAssessment(id);
+
+        model.addAttribute(RISK_ASSESSMENT, riskAssessment);
+        model.addAttribute(PAGE_TITLE, "Delete: " + riskAssessment.getAssessmentName());
+        return "assessments/deleteRiskAssessment";
     }
 
     @GetMapping("/error")

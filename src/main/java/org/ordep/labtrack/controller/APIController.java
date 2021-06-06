@@ -1,6 +1,7 @@
 package org.ordep.labtrack.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.Role;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -86,6 +88,7 @@ public class APIController {
         labTrackUser.setEmailAddress(username);
         labTrackUser.setDisplayName(data.getFirst("displayName"));
         labTrackUser.setLoggedIn(false);
+        labTrackUser.setRoles(Collections.singletonList(Role.USER));
 
         userService.registerUser(labTrackUser);
 
@@ -129,6 +132,43 @@ public class APIController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("/api/user/change-role")
+    public void changeRole(@RequestParam UUID userId, @RequestParam Role role) {
+        var currentUser = userService.getCurrentUser();
+        var user = userService.findUser(userId);
+
+        if (user == null) {
+            throw new UserException("User not found");
+        }
+
+        if (LabTrackUtilities.isUserSenior(user.getRoles().get(0), currentUser.getRoles().get(0))) {
+            throw new UserException("User does not have the right permission to move user: " + user);
+        }
+
+        var approvalLevel = LabTrackUtilities.getJuniorRoles(currentUser.getRoles().get(0));
+
+        if (!approvalLevel.contains(role)) {
+            throw new UserException("User does not have the right permission for role: " + role.getDisplayName());
+        }
+
+        List<Role> roles = new ArrayList<>();
+        roles.add(role);
+
+        user.setRoles(roles);
+
+        userService.updateUser(user);
+
+        var auth = authenticationService.findUserById(userId);
+
+        if (auth == null) {
+            throw new UserException("User not found");
+        }
+
+        auth.setRoles(roles);
+
+        authenticationService.saveAuthenticationEntity(auth);
+    }
+
     @GetMapping("/api/risks")
     public List<RiskAssessment> getRisks() {
         return assessmentService.getAllRiskAssessments();
@@ -141,7 +181,7 @@ public class APIController {
         assessmentService.newRiskAssessment(riskAssessment);
 
         httpServletResponse.setHeader(REDIRECT_LOCATION, HOME_URL);
-        httpServletResponse.setStatus(200);
+        httpServletResponse.setStatus(302);
     }
 
     @PostMapping("/api/assessment/risk/approve")
@@ -159,6 +199,18 @@ public class APIController {
 
             assessmentService.updateRiskAssessment(assessment);
         }
+    }
+
+    @DeleteMapping("/api/assessment/risk")
+    public void deleteRiskAssessment(@RequestParam UUID assessmentId) {
+        var assessment = assessmentService.findOneRiskAssessment(assessmentId);
+        var user = userService.getCurrentUser();
+
+        if (assessment.getAuthor() == user) {
+            log.info("Risk Assessment to be deleted: {} by: {}", assessment, user);
+            assessmentService.deleteRiskAssessment(assessment);
+        }
+
     }
 
     @PostMapping("/api/assessment/coshh/new")
@@ -204,6 +256,18 @@ public class APIController {
 
             assessmentService.updateCoshhAssessment(assessment);
         }
+    }
+
+    @DeleteMapping("/api/assessment/coshh")
+    public void deleteCoshhAssessment(@RequestParam UUID assessmentId) {
+        var assessment = assessmentService.findOneCoshhAssessment(assessmentId);
+        var user = userService.getCurrentUser();
+
+        if (assessment.getAuthor() == user) {
+            log.info("Risk Assessment to be deleted: {} by: {}", assessment, user);
+            assessmentService.deleteCoshhAssessment(assessment);
+        }
+
     }
 
     @PostMapping("/api/card/chemical/new")

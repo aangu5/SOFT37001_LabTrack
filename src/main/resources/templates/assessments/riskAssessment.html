@@ -7,11 +7,33 @@
 </head>
 <body style="margin: 0px">
 <div th:replace="components/header">Header</div>
-<div th:replace="components/sidebar">Sidebar</div>
+<div th:replace="components/sidebar" class="no-print">Sidebar</div>
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-    <div style="width: 100%">
+      <div class="button no-print">
+        <a th:href="@{/assessment/risk/copy(id=${riskAssessment.getAssessmentId()})}">
+          <h2>Copy Risk Assessment</h2>
+        </a>
+      </div>
+      <div class="button no-print">
+        <a onclick="printPDF()">
+          <h2>Print Risk Assessment</h2>
+        </a>
+      </div>
+      <div class="button no-print">
+        <a onclick="shareAssessment()" class="popup">
+          <h2>Share Risk Assessment</h2>
+          <span class="popuptext" id="clipboard">Text copied to clipboard</span>
+        </a>
+      </div>
+      <div class="button no-print" th:if="${isUserOwner}">
+        <a th:href="@{/assessment/risk/delete(id=${riskAssessment.getAssessmentId()})}">
+          <h2>Delete Risk Assessment</h2>
+        </a>
+      </div>
+
+    <div style="width: 100%" id="content">
       <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
         <tr>
           <th class="rounded">Reaction</th>
@@ -112,6 +134,22 @@
     xhr.open('POST', "/api/assessment/risk/approve?assessmentId=" + assessmentId, true);
     xhr.send();
   }
+
+  async function shareAssessment() {
+    let textToCopy = window.location.href;
+    console.log(textToCopy);
+    await navigator.clipboard.writeText(textToCopy);
+    let popup = document.getElementById("clipboard");
+    popup.classList.toggle("show");
+
+  }
+
+  function printPDF() {
+
+      window.print();
+
+    }
+
 
 </script>
 

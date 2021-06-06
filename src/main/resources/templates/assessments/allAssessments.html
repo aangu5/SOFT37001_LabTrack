@@ -26,7 +26,7 @@
                 <td class="overview" th:text="${assessment.class.simpleName}">Type</td>
                 <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/risk(id=${assessment.assessmentId})}">Assessment Name</a></td>
                 <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
-                <td class="overview" th:text="${assessment.author.displayName}">Author</td>
+                <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"/></td>
 
             </tr>
         </table>

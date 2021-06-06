@@ -1,7 +1,6 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
-import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.model.enums.ChemicalPictogram;
 import org.ordep.labtrack.model.enums.FrequencyOfTask;
 import org.ordep.labtrack.model.enums.Severity;
@@ -38,11 +37,11 @@ public class RiskAssessment extends Assessment {
     private List<Sop> sops;
     private String signature;
 
-    @OneToMany
+    @ManyToMany
     private List<PhysicalHazardCard> physicalHazardCards;
-    @OneToMany
+    @ManyToMany
     private List<ChemicalHazardCard> chemicalHazardCards;
-    @OneToMany
+    @ManyToMany
     private List<BiologicalHazardCard> biologicalHazardCards;
 
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%"><head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
+  <title>Delete COSHH Assessment</title>
+</head>
+
+<body style="margin: 0px; height: 100%">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+
+<div style="background-color:grey; margin-left: 275px; margin-top: 60px; display: flex;">
+
+  <div class="button">
+    <a onclick="deleteAssessment()">
+      <h2>Confirm Delete</h2>
+    </a>
+  </div>
+  <div class="button">
+    <a>
+      <h2>Cancel</h2>
+    </a>
+  </div>
+
+</div>
+</body>
+<script th:inline="javascript">
+  function deleteAssessment() {
+    let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('DELETE', "/api/assessment/coshh?assessmentId=" + assessmentId, true);
+    xhr.send();
+
+    window.location.href="/home";
+  }
+</script>
+</html>

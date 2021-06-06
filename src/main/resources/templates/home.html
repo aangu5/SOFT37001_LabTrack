@@ -27,7 +27,7 @@
                     <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
                     <td class="overview" th:text="${card.getType()}">Type</td>
                     <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
-                    <td class="overview" th:text="${card.author.displayName}">Author</td>
+                    <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"/></td>
                 </tr>
             </table>
         </div>
@@ -41,9 +41,9 @@
                     <th class="overview">Status</th>
                 </tr>
                 <tr th:each="assessment : ${allAssessments}">
-                    <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/(id=${assessment.assessmentId})}">Assessment Name</a></td>
+                    <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/risk(id=${assessment.assessmentId})}">Assessment Name</a></td>
                     <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
-                    <td class="overview" th:text="${assessment.author.displayName}">Author</td>
+                    <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"/></td>
                     <td class="overview" th:text="${assessment.isActive()}">Author</td>
                 </tr>
             </table>
@@ -58,9 +58,9 @@
                     <th class="overview">Status</th>
                 </tr>
                 <tr th:each="coshh : ${allCoshhAssessments}">
-                    <td class="overview"><a th:text="${coshh.assessmentName}" th:href="@{/assessment(id=${coshh.assessmentId})}">Assessment Name</a></td>
+                    <td class="overview"><a th:text="${coshh.assessmentName}" th:href="@{/assessment/coshh(id=${coshh.assessmentId})}">Assessment Name</a></td>
                     <td class="overview" th:text="${coshh.getFormattedCreatedDate()}">Date Created</td>
-                    <td class="overview" th:text="${coshh.author.displayName}">Author</td>
+                    <td class="overview"><a th:text="${coshh.author.displayName}" th:href="@{/user(id=${coshh.author.userId.toString()})}"/></td>
                     <td class="overview" th:text="${coshh.isActive()}">Author</td>
                 </tr>
             </table>

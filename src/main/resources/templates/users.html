@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%"><head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100" rel="stylesheet">
+  <link href="/style.css" rel="stylesheet">
+  <title>Users</title>
+</head>
+
+<body style="margin: 0px; height: 100%">
+<div th:replace="components/header">Header</div>
+<div th:replace="components/sidebar">Sidebar</div>
+
+
+<div style="background-color:grey; margin-left: 275px; margin-top: 60px; display: flex;">
+  <div  style="background-color:white; display: flex; flex-wrap: wrap; height: 100%; width:100%; float: right; justify-content: center; align-content:flex-start;">
+    <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center"
+           th:if="${!users.isEmpty()}">
+      <tr style="font-size: 18px;">
+        <th class="overview">Display Name</th>
+        <th class="overview">Email Address</th>
+        <th class="overview">Role</th>
+      </tr>
+      <tr th:each="user : ${users}" >
+          <td class="overview" ><a th:text="${user.displayName}" th:href="@{/user(id=${user.userId.toString()})}"/></td>
+          <td class="overview" th:text="${user.emailAddress}"></td>
+          <td class="overview" th:text="${user.roles.get(0).getDisplayName()}"></td>
+      </tr>
+    </table>
+  </div>
+</div>
+</body>
+</html>

@@ -1,7 +1,11 @@
 package org.ordep.labtrack.configuration;
 
+import org.ordep.labtrack.model.enums.Role;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LabTrackUtilities {
 
@@ -22,5 +26,24 @@ public class LabTrackUtilities {
             output = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
         }
         return output;
+    }
+
+    public static boolean isUserSenior(Role role1, Role role2) {
+        int priority1 = role1.getPriority();
+        int priority2 = role2.getPriority();
+
+        return priority1 > priority2;
+
+    }
+
+    public static List<Role> getJuniorRoles(Role userRole){
+        List<Role> rolesList = new ArrayList<>();
+        for (Role role : Role.values()){
+            rolesList.add(role);
+            if(userRole.equals(role)){
+                return rolesList;
+            }
+        }
+        return rolesList;
     }
 }

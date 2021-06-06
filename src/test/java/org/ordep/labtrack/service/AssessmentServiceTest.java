@@ -16,6 +16,7 @@ import org.ordep.labtrack.model.AuthenticationEntity;
 import org.ordep.labtrack.model.CoshhAssessment;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.RiskAssessment;
+import org.ordep.labtrack.model.enums.Role;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -53,7 +54,7 @@ class AssessmentServiceTest {
 
     @Test
     void findAllRiskAssessmentsForUser() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.findUser(any(UUID.class))).thenReturn(user);
 
         RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
@@ -74,7 +75,7 @@ class AssessmentServiceTest {
 
     @Test
     void newRiskAssessment() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
@@ -149,7 +150,7 @@ class AssessmentServiceTest {
 
     @Test
     void newCoshhAssessment() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false);
+        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
