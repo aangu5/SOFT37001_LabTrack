@@ -121,8 +121,20 @@ public class WebController {
     }
 
     @GetMapping("/cards")
-    public String allCards(Model model) {
-        model.addAttribute("allCards", cardService.getAllCards());
+    public String allCards(@RequestParam(defaultValue = "none") String name, @RequestParam(defaultValue = "none") String author, Model model) {
+        List<Card> queryResult;
+
+        if (name.equals("none") && author.equals("none")) {
+            queryResult = cardService.getAllCards();
+        } else if (name.equals("none") && !author.equals("none")) {
+            queryResult = cardService.searchCardAuthor(author);
+            model.addAttribute("authorSearch", author);
+        } else {
+            queryResult = cardService.searchCardName(name);
+            model.addAttribute("nameSearch", name);
+        }
+
+        model.addAttribute("allCards", queryResult);
         model.addAttribute(PAGE_TITLE,"All Cards");
         return "cards/allCards";
     }

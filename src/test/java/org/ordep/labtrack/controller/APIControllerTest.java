@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,10 +49,26 @@ class APIControllerTest {
     private CardService cardService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private CoshhAssessment coshhAssessment;
+    private LabTrackUser user;
+    private RiskAssessment riskAssessment;
+    private AuthenticationEntity authenticationEntity;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         objectMapper.registerModule(new JavaTimeModule());
+
+        user = objectMapper.readValue(new ClassPathResource(
+                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
+
+        authenticationEntity = objectMapper.readValue(new ClassPathResource(
+                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
+
+        riskAssessment = objectMapper.readValue(new ClassPathResource(
+                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
+
+        coshhAssessment = objectMapper.readValue(new ClassPathResource(
+                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
     }
 
     @Test
@@ -184,14 +199,9 @@ class APIControllerTest {
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void changePassword() throws Exception {
 
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        AuthenticationEntity entity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
 
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(entity);
+        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(authenticationEntity);
 
         mockMvc.perform(post("/api/changePassword")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
@@ -200,21 +210,15 @@ class APIControllerTest {
                 .param("new-password-2", "Password2!"))
                 .andExpect(status().isOk());
 
-        verify(authenticationService, times(1)).saveAuthenticationEntity(any());;
+        verify(authenticationService, times(1)).saveAuthenticationEntity(any());
     }
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void changePassword_NullOldPassword() throws Exception {
 
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        AuthenticationEntity entity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
-
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(entity);
+        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(authenticationEntity);
 
         mockMvc.perform(post("/api/changePassword")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
@@ -222,21 +226,15 @@ class APIControllerTest {
                 .param("new-password-2", "Password2!"))
                 .andExpect(status().isFound());
 
-        verify(authenticationService, times(0)).saveAuthenticationEntity(any());;
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
     }
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void changePassword_MismatchedNewPassword() throws Exception {
 
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        AuthenticationEntity entity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
-
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(entity);
+        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(authenticationEntity);
 
         mockMvc.perform(post("/api/changePassword")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
@@ -245,21 +243,15 @@ class APIControllerTest {
                 .param("new-password-2", "Password3!"))
                 .andExpect(status().isFound());
 
-        verify(authenticationService, times(0)).saveAuthenticationEntity(any());;
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
     }
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void changePassword_InvalidNewPassword() throws Exception {
 
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        AuthenticationEntity entity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
-
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(entity);
+        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(authenticationEntity);
 
         mockMvc.perform(post("/api/changePassword")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
@@ -268,21 +260,15 @@ class APIControllerTest {
                 .param("new-password-2", "pass"))
                 .andExpect(status().isFound());
 
-        verify(authenticationService, times(0)).saveAuthenticationEntity(any());;
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
     }
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void changePassword_WrongOldPassword() throws Exception {
 
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        AuthenticationEntity entity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
-
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(entity);
+        when(authenticationService.getAuthenticationEntity(anyString())).thenReturn(authenticationEntity);
 
         mockMvc.perform(post("/api/changePassword")
                 .contentType("application/x-www-form-urlencoded;charset=UTF-8")
@@ -291,17 +277,12 @@ class APIControllerTest {
                 .param("new-password-2", "Password2!"))
                 .andExpect(status().isFound());
 
-        verify(authenticationService, times(0)).saveAuthenticationEntity(any());;
+        verify(authenticationService, times(0)).saveAuthenticationEntity(any());
     }
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveRiskAssessment() throws Exception {
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -316,11 +297,6 @@ class APIControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveRiskAssessment_UnableToApprove() throws Exception {
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -345,11 +321,6 @@ class APIControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveCoshhAssessment() throws Exception {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -364,11 +335,6 @@ class APIControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveCoshhAssessment_UnableToApprove() throws Exception {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -383,11 +349,6 @@ class APIControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void signCoshhAssessment() throws Exception {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
@@ -402,11 +363,6 @@ class APIControllerTest {
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void signCoshhAssessment_UnableToSign() throws Exception {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);

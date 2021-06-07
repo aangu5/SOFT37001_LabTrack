@@ -63,10 +63,6 @@ public class AuthenticationService implements UserDetailsService {
         return entity.getRoles();
     }
 
-    public List<AuthenticationEntity> getAllUsers(){
-        return authenticationRepository.findAll();
-    }
-
     public Role getHighestRole(LabTrackUser user){
         List<Role> roles = getUserRoles(user);
         if (roles.contains(Role.ADMIN)) {

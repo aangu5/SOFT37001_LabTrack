@@ -17,6 +17,13 @@
             <a href="/cards/physical"><div class="button"><h2>View Physical Hazard Cards</h2></div></a>
         </div>
         <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center" th:if="${!allCards.isEmpty()}">
+            <tr>
+                <td><input id="searchName" type="text" placeholder="Search Card Name" th:value="${nameSearch}"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input id="searchAuthor" type="text" placeholder="Search Author" th:value="${authorSearch}"></td>
+            </tr>
             <tr style="font-size: 18px;">
                 <th class="overview">Card Name</th>
                 <th class="overview">Type</th>
@@ -41,4 +48,19 @@
 </div>
 
 </body>
+<script>
+    var searchNameInput = document.getElementById("searchName");
+    searchNameInput.addEventListener("keyup", search);
+
+    var searchAuthorInput = document.getElementById("searchAuthor");
+    searchAuthorInput.addEventListener("keyup", search);
+
+    function search(event) {
+        if (event.keyCode === 13) {
+            let name = searchNameInput.value;
+            let author = searchAuthorInput.value;
+            window.location.href = "/cards?name=" + name + "&author=" + author;
+        }
+    }
+</script>
 </html>

@@ -1,49 +1,56 @@
 package org.ordep.labtrack.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.ordep.labtrack.data.UserRepository;
 import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.LabTrackUser;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class LabTrackUserServiceTest {
 
     private UserRepository userRepository;
     private UserService userService;
+    private LabTrackUser user;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         userRepository = Mockito.mock(UserRepository.class);
         userService = new UserService(userRepository);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        user = objectMapper.readValue(new ClassPathResource(
+                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
     }
 
     @Test
-    void findUser() throws Exception {
-        LabTrackUser testLabTrackUser = new LabTrackUser();
-        testLabTrackUser.setUserId(UUID.fromString("24644ebd-cd65-44b1-baa8-435c5d03d497"));
-        when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(testLabTrackUser));
+    void findUser() {
+        when(userRepository.findById(any(UUID.class))).thenReturn(Optional.of(user));
 
-        assertEquals(testLabTrackUser,userService.findUser(UUID.fromString("24644ebd-cd65-44b1-baa8-435c5d03d497")));
+        assertEquals(user, userService.findUser(UUID.randomUUID()));
 
     }
 
     @Test
-    void findUser_throwsUserNotFoundException() throws Exception {
+    void findUser_throwsUserNotFoundException() {
 
         when(userRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-
-        UUID uuid = UUID.fromString("24644ebd-cd65-44b1-baa8-435c5d03d497");
+        UUID uuid = UUID.randomUUID();
 
         assertThrows(UserException.class, () -> userService.findUser(uuid));
 
@@ -51,23 +58,18 @@ class LabTrackUserServiceTest {
 
     @Test
     void updateUser() {
-        userService.updateUser(new LabTrackUser());
+        userService.updateUser(user);
         verify(userRepository, times(1)).save(any());
     }
 
     @Test
     void registerUser() {
-        userService.registerUser(new LabTrackUser());
+        userService.registerUser(user);
         verify(userRepository, times(1)).save(any());
     }
 
     @Test
     void getCurrentUser_ValidUser() {
-        UUID expectedUserID = UUID.randomUUID();
-
-        LabTrackUser user = new LabTrackUser();
-        user.setDisplayName("Steve");
-        user.setUserId(expectedUserID);
 
         when(userRepository.findByEmailAddress(anyString())).thenReturn(user);
 
@@ -87,11 +89,6 @@ class LabTrackUserServiceTest {
 
     @Test
     void getCurrentUser_UserNull() {
-        UUID expectedUserID = UUID.randomUUID();
-
-        LabTrackUser user = new LabTrackUser();
-        user.setDisplayName("Steve");
-        user.setUserId(expectedUserID);
 
         when(userRepository.findByEmailAddress(anyString())).thenReturn(null);
 
@@ -105,5 +102,14 @@ class LabTrackUserServiceTest {
         assertThrows(UserException.class, () -> userService.getCurrentUser());
 
         verify(userRepository, times(1)).findByEmailAddress("Steve");
+    }
+
+    @Test
+    void getAllUsers() {
+
+        when(userRepository.findAll()).thenReturn(Collections.singletonList(user));
+
+        assertEquals(Collections.singletonList(user),userService.getAllUsers());
+
     }
 }

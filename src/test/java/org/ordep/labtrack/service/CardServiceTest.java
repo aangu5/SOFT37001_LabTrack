@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
@@ -19,14 +17,11 @@ import org.ordep.labtrack.model.enums.PhysicalPictogram;
 import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.model.enums.SignalWord;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.domain.PageRequest;
 
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,7 +60,7 @@ class CardServiceTest {
     // Chemistry Hazard Card
 
     @Test
-    void newChemicalHazardCard() throws JsonProcessingException {
+    void newChemicalHazardCard() {
         List<ChemicalPictogram> pictograms = Collections.singletonList(ChemicalPictogram.GHS01);
 
         HazardStatement hazardStatement = new HazardStatement(uuid1, "name", "state");
@@ -259,7 +254,7 @@ class CardServiceTest {
         verify(biologicalHazardCardRepository, times(1)).save(any());
         assertEquals("name", card.getCardName());
         assertEquals(user, card.getAuthor());
-        assertEquals(true, card.isHazardous());
+        assertTrue(card.isHazardous());
         assertEquals(man, card.getMan());
         assertEquals(sops, card.getSops());
         System.out.println(objectMapper.writeValueAsString(card));

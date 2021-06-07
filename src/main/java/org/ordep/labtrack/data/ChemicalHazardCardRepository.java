@@ -13,4 +13,6 @@ public interface ChemicalHazardCardRepository extends PagingAndSortingRepository
     List<ChemicalHazardCard> findAllByOrderByDateCreatedDesc();
 
     List<ChemicalHazardCard> findChemicalHazardCardsByAuthor(LabTrackUser user, Pageable pageable);
+    List<ChemicalHazardCard> findByCardNameContainsIgnoreCase(String cardName);
+    List<ChemicalHazardCard> findByAuthor_DisplayNameContainsIgnoreCase(String cardName);
 }

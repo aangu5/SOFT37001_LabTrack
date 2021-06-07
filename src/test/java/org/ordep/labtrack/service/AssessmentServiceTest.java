@@ -12,20 +12,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
-import org.ordep.labtrack.model.AuthenticationEntity;
-import org.ordep.labtrack.model.CoshhAssessment;
-import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.RiskAssessment;
-import org.ordep.labtrack.model.enums.Role;
+import org.ordep.labtrack.model.*;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,51 +36,48 @@ class AssessmentServiceTest {
     private CoshhAssessmentRepository coshhAssessmentRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private CoshhAssessment coshhAssessment;
+    private RiskAssessment riskAssessment;
+    private LabTrackUser user;
 
     @InjectMocks
     private AssessmentService assessmentService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws IOException {
         objectMapper.registerModule(new JavaTimeModule());
+        coshhAssessment = objectMapper.readValue(new ClassPathResource("/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
+        user = objectMapper.readValue(new ClassPathResource("/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
+        riskAssessment = objectMapper.readValue(new ClassPathResource("/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
     }
 
     @Test
-    void findAllRiskAssessmentsForUser() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+    void findAllRiskAssessmentsForUser() {
+
         when(userService.findUser(any(UUID.class))).thenReturn(user);
 
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
         when(riskAssessmentRepository.findRiskAssessmentByAuthor(any())).thenReturn(Collections.singletonList(riskAssessment));
 
         Assertions.assertEquals(Collections.singletonList(riskAssessment), assessmentService.findAllRiskAssessmentsForUser(uuid));
     }
 
     @Test
-    void getAllRiskAssessments() throws IOException {
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                        "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
+    void getAllRiskAssessments() {
+
         when(riskAssessmentRepository.findAll()).thenReturn(Collections.singletonList(riskAssessment));
 
         Assertions.assertEquals(Collections.singletonList(riskAssessment), assessmentService.getAllRiskAssessments());
     }
 
     @Test
-    void newRiskAssessment() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+    void newRiskAssessment() {
         when(userService.getCurrentUser()).thenReturn(user);
 
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
         assertNotNull(assessmentService.newRiskAssessment(riskAssessment));
     }
 
     @Test
-    void findOneRiskAssessment() throws IOException {
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
-
+    void findOneRiskAssessment() {
         when(riskAssessmentRepository.findById(any(UUID.class))).thenReturn(Optional.of(riskAssessment));
 
         assertEquals(riskAssessment, assessmentService.findOneRiskAssessment(uuid));
@@ -102,10 +92,7 @@ class AssessmentServiceTest {
     }
 
     @Test
-    void findAllRiskAssessmentsToApprove() throws IOException {
-        RiskAssessment riskAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);
-
+    void findAllRiskAssessmentsToApprove() {
         when(riskAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(riskAssessment));
         when(authenticationService.canUserApprove(any())).thenReturn(true);
 
@@ -123,48 +110,35 @@ class AssessmentServiceTest {
 
     @Test
     void updateRiskAssessment() {
-        assessmentService.updateRiskAssessment(new RiskAssessment());
+        assessmentService.updateRiskAssessment(riskAssessment);
         verify(riskAssessmentRepository, times(1)).save(any());
     }
 
     @Test
-    void findAllCoshhAssessmentsForUser() throws IOException {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        when(userService.findUser(any(UUID.class))).thenReturn(new LabTrackUser());
+    void findAllCoshhAssessmentsForUser() {
+        when(userService.findUser(any(UUID.class))).thenReturn(user);
         when(coshhAssessmentRepository.findCoshhAssessmentByAuthor(any(LabTrackUser.class))).thenReturn(Collections.singletonList(coshhAssessment));
 
         assertEquals(Collections.singletonList(coshhAssessment), assessmentService.findAllCoshhAssessmentsForUser(uuid));
     }
 
     @Test
-    void getAllCoshhAssessments() throws IOException {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
+    void getAllCoshhAssessments() {
         when(coshhAssessmentRepository.findAll()).thenReturn(Collections.singletonList(coshhAssessment));
 
         assertEquals(Collections.singletonList(coshhAssessment), assessmentService.getAllCoshhAssessments());
     }
 
     @Test
-    void newCoshhAssessment() throws IOException {
-        LabTrackUser user = new LabTrackUser(uuid, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+    void newCoshhAssessment() {
         when(userService.getCurrentUser()).thenReturn(user);
-
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
 
         assertNotNull(assessmentService.newCoshhAssessment(coshhAssessment));
         verify(coshhAssessmentRepository, times(1)).save(any());
     }
 
     @Test
-    void findAllCoshhAssessmentsToApprove() throws IOException {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
+    void findAllCoshhAssessmentsToApprove() {
         when(coshhAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(coshhAssessment));
         when(authenticationService.canUserApprove(any())).thenReturn(true);
 
@@ -181,9 +155,7 @@ class AssessmentServiceTest {
     }
 
     @Test
-    void findOneCoshhAssessment() throws IOException {
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
+    void findOneCoshhAssessment() {
 
         when(coshhAssessmentRepository.findById(any(UUID.class))).thenReturn(Optional.of(coshhAssessment));
 
@@ -198,13 +170,7 @@ class AssessmentServiceTest {
     }
 
     @Test
-    void testCanUserSignAssessment_true() throws IOException {
-
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
+    void testCanUserSignAssessment_true() {
 
         when(coshhAssessmentRepository.findById(any(UUID.class))).thenReturn(Optional.of(coshhAssessment));
         when(userService.getCurrentUser()).thenReturn(user);
@@ -214,13 +180,7 @@ class AssessmentServiceTest {
     }
 
     @Test
-    void testCanUserSignAssessment_false() throws IOException {
-
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
+    void testCanUserSignAssessment_false() {
 
         when(coshhAssessmentRepository.findById(any())).thenReturn(Optional.of(coshhAssessment));
         when(userService.getCurrentUser()).thenReturn(user);
@@ -232,13 +192,7 @@ class AssessmentServiceTest {
     }
 
     @Test
-    void hasUserSignedAssessment() throws IOException {
-
-        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource(
-                "/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
-
-        LabTrackUser user = objectMapper.readValue(new ClassPathResource(
-                "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
+    void hasUserSignedAssessment() {
 
         assertTrue(assessmentService.hasUserSignedAssessment(coshhAssessment, user));
 
@@ -252,5 +206,33 @@ class AssessmentServiceTest {
     void updateCoshhAssessment() {
         assessmentService.updateCoshhAssessment(new CoshhAssessment());
         verify(coshhAssessmentRepository, times(1)).save(any());
+    }
+
+    @Test
+    void deleteRiskAssessment() {
+        assessmentService.deleteRiskAssessment(riskAssessment);
+        verify(riskAssessmentRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void deleteCoshhAssessment() {
+        assessmentService.deleteCoshhAssessment(coshhAssessment);
+        verify(coshhAssessmentRepository, times(1)).delete(any());
+    }
+
+    @Test
+    void getAllAssessments() {
+        List<Assessment> expected = new ArrayList<>();
+        expected.add(riskAssessment);
+        expected.add(coshhAssessment);
+
+        when(riskAssessmentRepository.findAll()).thenReturn(Collections.singletonList(riskAssessment));
+        when(coshhAssessmentRepository.findAll()).thenReturn(Collections.singletonList(coshhAssessment));
+
+        expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        List<Assessment> actual = assessmentService.getAllAssessments();
+
+        assertEquals(expected, actual);
     }
 }

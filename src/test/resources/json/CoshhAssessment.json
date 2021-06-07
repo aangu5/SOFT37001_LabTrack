@@ -66,7 +66,8 @@
       "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
       "displayName": "Angus Cheney",
       "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-      "loggedIn": false
+      "loggedIn": false,
+      "roles": ["ADMIN"]
     }
   ]
 }

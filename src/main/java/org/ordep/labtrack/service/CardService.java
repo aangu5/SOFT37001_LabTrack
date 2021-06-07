@@ -148,4 +148,26 @@ public class CardService {
         return output;
     }
 
+    public List<Card> searchCardName(String name) {
+        List<Card> output = new ArrayList<>();
+
+        output.addAll(chemicalHazardCardRepository.findByCardNameContainsIgnoreCase(name));
+        output.addAll(biologicalHazardCardRepository.findByCardNameContainsIgnoreCase(name));
+        output.addAll(physicalHazardCardRepository.findByCardNameContainsIgnoreCase(name));
+
+        output.sort(Comparator.comparing(Card::getDateCreated).reversed());
+        return output;
+    }
+
+    public List<Card> searchCardAuthor(String author) {
+        List<Card> output = new ArrayList<>();
+
+        output.addAll(chemicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(author));
+        output.addAll(biologicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(author));
+        output.addAll(physicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(author));
+
+        output.sort(Comparator.comparing(Card::getDateCreated).reversed());
+        return output;
+    }
+
 }

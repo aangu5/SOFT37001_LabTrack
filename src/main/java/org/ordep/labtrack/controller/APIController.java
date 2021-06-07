@@ -169,6 +169,15 @@ public class APIController {
         authenticationService.saveAuthenticationEntity(auth);
     }
 
+    @PostMapping("/api/user/change-name")
+    public void changeDisplayName(@RequestParam String displayName) {
+        var currentUser = userService.getCurrentUser();
+
+        currentUser.setDisplayName(displayName);
+
+        userService.updateUser(currentUser);
+    }
+
     @GetMapping("/api/risks")
     public List<RiskAssessment> getRisks() {
         return assessmentService.getAllRiskAssessments();

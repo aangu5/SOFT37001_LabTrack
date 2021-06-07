@@ -19,7 +19,9 @@ td.data {
     -moz-border-radius: 6px;
     width: 100%;
     padding-left: 15px;
+    box-shadow: 3px 3px 5px #888888;
 }
+
 
 th.rounded {
     padding: 20px;
@@ -29,6 +31,7 @@ th.rounded {
     -moz-border-radius: 6px;
     align-content: flex-start;
     white-space: nowrap;
+    box-shadow: 3px 3px 5px #888888;
 }
 ul {
     font-size: 24px;
