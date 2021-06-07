@@ -1,11 +1,9 @@
 package org.ordep.labtrack.data;
 
 import org.ordep.labtrack.model.BiologicalHazardCard;
-import org.ordep.labtrack.model.Card;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
