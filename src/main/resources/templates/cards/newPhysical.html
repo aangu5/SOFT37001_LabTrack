@@ -164,7 +164,7 @@
       <h1>Mandatory Pictograms</h1>
       <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
         <label style="text-align:center;" class="pictogram" th:each="pictogram : ${mandatoryPictograms}" th:for="${pictogram.name()}">
-          <div style="background-color:white; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
+          <div style="background-color:white; text-align: center; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
           <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
           <input class="pictogramBox" type="checkbox" th:field="*{mandatoryPictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
           <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
