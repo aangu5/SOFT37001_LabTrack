@@ -9,21 +9,5 @@
     "displayName": "display name",
     "emailAddress": "email@mail.com",
     "loggedIn": false
-  },
-  "cat": "cat",
-  "dose": "dose",
-  "period": "period",
-  "state": "state",
-  "man": {
-    "dataId": "5d83af65-e06e-4e1b-8bdd-c2539426f700",
-    "manName": "name",
-    "manState": "state"
-  },
-  "sops": [
-    {
-      "dataId": "360bcc84-16af-4912-9453-b801251150ca",
-      "sopName": "name",
-      "sopState": "state"
-    }
-  ]
+  }
 }

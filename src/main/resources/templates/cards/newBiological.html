@@ -135,7 +135,7 @@
             <tr>
               <th>Card Name*</th>
               <td class="data">
-                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64">
               </td>
             </tr>
             <tr>
@@ -143,38 +143,22 @@
               <td class="data" style="background-color:white;">
                 <label>
                   <img src="/images/BHS01.png" width="100"/>
-                  <input type="checkbox">
+                  <input type="checkbox" th:field="*{hazardous}">
                 </label>
               </td>
             </tr>
             <tr>
               <th>Synonyms</th>
               <td class="data">
-                <input th:field="*{synonyms}" type="text" minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+                <input th:field="*{synonyms}" type="text" minlength="3" maxlength="64">
               </td>
             </tr>
             <tr>
-              <th>Cat</th>
+              <th class="rounded">BioSafety Level*</th>
               <td class="data">
-                <input th:field="*{cat}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>Dose</th>
-              <td class="data">
-                <input th:field="*{dose}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>Period</th>
-              <td class="data">
-                <input th:field="*{period}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
-              </td>
-            </tr>
-            <tr>
-              <th>State</th>
-              <td class="data">
-                <input th:field="*{state}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+                <select style="width:100%" class="table" th:field="*{bioSafetyLevel}" required>
+                  <option class="table" th:each="i : ${bioSafetyLevel}" th:text="${i.getDisplayName()}" th:value="${i}"</option>
+                </select>
               </td>
             </tr>
           </table>

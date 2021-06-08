@@ -1,11 +1,10 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
+import org.ordep.labtrack.model.enums.MandatoryPictogram;
 import org.ordep.labtrack.model.enums.PhysicalPictogram;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,11 +15,10 @@ import java.util.List;
 @Entity
 public class PhysicalHazardCard extends Card {
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<PhysicalPictogram> symbols;
-    @OneToMany
-    private List<Haz> hazs;
-    @OneToMany
-    private List<Man> men;
-    @OneToMany
-    private List<Sop> sops;
+    private String hazards;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private List<MandatoryPictogram> mandatoryPictograms;
 }

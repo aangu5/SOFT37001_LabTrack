@@ -232,11 +232,13 @@ public class WebController {
         if (type.equalsIgnoreCase("PhysicalHazardCard")) {
             model.addAttribute("physicalHazardCard", new PhysicalHazardCard());
             model.addAttribute("pictogramTypes", PhysicalPictogram.values());
+            model.addAttribute("mandatoryPictograms", MandatoryPictogram.values());
             model.addAttribute(PAGE_TITLE,"New Physical Hazard Card");
             return "cards/newPhysical";
         }
         if (type.equalsIgnoreCase("BiologicalHazardCard")) {
             model.addAttribute("biologicalHazardCard", new BiologicalHazardCard());
+            model.addAttribute("bioSafetyLevel", BioSafetyLevel.values());
             model.addAttribute(PAGE_TITLE,"New Biological Hazard Card");
             return "cards/newBiological";
         }

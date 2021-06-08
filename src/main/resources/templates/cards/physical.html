@@ -33,6 +33,28 @@
         </tr>
       </table>
     </div>
+  <div>
+    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+      <!-- images in here -->
+      <h1>Physical Pictograms</h1>
+      <div th:each="pictogram : ${physicalHazardCard.getSymbols()}">
+        <img th:alt="${pictogram.name()}"
+             th:src="@{${'/images/' + pictogram.name() +'.jpg'}}"
+             width="100">
+        <p th:text="${pictogram.getDisplayName()}"></p>
+      </div>
+    </div>
+    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+      <!-- images in here -->
+      <h1>Mandatory Pictograms</h1>
+      <div th:each="pictogram : ${physicalHazardCard.getMandatoryPictograms()}">
+        <img th:alt="${pictogram.name()}"
+             th:src="@{${'/images/' + pictogram.name() +'.jpg'}}"
+             width="100">
+        <p th:text="${pictogram.getDisplayName()}"></p>
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>

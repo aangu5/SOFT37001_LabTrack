@@ -1,11 +1,9 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
+import org.ordep.labtrack.model.enums.BioSafetyLevel;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -15,12 +13,5 @@ import java.util.List;
 @Entity
 public class BiologicalHazardCard extends Card {
     private boolean hazardous;
-    private String cat;
-    private String dose;
-    private String period;
-    private String state;
-    @OneToOne
-    private Man man;
-    @OneToMany
-    private List<Sop> sops;
+    private BioSafetyLevel bioSafetyLevel;
 }

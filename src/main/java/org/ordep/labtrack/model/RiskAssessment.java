@@ -17,12 +17,7 @@ import java.util.List;
 public class RiskAssessment extends Assessment {
 
     private String reaction;
-    @ElementCollection
-    private List<ChemicalPictogram> pictograms;
-    @OneToMany
-    private List<HazardStatement> hazardStatements;
-    @ElementCollection
-    private List<String> risks;
+    private String risks;
     private String numberOfExposures;
     @Enumerated(EnumType.STRING)
     private FrequencyOfTask frequencyOfTask;
@@ -31,10 +26,6 @@ public class RiskAssessment extends Assessment {
     @Enumerated(EnumType.STRING)
     private Severity likelihood;
     private String riskRating;
-    @OneToMany
-    private List<PrecautionaryStatement> precautionaryStatements;
-    @OneToMany
-    private List<Sop> sops;
     private String signature;
 
     @ManyToMany

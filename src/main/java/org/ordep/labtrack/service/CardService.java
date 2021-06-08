@@ -29,12 +29,6 @@ public class CardService {
     private PhysicalHazardCardRepository physicalHazardCardRepository;
     @Autowired
     private BiologicalHazardCardRepository biologicalHazardCardRepository;
-    @Autowired
-    private HazRepository hazRepository;
-    @Autowired
-    private ManRepository manRepository;
-    @Autowired
-    private SopRepository sopRepository;
 
     // Chemical Hazard Cards
 

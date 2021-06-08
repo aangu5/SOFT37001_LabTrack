@@ -16,6 +16,7 @@ import java.util.List;
 public class ChemicalHazardCard extends Card {
 
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<ChemicalPictogram> pictograms;
     private String cas;
     @Enumerated(EnumType.STRING)

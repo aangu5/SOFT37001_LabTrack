@@ -6,9 +6,7 @@ import org.ordep.labtrack.model.enums.Precaution;
 import org.ordep.labtrack.model.enums.ProtectiveEquipment;
 import org.ordep.labtrack.model.enums.RouteOfExposure;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -26,12 +24,16 @@ public class CoshhAssessment extends Assessment {
     @ManyToMany
     private List<PrecautionaryStatement> precautionaryStatements;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<HazardToHealth> hazardToHealths;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<RouteOfExposure> routeOfExposures;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<Precaution> precautions;
     @ElementCollection
+    @Enumerated(EnumType.STRING)
     private List<ProtectiveEquipment> protectiveEquipments;
     private String storageInformation;
     private String disposalMethod;

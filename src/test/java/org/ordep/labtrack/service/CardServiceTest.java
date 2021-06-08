@@ -12,10 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
-import org.ordep.labtrack.model.enums.ChemicalPictogram;
-import org.ordep.labtrack.model.enums.PhysicalPictogram;
-import org.ordep.labtrack.model.enums.Role;
-import org.ordep.labtrack.model.enums.SignalWord;
+import org.ordep.labtrack.model.enums.*;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -41,12 +38,6 @@ class CardServiceTest {
     private BiologicalHazardCardRepository biologicalHazardCardRepository;
     @Mock
     private StatementService statementService;
-    @Mock
-    private HazRepository hazRepository;
-    @Mock
-    private ManRepository manRepository;
-    @Mock
-    private SopRepository sopRepository;
     @Mock
     private UserService userService;
     @InjectMocks
@@ -149,14 +140,7 @@ class CardServiceTest {
     void newPhysicalHazardCard() {
         List<PhysicalPictogram> pictograms = Collections.singletonList(PhysicalPictogram.PHS01);
 
-        Haz haz = new Haz(uuid2, "name", "state");
-        List<Haz> hazs = Collections.singletonList(haz);
-
-        Man man = new Man(uuid3, "name", "state");
-        List<Man> men = Collections.singletonList(man);
-
-        Sop sop = new Sop(uuid4, "name", "state");
-        List<Sop> sops = Collections.singletonList(sop);
+        List<MandatoryPictogram> men = Collections.singletonList(MandatoryPictogram.MHS01);
 
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
@@ -164,9 +148,8 @@ class CardServiceTest {
         var input = new PhysicalHazardCard();
         input.setCardName("name");
         input.setSymbols(pictograms);
-        input.setHazs(hazs);
-        input.setMen(men);
-        input.setSops(sops);
+        input.setHazards("hazs");
+        input.setMandatoryPictograms(men);
         input.setAuthor(user);
 
         PhysicalHazardCard card = cardService.newPhysicalHazardCard(input);
@@ -175,9 +158,8 @@ class CardServiceTest {
         assertEquals("name", card.getCardName());
         assertEquals(user, card.getAuthor());
         assertEquals(pictograms, card.getSymbols());
-        assertEquals(hazs, card.getHazs());
-        assertEquals(men, card.getMen());
-        assertEquals(sops, card.getSops());
+        assertEquals("hazs", card.getHazards());
+        assertEquals(men, card.getMandatoryPictograms());
 
     }
 
@@ -234,19 +216,12 @@ class CardServiceTest {
     @Test
     void newBiologicalHazardCard() throws JsonProcessingException {
 
-        Man man = new Man(uuid2, "name", "state");
-
-        Sop sop = new Sop(uuid3, "name", "state");
-        List<Sop> sops = Collections.singletonList(sop);
-
         LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new BiologicalHazardCard();
         input.setCardName("name");
         input.setHazardous(true);
-        input.setMan(man);
-        input.setSops(sops);
         input.setAuthor(user);
 
         BiologicalHazardCard card = cardService.newBiologicalHazardCard(input);
@@ -255,8 +230,6 @@ class CardServiceTest {
         assertEquals("name", card.getCardName());
         assertEquals(user, card.getAuthor());
         assertTrue(card.isHazardous());
-        assertEquals(man, card.getMan());
-        assertEquals(sops, card.getSops());
         System.out.println(objectMapper.writeValueAsString(card));
     }
 

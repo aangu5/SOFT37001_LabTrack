@@ -69,6 +69,12 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <th class="rounded">Risks</th>
+                        <td class="data">
+                            <input th:field="*{risks}" type="text">
+                        </td>
+                    </tr>
                     <tr th:if="${!chemicalHazardCards.isEmpty()}">
                         <th class="rounded"><label for="chemicalHazardCards">Chemical Hazard Cards</label></th>
                         <td class="data">

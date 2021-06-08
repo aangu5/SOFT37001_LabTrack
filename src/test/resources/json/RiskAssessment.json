@@ -17,34 +17,30 @@
   "dateApproved": null,
   "approved": true,
   "reaction": "",
-  "pictograms": [],
-  "hazardStatements": [],
-  "risks": [],
+  "risks": "risk",
   "numberOfExposures": "",
   "frequencyOfTask": "DAILY",
   "severity": "LOW",
   "likelihood": "VERY_LOW",
   "riskRating": null,
-  "precautionaryStatements": [],
-  "sops": [],
   "signature": null,
   "physicalHazardCards": [
     {
-      "cardId": "e8613e04-0862-4ce8-a5e3-74052caaccbf",
-      "cardName": "Microwaving",
+      "cardId": "9aa735cf-71ab-4e32-ba61-3be346d72ec1",
+      "cardName": "name",
       "synonyms": null,
+      "symbols": [
+        "PHS01"
+      ],
       "dateCreated": "2019-07-18T11:22:15",
-      "cardType": "PHYSICAL",
       "author": {
-        "userId": "4fb37ffc-49c3-4b3a-8d33-12099cdaf8ac",
-        "displayName": "Reece Edwards",
-        "emailAddress": "reece.edwards2019@ntu.ac.uk",
+        "userId": "702d1aab-fd01-400f-9d08-fb6485b0a773",
+        "displayName": "display name",
+        "emailAddress": "email@mail.com",
         "loggedIn": false
       },
-      "symbols": [],
-      "hazs": [],
-      "men": [],
-      "sops": []
+      "hazards": "some hazard",
+      "mandatoryPictograms": ["MHS12"]
     }
   ],
   "chemicalHazardCards": [

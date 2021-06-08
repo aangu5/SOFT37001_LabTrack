@@ -53,6 +53,16 @@
           <td class="data" th:text="${riskAssessment.isActive()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
+        <tr th:if="${riskAssessment.approved}">
+          <th class="rounded">Approver</th>
+          <td class="data" th:text="${riskAssessment.getAuthor().getDisplayName()}">Stephen 'Conical Flask' Turner
+          </td>
+        </tr>
+        <tr th:if="${riskAssessment.approved}">
+          <th class="rounded">Approved on</th>
+          <td class="data" th:text="${riskAssessment.getFormattedApprovedDate()}">Stephen 'Conical Flask' Turner
+          </td>
+        </tr>
         <tr>
           <th class="rounded">Number of Exposures</th>
           <td class="data" th:text="${riskAssessment.numberOfExposures}">Exposures</td>

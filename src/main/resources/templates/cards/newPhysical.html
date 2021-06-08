@@ -134,18 +134,44 @@
             <tr>
               <th>Card Name*</th>
               <td class="data">
-                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+                <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64">
+              </td>
+            </tr>
+            <tr><th>Synonyms</th>
+              <td class="data">
+                <input th:field="*{synonyms}" type="text" minlength="3" maxlength="64">
+              </td>
+            </tr>
+            <tr>
+              <th>Hazards</th>
+              <td class="data">
+                <input th:field="*{hazards}" type="text" minlength="3" maxlength="64">
               </td>
             </tr>
           </table>
         </div>
       </div>
-      <!-- images in here -->
-      <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
-        <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
-        <input class="pictogramBox" type="checkbox" th:field="*{symbols}" th:id="${pictogram.name()}" th:value="${symbols}"/>
-        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
-      </label>
+      <h1>Physical Pictograms</h1>
+
+
+      <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
+        <label style="display:flex; justify-content:center"   class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
+          <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
+          <input class="pictogramBox" type="checkbox" th:field="*{symbols}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
+          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+        </label>
+      </div>
+      <h1>Mandatory Pictograms</h1>
+      <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
+        <label style="text-align:center;" class="pictogram" th:each="pictogram : ${mandatoryPictograms}" th:for="${pictogram.name()}">
+          <div style="background-color:white; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center">
+          <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
+          <input class="pictogramBox" type="checkbox" th:field="*{mandatoryPictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
+          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+          </div>
+        </label>
+        </div>
+
     </div>
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
       <input style="display:none" id="submit" type="submit" value="Submit">

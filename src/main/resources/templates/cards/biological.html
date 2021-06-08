@@ -42,16 +42,8 @@
           </td>
         </tr>
         <tr>
-          <th class="rounded">cat</th>
-          <td class="data" th:text="${biologicalHazardCard.cat}"/>
-        </tr>
-        <tr>
-          <th class="rounded">dose</th>
-          <td class="data" th:text="${biologicalHazardCard.dose}"/>
-        </tr>
-        <tr>
-          <th class="rounded">period</th>
-          <td class="data" th:text="${biologicalHazardCard.state}"/>
+          <th class="rounded">BioSafety Level</th>
+          <td class="data" th:text="${biologicalHazardCard.getBioSafetyLevel().getDisplayName()}"/>
         </tr>
       </table>
     </div>

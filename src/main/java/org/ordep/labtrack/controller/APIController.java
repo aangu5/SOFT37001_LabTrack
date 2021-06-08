@@ -303,7 +303,7 @@ public class APIController {
 
     @PostMapping("/api/card/physical/new")
     public void newPhysicalHazardCard(@ModelAttribute PhysicalHazardCard physicalHazardCard, Model model, HttpServletResponse httpServletResponse) {
-        log.info("New Biological Hazard Card: {}", physicalHazardCard);
+        log.info("New Physical Hazard Card: {}", physicalHazardCard);
         model.addAttribute(physicalHazardCard);
         cardService.newPhysicalHazardCard(physicalHazardCard);
 
