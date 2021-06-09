@@ -20,4 +20,7 @@ public class Constants {
     public static final String PRECAUTIONARY_STATEMENTS = "precautionaryStatements";
     public static final String RISK_ASSESSMENT = "riskAssessment";
     public static final String COSHH_ASSESSMENT = "coshhAssessment";
+    public static final String NONE = "none";
+    public static final String NAME_SEARCH = "nameSearch";
+    public static final String AUTHOR_SEARCH = "authorSearch";
 }

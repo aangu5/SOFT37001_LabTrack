@@ -1,7 +1,6 @@
 package org.ordep.labtrack.model;
 
 import lombok.*;
-import org.ordep.labtrack.model.enums.ChemicalPictogram;
 import org.ordep.labtrack.model.enums.FrequencyOfTask;
 import org.ordep.labtrack.model.enums.Severity;
 

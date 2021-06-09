@@ -24,14 +24,12 @@ public class WebController {
     private final StatementService statementService;
     private final UserService userService;
     private final AssessmentService assessmentService;
-    private final AuthenticationService authenticationService;
 
-    public WebController(CardService cardService, StatementService statementService, UserService userService, AssessmentService assessmentService, AuthenticationService authenticationService) {
+    public WebController(CardService cardService, StatementService statementService, UserService userService, AssessmentService assessmentService) {
         this.cardService = cardService;
         this.statementService = statementService;
         this.userService = userService;
         this.assessmentService = assessmentService;
-        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/home")
@@ -121,15 +119,15 @@ public class WebController {
     }
 
     @GetMapping("/cards")
-    public String allCards(@RequestParam(defaultValue = "none") String name, @RequestParam(defaultValue = "none") String author, Model model) {
+    public String allCards(@RequestParam(defaultValue = NONE) String name, @RequestParam(defaultValue = NONE) String author, Model model) {
         List<Card> queryResult;
 
-        if (author.equals("none") && !name.equals("none")) {
+        if (author.equals(NONE) && !name.equals(NONE)) {
             queryResult = cardService.searchCardName(name);
-            model.addAttribute("nameSearch", name);
-        } else if (!author.equals("none") && name.equals("none")){
+            model.addAttribute(NAME_SEARCH, name);
+        } else if (!author.equals(NONE) && name.equals(NONE)){
             queryResult = cardService.searchCardAuthor(author);
-            model.addAttribute("authorSearch", author);
+            model.addAttribute(AUTHOR_SEARCH, author);
         } else {
             queryResult = cardService.getAllCards();
         }
@@ -140,7 +138,7 @@ public class WebController {
     }
 
     @GetMapping("/cards/chemical")
-    public String chemicalCards(@RequestParam(defaultValue = "none") String view,
+    public String chemicalCards(@RequestParam(defaultValue = NONE) String view,
                                 @RequestParam(defaultValue = "0") int page,
                                 Model model) {
         List<ChemicalHazardCard> cards;
@@ -160,7 +158,7 @@ public class WebController {
     }
 
     @GetMapping("/cards/biological")
-    public String biologicalCards(@RequestParam(defaultValue = "none") String view, Model model) {
+    public String biologicalCards(@RequestParam(defaultValue = NONE) String view, Model model) {
         List<BiologicalHazardCard> cards;
 
         if (view.equals("self")) {
@@ -178,7 +176,7 @@ public class WebController {
     }
 
     @GetMapping("/cards/physical")
-    public String physicalCards(@RequestParam(defaultValue = "none") String view, Model model) {
+    public String physicalCards(@RequestParam(defaultValue = NONE) String view, Model model) {
         List<PhysicalHazardCard> cards;
 
         if (view.equals("self")) {
@@ -201,9 +199,9 @@ public class WebController {
     }
 
     @GetMapping("/assessments/risk")
-    public String riskAssessments(@RequestParam(defaultValue = "none") String view,
-                                  @RequestParam(defaultValue = "none") String name,
-                                  @RequestParam(defaultValue = "none") String author, Model model) {
+    public String riskAssessments(@RequestParam(defaultValue = NONE) String view,
+                                  @RequestParam(defaultValue = NONE) String name,
+                                  @RequestParam(defaultValue = NONE) String author, Model model) {
         List<RiskAssessment> assessments;
 
         switch (view) {
@@ -215,12 +213,12 @@ public class WebController {
                 assessments = assessmentService.findAllRiskAssessmentsToApprove();
                 break;
             case "search":
-                if (author.equals("none") && !name.equals("none")) {
+                if (author.equals(NONE) && !name.equals(NONE)) {
                     assessments = assessmentService.searchRiskAssessmentName(name);
-                    model.addAttribute("nameSearch", name);
-                } else if (!author.equals("none") && name.equals("none")){
+                    model.addAttribute(NAME_SEARCH, name);
+                } else if (!author.equals(NONE) && name.equals(NONE)){
                     assessments = assessmentService.searchRiskAssessmentAuthor(author);
-                    model.addAttribute("authorSearch", author);
+                    model.addAttribute(AUTHOR_SEARCH, author);
                 } else {
                     assessments = assessmentService.getAllRiskAssessments();
                 }
@@ -277,9 +275,9 @@ public class WebController {
     }
 
     @GetMapping("/assessments/coshh")
-    public String coshhAssessments(@RequestParam(defaultValue = "none") String view,
-                                   @RequestParam(defaultValue = "none") String name,
-                                   @RequestParam(defaultValue = "none") String author, Model model) {
+    public String coshhAssessments(@RequestParam(defaultValue = NONE) String view,
+                                   @RequestParam(defaultValue = NONE) String name,
+                                   @RequestParam(defaultValue = NONE) String author, Model model) {
         List<CoshhAssessment> assessments;
 
         switch (view) {
@@ -291,12 +289,12 @@ public class WebController {
                 assessments = assessmentService.findAllCoshhAssessmentsToApprove();
                 break;
             case "search":
-                if (author.equals("none") && !name.equals("none")) {
+                if (author.equals(NONE) && !name.equals(NONE)) {
                     assessments = assessmentService.searchCoshhAssessmentName(name);
-                    model.addAttribute("nameSearch", name);
-                } else if (!author.equals("none") && name.equals("none")) {
+                    model.addAttribute(NAME_SEARCH, name);
+                } else if (!author.equals(NONE) && name.equals(NONE)) {
                     assessments = assessmentService.searchCoshhAssessmentAuthor(author);
-                    model.addAttribute("authorSearch", author);
+                    model.addAttribute(AUTHOR_SEARCH, author);
                 } else {
                     assessments = assessmentService.getAllCoshhAssessments();
                 }
@@ -313,7 +311,7 @@ public class WebController {
     }
 
     @GetMapping("/assessment/coshh")
-    public String coshhAssessment(@RequestParam(defaultValue = "none") UUID id, Model model) {
+    public String coshhAssessment(@RequestParam(defaultValue = NONE) UUID id, Model model) {
         LabTrackUser user = userService.getCurrentUser();
 
         var assessment = assessmentService.findOneCoshhAssessment(id);

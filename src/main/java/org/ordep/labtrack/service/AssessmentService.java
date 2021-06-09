@@ -15,13 +15,11 @@ public class AssessmentService {
     private final RiskAssessmentRepository riskAssessmentRepository;
     private final CoshhAssessmentRepository coshhAssessmentRepository;
     private final UserService userService;
-    private final AuthenticationService authenticationService;
 
-    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, CoshhAssessmentRepository coshhAssessmentRepository, UserService userService, AuthenticationService authenticationService){
+    public AssessmentService(RiskAssessmentRepository riskAssessmentRepository, CoshhAssessmentRepository coshhAssessmentRepository, UserService userService){
         this.riskAssessmentRepository = riskAssessmentRepository;
         this.coshhAssessmentRepository = coshhAssessmentRepository;
         this.userService = userService;
-        this.authenticationService = authenticationService;
     }
 
     public List<RiskAssessment> findAllRiskAssessmentsForUser(UUID userID) {

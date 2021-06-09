@@ -1,7 +1,6 @@
 package org.ordep.labtrack.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.ordep.labtrack.model.enums.Role;
