@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
@@ -94,7 +95,7 @@ class AssessmentServiceTest {
     @Test
     void findAllRiskAssessmentsToApprove() {
         when(riskAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(riskAssessment));
-        when(authenticationService.canUserApprove(any())).thenReturn(true);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.singletonList(riskAssessment), assessmentService.findAllRiskAssessmentsToApprove());
 
@@ -103,7 +104,7 @@ class AssessmentServiceTest {
     @Test
     void findAllRiskAssessmentsToApprove_unableToApprove() {
 
-        when(authenticationService.canUserApprove(any())).thenReturn(false);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.emptyList(), assessmentService.findAllRiskAssessmentsToApprove());
     }
@@ -140,7 +141,7 @@ class AssessmentServiceTest {
     @Test
     void findAllCoshhAssessmentsToApprove() {
         when(coshhAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(coshhAssessment));
-        when(authenticationService.canUserApprove(any())).thenReturn(true);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.singletonList(coshhAssessment), assessmentService.findAllCoshhAssessmentsToApprove());
 
@@ -149,7 +150,7 @@ class AssessmentServiceTest {
     @Test
     void findAllCoshhAssessmentsToApprove_unableToApprove() {
 
-        when(authenticationService.canUserApprove(any())).thenReturn(false);
+        when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.emptyList(), assessmentService.findAllCoshhAssessmentsToApprove());
     }
@@ -232,6 +233,66 @@ class AssessmentServiceTest {
         expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
 
         List<Assessment> actual = assessmentService.getAllAssessments();
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchRiskAssessmentAuthor() {
+        List<RiskAssessment> riskAssessments = Collections.singletonList(riskAssessment);
+
+        List<RiskAssessment> expected = new ArrayList<>(riskAssessments);
+
+        when(riskAssessmentRepository.findByAuthor_DisplayNameContainsIgnoreCase(anyString())).thenReturn(riskAssessments);
+
+        expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        List<RiskAssessment> actual = assessmentService.searchRiskAssessmentAuthor("search term");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchRiskAssessmentName() {
+        List<RiskAssessment> riskAssessments = Collections.singletonList(riskAssessment);
+
+        List<RiskAssessment> expected = new ArrayList<>(riskAssessments);
+
+        when(riskAssessmentRepository.findByAssessmentNameContainsIgnoreCase(anyString())).thenReturn(riskAssessments);
+
+        expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        List<RiskAssessment> actual = assessmentService.searchRiskAssessmentName("search term");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchCoshhAssessmentAuthor() {
+        List<CoshhAssessment> coshhAssessments = Collections.singletonList(coshhAssessment);
+
+        List<CoshhAssessment> expected = new ArrayList<>(coshhAssessments);
+
+        when(coshhAssessmentRepository.findByAuthor_DisplayNameContainsIgnoreCase(anyString())).thenReturn(coshhAssessments);
+
+        expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        List<CoshhAssessment> actual = assessmentService.searchCoshhAssessmentAuthor("search term");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchCoshhAssessmentName() {
+        List<CoshhAssessment> coshhAssessments = Collections.singletonList(coshhAssessment);
+
+        List<CoshhAssessment> expected = new ArrayList<>(coshhAssessments);
+
+        when(coshhAssessmentRepository.findByAssessmentNameContainsIgnoreCase(anyString())).thenReturn(coshhAssessments);
+
+        expected.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
+
+        List<CoshhAssessment> actual = assessmentService.searchCoshhAssessmentName("search term");
 
         assertEquals(expected, actual);
     }

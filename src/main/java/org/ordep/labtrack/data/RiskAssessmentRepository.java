@@ -11,4 +11,6 @@ public interface RiskAssessmentRepository extends PagingAndSortingRepository<Ris
     List<RiskAssessment> findRiskAssessmentByAuthor(LabTrackUser author);
     List<RiskAssessment> findAll();
     List<RiskAssessment> findAllByApproved(boolean approved);
+    List<RiskAssessment> findByAssessmentNameContainsIgnoreCase(String cardName);
+    List<RiskAssessment> findByAuthor_DisplayNameContainsIgnoreCase(String displayName);
 }

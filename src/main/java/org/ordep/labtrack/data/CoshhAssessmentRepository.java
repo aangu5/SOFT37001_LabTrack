@@ -11,4 +11,6 @@ public interface CoshhAssessmentRepository extends PagingAndSortingRepository<Co
     List<CoshhAssessment> findCoshhAssessmentByAuthor(LabTrackUser author);
     List<CoshhAssessment> findAll();
     List<CoshhAssessment> findAllByApproved(boolean approved);
+    List<CoshhAssessment> findByAuthor_DisplayNameContainsIgnoreCase(String author);
+    List<CoshhAssessment> findByAssessmentNameContainsIgnoreCase(String name);
 }

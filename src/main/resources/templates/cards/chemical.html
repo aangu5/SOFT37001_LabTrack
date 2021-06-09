@@ -25,21 +25,25 @@
                     <td class="data" th:text="${chemicalHazardCard.getType()}">Barclays</td>
                 </tr>
                 <tr>
+                    <th class="rounded">Synonyms</th>
+                    <td class="data" th:text="${chemicalHazardCard.getSynonyms()}"/>
+                </tr>
+                <tr>
                     <th class="rounded">Date Created</th>
                     <td class="data" th:text="${chemicalHazardCard.getFormattedDate()}">11/04/2021</td>
                 </tr>
                 <tr>
                     <th class="rounded">Author</th>
-                    <td class="data" th:text="${chemicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner
+                    <td class="data" th:text="${chemicalHazardCard.getAuthor().getDisplayName()}">Stephen 'Conical Flask' Turner
                     </td>
                 </tr>
                 <tr>
                     <th class="rounded">CAS</th>
-                    <td class="data" th:text="${chemicalHazardCard.cas}">ual sex</td>
+                    <td class="data" th:text="${chemicalHazardCard.getCas()}">ual sex</td>
                 </tr>
-                <tr>
+                <tr th:if="${chemicalHazardCard.getSignalWord() != null}">
                     <th class="rounded">Signal Word</th>
-                    <td class="data" th:text="${chemicalHazardCard.signalWord.getDisplayName()}">"Bananas"</td>
+                    <td class="data" th:text="${chemicalHazardCard.getSignalWord().getDisplayName()}">"Bananas"</td>
                 </tr>
             </table>
         </div>

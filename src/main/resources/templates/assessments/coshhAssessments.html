@@ -32,6 +32,12 @@
       </div>
     </div>
     <table th:if="${!coshhAssessments.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
+        <tr style="font-size: 18px;">
+            <td><input id="searchName" type="text" placeholder="Seach Name" th:value="${nameSearch}"></td>
+            <td></td>
+            <td><input id="searchAuthor" type="text" placeholder="Search Author" th:value="${authorSearch}"></td>
+            <td></td>
+        </tr>
       <tr style="font-size: 18px;">
         <th class="overview">Name</th>
         <th class="overview">Date Created</th>
@@ -42,7 +48,7 @@
         <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/coshh(id=${assessment.assessmentId})}">Assessment Name</a></td>
         <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
         <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"/></td>
-          <td class="overview" th:text="${assessment.signedUsers.contains(user)}"></td>
+          <td class="overview" th:text="${assessment.signedUsers.contains(user)} ? 'Yes' : 'No'"></td>
       </tr>
     </table>
 
@@ -51,8 +57,6 @@
     </div>
 
   </div>
-</div>
-</div>
 <script>
   let url = window.location.href;
   console.log(url);
@@ -62,6 +66,23 @@
     document.getElementById("to-approve").style.opacity = 0.5;
   } else {
     document.getElementById("all-cards").style.opacity = 0.5;
+  }
+  let searchNameInput = document.getElementById("searchName");
+  searchNameInput.addEventListener("keyup", search);
+
+  let searchAuthorInput = document.getElementById("searchAuthor");
+  searchAuthorInput.addEventListener("keyup", search);
+
+  function search(event) {
+      if (event.keyCode === 13) {
+          let name = searchNameInput.value;
+          let author = searchAuthorInput.value;
+          if (name === "" && author === "") {
+              window.location.href = "/assessments/coshh";
+          } else {
+              window.location.href = "/assessments/coshh?view=search&name=" + name + "&author=" + author;
+          }
+      }
   }
 </script>
 

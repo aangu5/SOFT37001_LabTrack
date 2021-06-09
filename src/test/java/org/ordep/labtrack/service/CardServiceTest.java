@@ -307,4 +307,54 @@ class CardServiceTest {
 
         assertEquals(expected, actual);
     }
+
+    @Test
+    void searchCardName() throws IOException {
+        List<ChemicalHazardCard> chemicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/ChemicalHazardCard.json").getInputStream(), ChemicalHazardCard.class));
+        List<PhysicalHazardCard> physicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/PhysicalHazardCard.json").getInputStream(), PhysicalHazardCard.class));
+        List<BiologicalHazardCard> biologicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/BiologicalHazardCard.json").getInputStream(), BiologicalHazardCard.class));
+
+        List<Card> expected = new ArrayList<>();
+        expected.addAll(chemicalCards);
+        expected.addAll(physicalCards);
+        expected.addAll(biologicalCards);
+
+        when(chemicalHazardCardRepository.findByCardNameContainsIgnoreCase(anyString())).thenReturn(chemicalCards);
+        when(physicalHazardCardRepository.findByCardNameContainsIgnoreCase(anyString())).thenReturn(physicalCards);
+        when(biologicalHazardCardRepository.findByCardNameContainsIgnoreCase(anyString())).thenReturn(biologicalCards);
+
+        expected.sort(Comparator.comparing(Card::getDateCreated).reversed());
+
+        List<Card> actual = cardService.searchCardName("search term");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void searchCardAuthor() throws IOException {
+        List<ChemicalHazardCard> chemicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/ChemicalHazardCard.json").getInputStream(), ChemicalHazardCard.class));
+        List<PhysicalHazardCard> physicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/PhysicalHazardCard.json").getInputStream(), PhysicalHazardCard.class));
+        List<BiologicalHazardCard> biologicalCards = Collections.singletonList(objectMapper.readValue(new ClassPathResource(
+                "/json/BiologicalHazardCard.json").getInputStream(), BiologicalHazardCard.class));
+
+        List<Card> expected = new ArrayList<>();
+        expected.addAll(chemicalCards);
+        expected.addAll(physicalCards);
+        expected.addAll(biologicalCards);
+
+        when(chemicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(anyString())).thenReturn(chemicalCards);
+        when(physicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(anyString())).thenReturn(physicalCards);
+        when(biologicalHazardCardRepository.findByAuthor_DisplayNameContainsIgnoreCase(anyString())).thenReturn(biologicalCards);
+
+        expected.sort(Comparator.comparing(Card::getDateCreated).reversed());
+
+        List<Card> actual = cardService.searchCardAuthor("search term");
+
+        assertEquals(expected, actual);
+    }
 }

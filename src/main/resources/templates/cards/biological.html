@@ -24,12 +24,16 @@
           <td class="data" th:text="${biologicalHazardCard.getType()}"/>
         </tr>
         <tr>
+          <th class="rounded">Synonyms</th>
+          <td class="data" th:text="${biologicalHazardCard.getSynonyms()}"/>
+        </tr>
+        <tr>
           <th class="rounded">Date Created</th>
           <td class="data" th:text="${biologicalHazardCard.getFormattedDate()}"/>
         </tr>
         <tr>
           <th class="rounded">Author</th>
-          <td class="data" th:text="${biologicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner
+          <td class="data" th:text="${biologicalHazardCard.getAuthor().getDisplayName()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
         <tr>
@@ -41,7 +45,7 @@
             <img style="margin:5px;" th:alt="Hazardous" src="/images/BHS01.png" width="100">
           </td>
         </tr>
-        <tr>
+        <tr th:if="${biologicalHazardCard.getBioSafetyLevel() != null}">
           <th class="rounded">BioSafety Level</th>
           <td class="data" th:text="${biologicalHazardCard.getBioSafetyLevel().getDisplayName()}"/>
         </tr>

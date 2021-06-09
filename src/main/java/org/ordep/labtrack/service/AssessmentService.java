@@ -1,5 +1,6 @@
 package org.ordep.labtrack.service;
 
+import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
@@ -60,7 +61,7 @@ public class AssessmentService {
 
         LabTrackUser currentUser = userService.getCurrentUser();
 
-        if (authenticationService.canUserApprove(currentUser)) {
+        if (LabTrackUtilities.canUserApprove(currentUser)) {
             return riskAssessmentRepository.findAllByApproved(false);
         } else {
             return new ArrayList<>();
@@ -103,7 +104,7 @@ public class AssessmentService {
     public List<CoshhAssessment> findAllCoshhAssessmentsToApprove() {
         LabTrackUser currentUser = userService.getCurrentUser();
 
-        if (authenticationService.canUserApprove(currentUser)) {
+        if (LabTrackUtilities.canUserApprove(currentUser)) {
             return coshhAssessmentRepository.findAllByApproved(false);
         } else {
             return new ArrayList<>();
@@ -149,5 +150,21 @@ public class AssessmentService {
         assessments.sort(Comparator.comparing(Assessment::getDateCreated).reversed());
 
         return assessments;
+    }
+
+    public List<RiskAssessment> searchRiskAssessmentAuthor(String author) {
+        return riskAssessmentRepository.findByAuthor_DisplayNameContainsIgnoreCase(author);
+    }
+
+    public List<RiskAssessment> searchRiskAssessmentName(String name) {
+        return riskAssessmentRepository.findByAssessmentNameContainsIgnoreCase(name);
+    }
+
+    public List<CoshhAssessment> searchCoshhAssessmentAuthor(String author) {
+        return coshhAssessmentRepository.findByAuthor_DisplayNameContainsIgnoreCase(author);
+    }
+
+    public List<CoshhAssessment> searchCoshhAssessmentName(String name) {
+        return coshhAssessmentRepository.findByAssessmentNameContainsIgnoreCase(name);
     }
 }

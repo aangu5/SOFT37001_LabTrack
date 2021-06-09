@@ -136,8 +136,9 @@ public class APIController {
     public void changeRole(@RequestParam UUID userId, @RequestParam Role role) {
         var currentUser = userService.getCurrentUser();
         var user = userService.findUser(userId);
+        var auth = authenticationService.findUserById(userId);
 
-        if (user == null) {
+        if (user == null || auth == null) {
             throw new UserException("User not found");
         }
 
@@ -157,12 +158,6 @@ public class APIController {
         user.setRoles(roles);
 
         userService.updateUser(user);
-
-        var auth = authenticationService.findUserById(userId);
-
-        if (auth == null) {
-            throw new UserException("User not found");
-        }
 
         auth.setRoles(roles);
 
@@ -201,7 +196,7 @@ public class APIController {
 
         log.info("Risk Assessment approval: {} by {}", assessment, user);
 
-        if (authenticationService.canUserApprove(user)) {
+        if (LabTrackUtilities.canUserApprove(user)) {
             assessment.setApproved(true);
             assessment.setDateApproved(LocalDateTime.now());
             assessment.setApprover(user);
@@ -215,7 +210,7 @@ public class APIController {
         var assessment = assessmentService.findOneRiskAssessment(assessmentId);
         var user = userService.getCurrentUser();
 
-        if (assessment.getAuthor() == user) {
+        if (assessment.getAuthor().equals(user)) {
             log.info("Risk Assessment to be deleted: {} by: {}", assessment, user);
             assessmentService.deleteRiskAssessment(assessment);
         }
@@ -240,7 +235,7 @@ public class APIController {
 
         log.info("Coshh Assessment approval: {} by {}", assessment, user);
 
-        if (authenticationService.canUserApprove(user)) {
+        if (LabTrackUtilities.canUserApprove(user)) {
             assessment.setApproved(true);
             assessment.setDateApproved(LocalDateTime.now());
             assessment.setApprover(user);

@@ -1,5 +1,6 @@
 package org.ordep.labtrack.configuration;
 
+import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.enums.Role;
 
 import java.time.LocalDateTime;
@@ -45,5 +46,28 @@ public class LabTrackUtilities {
             }
         }
         return rolesList;
+    }
+
+    public static Role getHighestRole(LabTrackUser user) {
+        List<Role> roles = user.getRoles();
+
+        if (roles.contains(Role.ADMIN)) {
+            return Role.ADMIN;
+        }
+        else if (roles.contains(Role.LECTURER)){
+            return Role.LECTURER;
+        }
+        else if (roles.contains(Role.STUDENT)){
+            return Role.STUDENT;
+        }
+        else {
+            return Role.USER;
+        }
+    }
+
+    public static boolean canUserApprove(LabTrackUser user) {
+        List<Role> roles = user.getRoles();
+
+        return roles.contains(Role.ADMIN) || roles.contains(Role.LECTURER);
     }
 }

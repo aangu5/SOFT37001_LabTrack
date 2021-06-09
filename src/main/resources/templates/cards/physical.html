@@ -19,8 +19,12 @@
     </div>
       <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
         <tr>
-          <th  class="rounded">Card Type</th>
+          <th class="rounded">Card Type</th>
           <td class="data" th:text="${physicalHazardCard.getType()}"/>
+        </tr>
+        <tr>
+          <th class="rounded">Synonyms</th>
+          <td class="data" th:text="${physicalHazardCard.getSynonyms()}"/>
         </tr>
         <tr>
           <th class="rounded">Date Created</th>
@@ -28,13 +32,13 @@
         </tr>
         <tr>
           <th class="rounded">Author</th>
-          <td class="data" th:text="${physicalHazardCard.author.displayName}">Stephen 'Conical Flask' Turner
+          <td class="data" th:text="${physicalHazardCard.getAuthor().getDisplayName()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
       </table>
     </div>
   <div>
-    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;" th:if="${!physicalHazardCard.getSymbols().isEmpty()}">
       <!-- images in here -->
       <h1>Physical Pictograms</h1>
       <div th:each="pictogram : ${physicalHazardCard.getSymbols()}">
@@ -44,7 +48,7 @@
         <p th:text="${pictogram.getDisplayName()}"></p>
       </div>
     </div>
-    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;">
+    <div style="background-color: white; display: flex; flex-wrap: wrap; justify-content: center; align-items: center;" th:if="${!physicalHazardCard.getMandatoryPictograms().isEmpty()}">
       <!-- images in here -->
       <h1>Mandatory Pictograms</h1>
       <div th:each="pictogram : ${physicalHazardCard.getMandatoryPictograms()}">

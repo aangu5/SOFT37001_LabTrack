@@ -47,9 +47,9 @@ public class WebController {
     public String profile(Model model) {
         model.addAttribute(PAGE_TITLE,"My Profile");
         LabTrackUser currentUser = userService.getCurrentUser();
-        model.addAttribute("user",currentUser);
-        model.addAttribute("role",authenticationService.getHighestRole(currentUser));
-        model.addAttribute("permitted",authenticationService.canUserApprove(currentUser));
+        model.addAttribute("user", currentUser);
+        model.addAttribute("role", LabTrackUtilities.getHighestRole(currentUser));
+        model.addAttribute("permitted", LabTrackUtilities.canUserApprove(currentUser));
         return "profile";
     }
 
@@ -63,7 +63,7 @@ public class WebController {
     @GetMapping("/users")
     public String manageUsers(Model model){
         model.addAttribute(PAGE_TITLE,"View Users");
-        model.addAttribute("permitted",authenticationService.canUserApprove(userService.getCurrentUser()));
+        model.addAttribute("permitted", LabTrackUtilities.canUserApprove(userService.getCurrentUser()));
         List<LabTrackUser> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "users";
@@ -124,14 +124,14 @@ public class WebController {
     public String allCards(@RequestParam(defaultValue = "none") String name, @RequestParam(defaultValue = "none") String author, Model model) {
         List<Card> queryResult;
 
-        if (name.equals("none") && author.equals("none")) {
-            queryResult = cardService.getAllCards();
-        } else if (name.equals("none") && !author.equals("none")) {
+        if (author.equals("none") && !name.equals("none")) {
+            queryResult = cardService.searchCardName(name);
+            model.addAttribute("nameSearch", name);
+        } else if (!author.equals("none") && name.equals("none")){
             queryResult = cardService.searchCardAuthor(author);
             model.addAttribute("authorSearch", author);
         } else {
-            queryResult = cardService.searchCardName(name);
-            model.addAttribute("nameSearch", name);
+            queryResult = cardService.getAllCards();
         }
 
         model.addAttribute("allCards", queryResult);
@@ -201,16 +201,33 @@ public class WebController {
     }
 
     @GetMapping("/assessments/risk")
-    public String riskAssessments(@RequestParam(defaultValue = "none") String view, Model model) {
+    public String riskAssessments(@RequestParam(defaultValue = "none") String view,
+                                  @RequestParam(defaultValue = "none") String name,
+                                  @RequestParam(defaultValue = "none") String author, Model model) {
         List<RiskAssessment> assessments;
 
-        if (view.equals("self")) {
-            LabTrackUser user = userService.getCurrentUser();
-            assessments = assessmentService.findAllRiskAssessmentsForUser(user.getUserId());
-        } else if (view.equals("approve")) {
-            assessments = assessmentService.findAllRiskAssessmentsToApprove();
-        } else {
-            assessments = assessmentService.getAllRiskAssessments();
+        switch (view) {
+            case "self":
+                LabTrackUser user = userService.getCurrentUser();
+                assessments = assessmentService.findAllRiskAssessmentsForUser(user.getUserId());
+                break;
+            case "approve":
+                assessments = assessmentService.findAllRiskAssessmentsToApprove();
+                break;
+            case "search":
+                if (author.equals("none") && !name.equals("none")) {
+                    assessments = assessmentService.searchRiskAssessmentName(name);
+                    model.addAttribute("nameSearch", name);
+                } else if (!author.equals("none") && name.equals("none")){
+                    assessments = assessmentService.searchRiskAssessmentAuthor(author);
+                    model.addAttribute("authorSearch", author);
+                } else {
+                    assessments = assessmentService.getAllRiskAssessments();
+                }
+                break;
+            default:
+                assessments = assessmentService.getAllRiskAssessments();
+                break;
         }
 
         model.addAttribute("riskAssessments", assessments);
@@ -260,16 +277,33 @@ public class WebController {
     }
 
     @GetMapping("/assessments/coshh")
-    public String coshhAssessments(@RequestParam(defaultValue = "none") String view, Model model) {
+    public String coshhAssessments(@RequestParam(defaultValue = "none") String view,
+                                   @RequestParam(defaultValue = "none") String name,
+                                   @RequestParam(defaultValue = "none") String author, Model model) {
         List<CoshhAssessment> assessments;
 
-        if (view.equals("self")) {
-            LabTrackUser user = userService.getCurrentUser();
-            assessments = assessmentService.findAllCoshhAssessmentsForUser(user.getUserId());
-        } else if (view.equals("approve")){
-            assessments = assessmentService.findAllCoshhAssessmentsToApprove();
-        } else {
-            assessments = assessmentService.getAllCoshhAssessments();
+        switch (view) {
+            case "self":
+                LabTrackUser user = userService.getCurrentUser();
+                assessments = assessmentService.findAllCoshhAssessmentsForUser(user.getUserId());
+                break;
+            case "approve":
+                assessments = assessmentService.findAllCoshhAssessmentsToApprove();
+                break;
+            case "search":
+                if (author.equals("none") && !name.equals("none")) {
+                    assessments = assessmentService.searchCoshhAssessmentName(name);
+                    model.addAttribute("nameSearch", name);
+                } else if (!author.equals("none") && name.equals("none")) {
+                    assessments = assessmentService.searchCoshhAssessmentAuthor(author);
+                    model.addAttribute("authorSearch", author);
+                } else {
+                    assessments = assessmentService.getAllCoshhAssessments();
+                }
+                break;
+            default:
+                assessments = assessmentService.getAllCoshhAssessments();
+                break;
         }
         model.addAttribute("coshhAssessments", assessments);
         model.addAttribute("user", userService.getCurrentUser());
@@ -284,7 +318,7 @@ public class WebController {
 
         var assessment = assessmentService.findOneCoshhAssessment(id);
         model.addAttribute(COSHH_ASSESSMENT, assessment);
-        model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
+        model.addAttribute("canUserApprove", LabTrackUtilities.canUserApprove(user));
         model.addAttribute("canUserSign", assessmentService.canUserSignAssessment(id));
         model.addAttribute("isUserOwner", assessment.getAuthor() == user);
 
@@ -341,7 +375,7 @@ public class WebController {
         LabTrackUser user = userService.getCurrentUser();
         var riskAssessment = assessmentService.findOneRiskAssessment(id);
         model.addAttribute(RISK_ASSESSMENT, riskAssessment);
-        model.addAttribute("canUserApprove", authenticationService.canUserApprove(user));
+        model.addAttribute("canUserApprove", LabTrackUtilities.canUserApprove(user));
         model.addAttribute("isUserOwner", riskAssessment.getAuthor() == user);
         model.addAttribute(PAGE_TITLE,riskAssessment.getAssessmentName());
         return "assessments/riskAssessment";

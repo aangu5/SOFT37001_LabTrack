@@ -49,17 +49,21 @@
 
 </body>
 <script>
-    var searchNameInput = document.getElementById("searchName");
+    let searchNameInput = document.getElementById("searchName");
     searchNameInput.addEventListener("keyup", search);
 
-    var searchAuthorInput = document.getElementById("searchAuthor");
+    let searchAuthorInput = document.getElementById("searchAuthor");
     searchAuthorInput.addEventListener("keyup", search);
 
     function search(event) {
         if (event.keyCode === 13) {
             let name = searchNameInput.value;
             let author = searchAuthorInput.value;
-            window.location.href = "/cards?name=" + name + "&author=" + author;
+            if (name === "" && author === "") {
+                window.location.href = "/cards";
+            } else {
+                window.location.href = "/cards?name=" + name + "&author=" + author;
+            }
         }
     }
 </script>

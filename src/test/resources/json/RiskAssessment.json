@@ -2,10 +2,11 @@
   "assessmentId": "d1296646-9963-4516-8450-c27c603bbc62",
   "assessmentName": "Autoclaving (Biohazard Waste Disposal)",
   "author": {
-    "userId": "5a0f9243-19b0-4549-9747-43f0f903b073",
-    "displayName": "Steve",
-    "emailAddress": "angus.cheney2019@ntu.ac.uk",
-    "loggedIn": false
+    "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
+    "displayName": "Angus Cheney",
+    "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
+    "loggedIn": false,
+    "roles": ["ADMIN"]
   },
   "approver": {
     "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",

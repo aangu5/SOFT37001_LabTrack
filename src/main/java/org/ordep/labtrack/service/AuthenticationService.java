@@ -45,37 +45,4 @@ public class AuthenticationService implements UserDetailsService {
     public void saveAuthenticationEntity(AuthenticationEntity authenticationEntity) {
         authenticationRepository.save(authenticationEntity);
     }
-
-    public boolean canUserApprove(LabTrackUser user) {
-        List<Role> roles = getUserRoles(user);
-
-        return roles.contains(Role.ADMIN) || roles.contains(Role.LECTURER);
-    }
-
-    public List<Role> getUserRoles(LabTrackUser user) {
-        Optional<AuthenticationEntity> optional = authenticationRepository.findById(user.getUserId());
-
-        if (optional.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        AuthenticationEntity entity = optional.get();
-        return entity.getRoles();
-    }
-
-    public Role getHighestRole(LabTrackUser user){
-        List<Role> roles = getUserRoles(user);
-        if (roles.contains(Role.ADMIN)) {
-            return Role.ADMIN;
-        }
-        else if (roles.contains(Role.LECTURER)){
-            return Role.LECTURER;
-        }
-        else if (roles.contains(Role.STUDENT)){
-            return Role.STUDENT;
-        }
-        else {
-            return Role.USER;
-        }
-    }
 }

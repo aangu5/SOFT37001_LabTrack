@@ -5,7 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.ordep.labtrack.configuration.LabTrackUtilities;
+import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.service.AssessmentService;
 import org.ordep.labtrack.service.AuthenticationService;
 import org.ordep.labtrack.service.CardService;
@@ -22,14 +25,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -282,11 +286,108 @@ class APIControllerTest {
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeRole() throws Exception{
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.findUser(any())).thenReturn(user);
+        when(authenticationService.findUserById(any())).thenReturn(authenticationEntity);
+        UUID uuid = UUID.randomUUID();
+        Role role = Role.ADMIN;
+
+        mockMvc.perform(post("/api/user/change-role")
+                .param("userId", uuid.toString())
+                .param("role", role.toString()))
+                .andExpect(status().isOk());
+
+        verify(userService, times(1)).updateUser(any());
+        verify(authenticationService, times(1)).saveAuthenticationEntity(any());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeRole_NullUserServiceUser() throws Exception{
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.findUser(any())).thenReturn(null);
+        when(authenticationService.findUserById(any())).thenReturn(authenticationEntity);
+        UUID uuid = UUID.randomUUID();
+        Role role = Role.ADMIN;
+
+        mockMvc.perform(post("/api/user/change-role")
+                .param("userId", uuid.toString())
+                .param("role", role.toString()))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeRole_NullAuthenticationServiceUser() throws Exception{
+        when(userService.getCurrentUser()).thenReturn(user);
+        when(userService.findUser(any())).thenReturn(user);
+        when(authenticationService.findUserById(any())).thenReturn(null);
+        UUID uuid = UUID.randomUUID();
+        Role role = Role.ADMIN;
+
+        mockMvc.perform(post("/api/user/change-role")
+                .param("userId", uuid.toString())
+                .param("role", role.toString()))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeRole_VictimMoreSenior() throws Exception{
+        List<Role> lowerRole = Collections.singletonList(Role.USER);
+
+        LabTrackUser lowerPermUser = new LabTrackUser();
+        lowerPermUser.setRoles(lowerRole);
+
+        when(userService.getCurrentUser()).thenReturn(lowerPermUser);
+        when(userService.findUser(any())).thenReturn(user);
+        when(authenticationService.findUserById(any())).thenReturn(authenticationEntity);
+        UUID uuid = UUID.randomUUID();
+        Role role = Role.USER;
+
+        mockMvc.perform(post("/api/user/change-role")
+                .param("userId", uuid.toString())
+                .param("role", role.toString()))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeRole_RoleHigherThanSelf() throws Exception{
+        List<Role> lowerRole = Collections.singletonList(Role.LECTURER);
+
+        LabTrackUser lowerPermUser = new LabTrackUser();
+        lowerPermUser.setRoles(lowerRole);
+
+        when(userService.getCurrentUser()).thenReturn(lowerPermUser);
+        when(userService.findUser(any())).thenReturn(lowerPermUser);
+        when(authenticationService.findUserById(any())).thenReturn(authenticationEntity);
+        UUID uuid = UUID.randomUUID();
+        Role role = Role.ADMIN;
+
+        mockMvc.perform(post("/api/user/change-role")
+                .param("userId", uuid.toString())
+                .param("role", role.toString()))
+                .andExpect(status().isFound());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void changeDisplayName() throws Exception{
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(post("/api/user/change-name").param("displayName", "no")).andExpect(status().isOk());
+
+        verify(userService, times(1)).updateUser(any());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveRiskAssessment() throws Exception {
 
         when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.canUserApprove(any())).thenReturn(true);
 
         mockMvc.perform(post("/api/assessment/risk/approve")
         .param("assessmentId", UUID.randomUUID().toString()))
@@ -300,12 +401,42 @@ class APIControllerTest {
 
         when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.canUserApprove(any())).thenReturn(false);
 
         mockMvc.perform(post("/api/assessment/risk/approve")
                 .param("assessmentId", UUID.randomUUID().toString()))
                 .andExpect(status().isOk())
                 .andReturn();
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void deleteRiskAssessment() throws Exception {
+        when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(delete("/api/assessment/risk/")
+                .param("assessmentId", "ab46e913-506e-4fe4-96d4-96ca665aacd2"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(assessmentService, times(1)).deleteRiskAssessment(any());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void deleteRiskAssessment_WrongAuthor() throws Exception {
+        LabTrackUser wrongAuthor = new LabTrackUser();
+        wrongAuthor.setDisplayName("Cheeky Cheney");
+
+        when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
+        when(userService.getCurrentUser()).thenReturn(wrongAuthor);
+
+        mockMvc.perform(delete("/api/assessment/risk/")
+                .param("assessmentId", "ab46e913-506e-4fe4-96d4-96ca665aacd2"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(assessmentService, times(0)).deleteRiskAssessment(any());
     }
 
     @Test
@@ -324,7 +455,6 @@ class APIControllerTest {
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.canUserApprove(any())).thenReturn(true);
 
         mockMvc.perform(post("/api/assessment/coshh/approve")
                 .param("assessmentId", UUID.randomUUID().toString()))
@@ -338,7 +468,6 @@ class APIControllerTest {
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
         when(userService.getCurrentUser()).thenReturn(user);
-        when(authenticationService.canUserApprove(any())).thenReturn(false);
 
         mockMvc.perform(post("/api/assessment/coshh/approve")
                 .param("assessmentId", UUID.randomUUID().toString()))

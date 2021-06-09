@@ -4,7 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.UserRepository;
 import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.LabTrackUser;
@@ -21,17 +25,18 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class LabTrackUserServiceTest {
 
+    @Mock
     private UserRepository userRepository;
+    @InjectMocks
     private UserService userService;
     private LabTrackUser user;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() throws IOException {
-        userRepository = Mockito.mock(UserRepository.class);
-        userService = new UserService(userRepository);
         objectMapper.registerModule(new JavaTimeModule());
 
         user = objectMapper.readValue(new ClassPathResource(
