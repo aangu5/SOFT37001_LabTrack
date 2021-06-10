@@ -267,7 +267,7 @@ public class APIController {
         var assessment = assessmentService.findOneCoshhAssessment(assessmentId);
         var user = userService.getCurrentUser();
 
-        if (assessment.getAuthor() == user) {
+        if (assessment.getAuthor().equals(user)) {
             log.info("Risk Assessment to be deleted: {} by: {}", assessment, user);
             assessmentService.deleteCoshhAssessment(assessment);
         }

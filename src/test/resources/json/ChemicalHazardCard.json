@@ -2,6 +2,7 @@
   "cardId": "feb55cbe-21c2-426b-9749-79ccf60b2882",
   "cardName": "name",
   "synonyms": "synonym 1",
+  "cardType": "CHEMICAL",
   "pictograms": [
     "GHS01"
   ],

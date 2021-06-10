@@ -23,7 +23,7 @@
             </a>
         </div>
         <div class="button">
-            <a href="/card/ChemicalHazardCard/new">
+            <a href="/card/chemical/new">
                 <h2>New Chemical Hazard Card</h2>
             </a>
         </div>
@@ -37,7 +37,7 @@
             <th class="overview">Synonyms</th>
         </tr>
         <tr th:each="card : ${chemicalCards}">
-            <td class="overview"><a th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}"
+            <td class="overview"><a th:href="@{/card/{type}(id=${card.cardId}, type=${card.cardType.getDisplayName().toLowerCase()})}"
                                     th:text="${card.cardName}">Card
                 Name</a></td>
             <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>

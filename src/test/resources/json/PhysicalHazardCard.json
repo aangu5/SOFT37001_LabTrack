@@ -2,6 +2,7 @@
   "cardId": "9aa735cf-71ab-4e32-ba61-3be346d72ec1",
   "cardName": "name",
   "synonyms": null,
+  "cardType": "PHYSICAL",
   "symbols": [
     "PHS01"
   ],

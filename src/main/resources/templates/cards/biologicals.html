@@ -32,7 +32,7 @@
         </a>
       </div>
       <div class="button">
-        <a href="/card/BiologicalHazardCard/new">
+        <a href="/card/biological/new">
           <h2>New Biological Hazard Card</h2>
         </a>
       </div>
@@ -45,7 +45,7 @@
         <th class="overview">Synonyms</th>
       </tr>
       <tr th:each="card : ${biologicalCards}">
-        <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+        <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.cardType.getDisplayName().toLowerCase()})}">Card Name</a></td>
         <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
         <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"/></td>
         <td class="overview" th:text="${card.synonyms}">Synonyms</td>

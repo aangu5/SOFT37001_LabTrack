@@ -451,6 +451,37 @@ class APIControllerTest {
 
     @Test
     @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void deleteCoshhAssessment() throws Exception {
+        when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(delete("/api/assessment/coshh/")
+                .param("assessmentId", "ab46e913-506e-4fe4-96d4-96ca665aacd2"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(assessmentService, times(1)).deleteCoshhAssessment(any());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void deleteCoshhAssessment_WrongAuthor() throws Exception {
+        LabTrackUser wrongAuthor = new LabTrackUser();
+        wrongAuthor.setDisplayName("Cheeky Cheney");
+
+        when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
+        when(userService.getCurrentUser()).thenReturn(wrongAuthor);
+
+        mockMvc.perform(delete("/api/assessment/coshh/")
+                .param("assessmentId", "ab46e913-506e-4fe4-96d4-96ca665aacd2"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        verify(assessmentService, times(0)).deleteCoshhAssessment(any());
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
     void approveCoshhAssessment() throws Exception {
 
         when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);

@@ -2,6 +2,7 @@
   "cardId": "d811a416-29ae-427c-ad3c-00d3f7e656eb",
   "cardName": "name",
   "synonyms": null,
+  "cardType": "BIOLOGICAL",
   "hazardous": true,
   "dateCreated": "2019-07-18T11:22:16",
   "author": {

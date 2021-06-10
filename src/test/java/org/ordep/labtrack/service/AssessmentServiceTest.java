@@ -14,6 +14,7 @@ import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.Role;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -103,7 +104,7 @@ class AssessmentServiceTest {
 
     @Test
     void findAllRiskAssessmentsToApprove_unableToApprove() {
-
+        user.setRoles(Collections.singletonList(Role.STUDENT));
         when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.emptyList(), assessmentService.findAllRiskAssessmentsToApprove());
@@ -149,7 +150,7 @@ class AssessmentServiceTest {
 
     @Test
     void findAllCoshhAssessmentsToApprove_unableToApprove() {
-
+        user.setRoles(Collections.singletonList(Role.STUDENT));
         when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.emptyList(), assessmentService.findAllCoshhAssessmentsToApprove());

@@ -24,7 +24,7 @@
                     <th class="overview">Author</th>
                 </tr>
                 <tr th:each="card : ${allCards}">
-                    <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.class.simpleName})}">Card Name</a></td>
+                    <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.cardType.getDisplayName().toLowerCase()})}">Card Name</a></td>
                     <td class="overview" th:text="${card.getType()}">Type</td>
                     <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
                     <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"/></td>

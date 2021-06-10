@@ -94,28 +94,28 @@ public class WebController {
         return "forgotten";
     }
 
-    @GetMapping("/card/{type}")
-    public String chemical(@RequestParam UUID id, @PathVariable String type, Model model) {
-        if (type.equals("ChemicalHazardCard")) {
-            var chemicalHazardCard = cardService.findOneChemicalHazardCard(id);
-            model.addAttribute("chemicalHazardCard", chemicalHazardCard);
-            model.addAttribute(PAGE_TITLE,chemicalHazardCard.getCardName());
-            return "cards/chemical";
-        }
-        if (type.equals("PhysicalHazardCard")) {
-            var physicalHazardCard = cardService.findOnePhysicalHazardCard(id);
-            model.addAttribute("physicalHazardCard", physicalHazardCard);
-            model.addAttribute(PAGE_TITLE,physicalHazardCard.getCardName());
-            return "cards/physical";
-        }
-        if (type.equals("BiologicalHazardCard")) {
-            var biologicalHazardCard = cardService.findOneBiologicalHazardCard(id);
-            model.addAttribute("biologicalHazardCard", cardService.findOneBiologicalHazardCard(id));
-            model.addAttribute(PAGE_TITLE,biologicalHazardCard.getCardName());
-            return "cards/biological";
-        }
+    @GetMapping("/card/chemical")
+    public String chemical(@RequestParam UUID id, Model model) {
+        var chemicalHazardCard = cardService.findOneChemicalHazardCard(id);
+        model.addAttribute("chemicalHazardCard", chemicalHazardCard);
+        model.addAttribute(PAGE_TITLE,chemicalHazardCard.getCardName());
+        return "cards/chemical";
+    }
 
-        return null;
+    @GetMapping("/card/biological")
+    public String biological(@RequestParam UUID id, Model model) {
+        var biologicalHazardCard = cardService.findOneBiologicalHazardCard(id);
+        model.addAttribute("biologicalHazardCard", biologicalHazardCard);
+        model.addAttribute(PAGE_TITLE,biologicalHazardCard.getCardName());
+        return "cards/biological";
+    }
+
+    @GetMapping("/card/physical")
+    public String physical(@RequestParam UUID id, Model model) {
+        var physicalHazardCard = cardService.findOnePhysicalHazardCard(id);
+        model.addAttribute("physicalHazardCard", physicalHazardCard);
+        model.addAttribute(PAGE_TITLE,physicalHazardCard.getCardName());
+        return "cards/physical";
     }
 
     @GetMapping("/cards")
@@ -146,9 +146,7 @@ public class WebController {
         if (view.equals("self")) {
             LabTrackUser user = userService.getCurrentUser();
             cards = cardService.findAllChemicalHazardCardsForUser(user.getUserId(), page);
-        } else if (view.equals(APPROVE)) {
-            cards = new ArrayList<>();
-        } else {
+        }  else {
             cards = cardService.findAllChemicalHazardCards();
         }
 
@@ -164,8 +162,6 @@ public class WebController {
         if (view.equals("self")) {
             LabTrackUser user = userService.getCurrentUser();
             cards = cardService.findAllBiologicalHazardCardsForUser(user.getUserId());
-        } else if (view.equals(APPROVE)) {
-            cards = new ArrayList<>();
         } else {
             cards = cardService.findAllBiologicalHazardCards();
         }
@@ -233,32 +229,32 @@ public class WebController {
         return "assessments/riskAssessments";
     }
 
-    @GetMapping("/card/{type}/new")
-    public String newCard(@PathVariable String type, Model model) {
-        if (type.equalsIgnoreCase("ChemicalHazardCard")) {
-            model.addAttribute("chemicalHazardCard", new ChemicalHazardCard());
-            model.addAttribute("signalWords", SignalWord.values());
-            model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
-            model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
-            model.addAttribute("pictogramTypes", ChemicalPictogram.values());
-            model.addAttribute(PAGE_TITLE,"New Chemical Hazard Card");
-            return "cards/newChemical";
-        }
-        if (type.equalsIgnoreCase("PhysicalHazardCard")) {
-            model.addAttribute("physicalHazardCard", new PhysicalHazardCard());
-            model.addAttribute("pictogramTypes", PhysicalPictogram.values());
-            model.addAttribute("mandatoryPictograms", MandatoryPictogram.values());
-            model.addAttribute(PAGE_TITLE,"New Physical Hazard Card");
-            return "cards/newPhysical";
-        }
-        if (type.equalsIgnoreCase("BiologicalHazardCard")) {
-            model.addAttribute("biologicalHazardCard", new BiologicalHazardCard());
-            model.addAttribute("bioSafetyLevel", BioSafetyLevel.values());
-            model.addAttribute(PAGE_TITLE,"New Biological Hazard Card");
-            return "cards/newBiological";
-        }
+    @GetMapping("/card/chemical/new")
+    public String newChemicalHazardCard(Model model) {
+        model.addAttribute("chemicalHazardCard", new ChemicalHazardCard());
+        model.addAttribute("signalWords", SignalWord.values());
+        model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
+        model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
+        model.addAttribute("pictogramTypes", ChemicalPictogram.values());
+        model.addAttribute(PAGE_TITLE,"New Chemical Hazard Card");
+        return "cards/newChemical";
+    }
 
-        return null;
+    @GetMapping("/card/biological/new")
+    public String newBiologicalHazardCard(Model model) {
+        model.addAttribute("biologicalHazardCard", new BiologicalHazardCard());
+        model.addAttribute("bioSafetyLevel", BioSafetyLevel.values());
+        model.addAttribute(PAGE_TITLE,"New Biological Hazard Card");
+        return "cards/newBiological";
+    }
+
+    @GetMapping("/card/physical/new")
+    public String newPhysicalHazardCard(Model model) {
+        model.addAttribute("physicalHazardCard", new PhysicalHazardCard());
+        model.addAttribute("pictogramTypes", PhysicalPictogram.values());
+        model.addAttribute("mandatoryPictograms", MandatoryPictogram.values());
+        model.addAttribute(PAGE_TITLE,"New Physical Hazard Card");
+        return "cards/newPhysical";
     }
 
     @GetMapping("/assessment/risk/new")

@@ -40,9 +40,8 @@ public class LabTrackUtilities {
     public static List<Role> getJuniorRoles(Role userRole){
         List<Role> rolesList = new ArrayList<>();
         for (Role role : Role.values()){
-            rolesList.add(role);
-            if(userRole.equals(role)){
-                return rolesList;
+            if (role.getPriority() <= userRole.getPriority()) {
+                rolesList.add(role);
             }
         }
         return rolesList;
