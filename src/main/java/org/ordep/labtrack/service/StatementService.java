@@ -5,7 +5,6 @@ import org.ordep.labtrack.data.HazardStatementRepository;
 import org.ordep.labtrack.data.PrecautionaryStatementRepository;
 import org.ordep.labtrack.model.HazardStatement;
 import org.ordep.labtrack.model.PrecautionaryStatement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,10 +15,14 @@ import java.util.UUID;
 @Service
 public class StatementService {
 
-    @Autowired
-    private HazardStatementRepository hazardStatementRepository;
-    @Autowired
-    private PrecautionaryStatementRepository precautionaryStatementRepository;
+    private final HazardStatementRepository hazardStatementRepository;
+    private final PrecautionaryStatementRepository precautionaryStatementRepository;
+
+    public StatementService(HazardStatementRepository hazardStatementRepository,
+                            PrecautionaryStatementRepository precautionaryStatementRepository) {
+        this.hazardStatementRepository = hazardStatementRepository;
+        this.precautionaryStatementRepository = precautionaryStatementRepository;
+    }
 
     public List<HazardStatement> findHazardStatements(List<UUID> statementIds) {
         return hazardStatementRepository.findByStatementIdIn(statementIds);

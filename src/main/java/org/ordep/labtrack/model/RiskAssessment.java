@@ -2,6 +2,7 @@ package org.ordep.labtrack.model;
 
 import lombok.*;
 import org.ordep.labtrack.model.enums.FrequencyOfTask;
+import org.ordep.labtrack.model.enums.Likelihood;
 import org.ordep.labtrack.model.enums.Severity;
 
 import javax.persistence.*;
@@ -23,7 +24,7 @@ public class RiskAssessment extends Assessment {
     @Enumerated(EnumType.STRING)
     private Severity severity;
     @Enumerated(EnumType.STRING)
-    private Severity likelihood;
+    private Likelihood likelihood;
     private String riskRating;
     private String signature;
 

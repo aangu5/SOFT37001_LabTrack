@@ -9,11 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.AssessmentState;
 import org.ordep.labtrack.model.enums.Role;
 import org.springframework.core.io.ClassPathResource;
 
@@ -32,8 +32,6 @@ class AssessmentServiceTest {
     private RiskAssessmentRepository riskAssessmentRepository;
     @Mock
     private UserService userService;
-    @Mock
-    private AuthenticationService authenticationService;
     @Mock
     private CoshhAssessmentRepository coshhAssessmentRepository;
 
@@ -95,7 +93,7 @@ class AssessmentServiceTest {
 
     @Test
     void findAllRiskAssessmentsToApprove() {
-        when(riskAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(riskAssessment));
+        when(riskAssessmentRepository.findAllByStatus(AssessmentState.PENDING)).thenReturn(Collections.singletonList(riskAssessment));
         when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.singletonList(riskAssessment), assessmentService.findAllRiskAssessmentsToApprove());
@@ -141,7 +139,7 @@ class AssessmentServiceTest {
 
     @Test
     void findAllCoshhAssessmentsToApprove() {
-        when(coshhAssessmentRepository.findAllByApproved(false)).thenReturn(Collections.singletonList(coshhAssessment));
+        when(coshhAssessmentRepository.findAllByStatus(AssessmentState.PENDING)).thenReturn(Collections.singletonList(coshhAssessment));
         when(userService.getCurrentUser()).thenReturn(user);
 
         assertEquals(Collections.singletonList(coshhAssessment), assessmentService.findAllCoshhAssessmentsToApprove());
@@ -187,21 +185,10 @@ class AssessmentServiceTest {
         when(coshhAssessmentRepository.findById(any())).thenReturn(Optional.of(coshhAssessment));
         when(userService.getCurrentUser()).thenReturn(user);
 
-        coshhAssessment.setApproved(false);
+        coshhAssessment.setStatus(AssessmentState.PENDING);
         coshhAssessment.setSignedUsers(Collections.emptyList());
 
         assertFalse(assessmentService.canUserSignAssessment(uuid));
-    }
-
-    @Test
-    void hasUserSignedAssessment() {
-
-        assertTrue(assessmentService.hasUserSignedAssessment(coshhAssessment, user));
-
-        user.setEmailAddress("test@gmail.com");
-
-        assertFalse(assessmentService.hasUserSignedAssessment(coshhAssessment, user));
-
     }
 
     @Test

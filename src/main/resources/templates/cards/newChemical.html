@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>New Chemical Hazard Card</title>
@@ -50,20 +50,21 @@
           <tr>
             <th class="rounded">Card Name*</th>
             <td class="data">
-              <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64" pattern="^[^\W\s_]+$">
+              <input th:field="*{cardName}" type="text" required minlength="3" maxlength="64">
             </td>
           </tr>
             <tr>
                 <th class="rounded">CAS*</th>
                 <td class="data">
                   <input th:field="*{cas}" type="text" required pattern="\b[1-9]{1}[0-9]{1,5}-\d{2}-\d\b">
+                  <label style="font-size: 12px">CAS Numbers are up to 10 digits long using the format xxxxxxx-yy-z.</label>
                 </td>
             </tr>
             <tr>
               <th class="rounded">Signal Word*</th>
               <td class="data">
                 <select style="width:100%" class="table" th:field="*{signalWord}" required>
-                  <option class="table" th:each="i : ${signalWords}" th:text="${i.getDisplayName()}" th:value="${i}"</option>
+                  <option class="table" th:each="i : ${signalWords}" th:text="${i.getDisplayName()}" th:value="${i}"></option>
                 </select>
               </td>
             </tr>
@@ -73,7 +74,7 @@
       <label class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
         <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.png'}}" width="100"/>
         <input class="pictogramBox" type="checkbox" th:field="*{pictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
-        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+        <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"></h4>
       </label>
       <table style="background-color:white; height: 1px; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
         <tr th:if="${!hazardStatements.isEmpty()}">
@@ -101,14 +102,12 @@
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
       <input style="display:none" id="submit" type="submit" value="Submit">
       <label for="submit">
-        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+        <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
           <h1 style="padding:10px; color:white">Submit</h1>
         </div>
       </label>
     </div>
     </div>
-
-  </div>
 </form>
 
 </body>

@@ -12,26 +12,26 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
+    <a href="/assessments/risk">
       <div class="button" id="all-cards">
-        <a href="/assessments/risk">
           <h2>All Risk Assessments</h2>
-        </a>
       </div>
+    </a>
+    <a href="/assessments/risk?view=self">
       <div class="button" id="my-cards">
-        <a href="/assessments/risk?view=self">
           <h2>My Risk Assessments</h2>
-        </a>
       </div>
+    </a>
+    <a href="/assessments/risk?view=approve">
       <div class="button" id="to-approve">
-        <a href="/assessments/risk?view=approve">
           <h2>Assessments to Approve</h2>
-        </a>
       </div>
+    </a>
+      <a href="/assessment/risk/new">
       <div class="button">
-        <a href="/assessment/risk/new">
           <h2>New Risk Assessment</h2>
-        </a>
     </div>
+    </a>
     <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
         <td><input id="searchName" type="text" placeholder="Seach Name" th:value="${nameSearch}"></td>
@@ -47,23 +47,22 @@
       <tr th:each="assessment : ${riskAssessments}">
         <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/risk(id=${assessment.assessmentId})}">Assessment Name</a></td>
         <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
-        <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"/></td>
-        <td class="overview"><a th:text="${assessment.isActive()}"/></td>
+        <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"></a></td>
+        <td class="overview"><a th:text="${assessment.isActive()}"></a></td>
 
       </tr>
     </table>
   </div>
 </div>
-</div>
 <script>
   let url = window.location.href;
   console.log(url);
   if (url.endsWith("?view=self")) {
-    document.getElementById("my-cards").style.opacity = 0.5;
+    document.getElementById("my-cards").style.opacity = "0.5";
   } else if (url.endsWith("?view=approve")) {
-    document.getElementById("to-approve").style.opacity = 0.5;
+    document.getElementById("to-approve").style.opacity = "0.5";
   } else {
-    document.getElementById("all-cards").style.opacity = 0.5;
+    document.getElementById("all-cards").style.opacity = "0.5";
   }
 
   let searchNameInput = document.getElementById("searchName");

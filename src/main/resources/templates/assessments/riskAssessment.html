@@ -11,27 +11,31 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-      <div class="button no-print">
-        <a th:href="@{/assessment/risk/copy(id=${riskAssessment.getAssessmentId()})}">
+    <a class="no-print" th:href="@{/assessment/risk/copy(id=${riskAssessment.getAssessmentId()})}">
+      <div class="button">
           <h2>Copy Risk Assessment</h2>
-        </a>
       </div>
-      <div class="button no-print">
-        <a onclick="printPDF()">
+    </a>
+    <a class="no-print" onclick="printPDF()">
+      <div class="button">
           <h2>Print Risk Assessment</h2>
-        </a>
       </div>
-      <div class="button no-print">
-        <a onclick="shareAssessment()" class="popup">
-          <h2>Share Risk Assessment</h2>
-          <span class="popuptext" id="clipboard">Text copied to clipboard</span>
-        </a>
+    </a>
+    <a class="no-print" onclick="shareAssessment()">
+      <div class="button">
+        <h2>Share Risk Assessment</h2>
       </div>
-      <div class="button no-print" th:if="${isUserOwner}">
-        <a th:href="@{/assessment/risk/delete(id=${riskAssessment.getAssessmentId()})}">
+    </a>
+    <div class="button no-print" id="popup" style="border-radius:4px; background-color:black; display:none;">
+      <h3>Copied to clipboard!</h3>
+    </div>
+    <a class="no-print" th:href="@{/assessment/risk/delete(id=${riskAssessment.getAssessmentId()})}">
+      <div class="button" th:if="${isUserOwner}">
+
           <h2>Delete Risk Assessment</h2>
-        </a>
+
       </div>
+    </a>
 
     <div style="width: 100%" id="content">
       <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
@@ -53,14 +57,19 @@
           <td class="data" th:text="${riskAssessment.isActive()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
-        <tr th:if="${riskAssessment.approved}">
-          <th class="rounded">Approver</th>
+        <tr th:if="${riskAssessment.getStatus}">
+          <th class="rounded">Reviewer</th>
           <td class="data" th:text="${riskAssessment.getAuthor().getDisplayName()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
-        <tr th:if="${riskAssessment.approved}">
-          <th class="rounded">Approved on</th>
+        <tr th:if="${riskAssessment.getStatus}">
+          <th class="rounded">Reviewed on</th>
           <td class="data" th:text="${riskAssessment.getFormattedApprovedDate()}">Stephen 'Conical Flask' Turner
+          </td>
+        </tr>
+        <tr th:if="${riskAssessment.getDeclinedReason() != null}">
+          <th class="rounded">Decline Reason</th>
+          <td class="data" th:text="${riskAssessment.getDeclinedReason()}">Stephen 'Conical Flask' Turner
           </td>
         </tr>
         <tr>
@@ -126,11 +135,24 @@
       </table>
     </div>
   </div>
-  <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!riskAssessment.approved && canUserApprove}">
+  <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!approved && canUserApprove}">
     <input style="display:none" id="approve" onclick="submitApproval()">
     <label for="approve">
-      <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+      <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
         <h1 style="padding:10px; color:white">Approve</h1>
+      </div>
+    </label>
+  </div>
+  <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center;">
+    <div style="background-color: #C4C4C4; border-radius: 6px; -moz-border-radius: 6px; width: 500px; height: 250px" id="declineCommentDiv" hidden>
+      <input onclick="" type="text" placeholder="Decline Comment" id="declineComment">
+    </div>
+  </div>
+  <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!approved && canUserApprove}">
+    <input style="display:none" id="decline" onclick="addCommentBox()">
+    <label for="decline">
+      <div style="background-color: #C4C4C4; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+        <h1 style="padding:10px;" id="declineButtonText">Decline</h1>
       </div>
     </label>
   </div>
@@ -140,17 +162,18 @@
   function submitApproval() {
     let assessmentId =/*[[${riskAssessment.getAssessmentId()}]]*/'abc';
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "/api/assessment/risk/approve?assessmentId=" + assessmentId, true);
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', "/api/assessment/risk/approve?assessmentId=" + assessmentId + "&status=approve", true);
     xhr.send();
+
+    location.reload();
   }
 
   async function shareAssessment() {
     let textToCopy = window.location.href;
     console.log(textToCopy);
     await navigator.clipboard.writeText(textToCopy);
-    let popup = document.getElementById("clipboard");
-    popup.classList.toggle("show");
+    document.getElementById("popup").style.display = "inline";
 
   }
 
@@ -158,7 +181,30 @@
 
       window.print();
 
+  }
+
+  function addCommentBox() {
+    let textBoxDiv = document.getElementById("declineCommentDiv");
+    let declineButton = document.getElementById("declineButtonText");
+    if (textBoxDiv.hidden === false) {
+      submitDecline();
+    } else {
+      textBoxDiv.hidden = false;
+      declineButton.textContent = "Submit Decline";
     }
+  }
+
+  function submitDecline() {
+    let assessmentId =/*[[${riskAssessment.getAssessmentId()}]]*/'abc';
+    let textBox = document.getElementById("declineComment");
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', "/api/assessment/risk/approve?assessmentId=" + assessmentId + "&status=decline", true);
+    xhr.setRequestHeader("reason", textBox.value);
+    xhr.send();
+
+    location.reload();
+  }
 
 
 </script>

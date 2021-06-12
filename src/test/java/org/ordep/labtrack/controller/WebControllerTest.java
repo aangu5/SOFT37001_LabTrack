@@ -10,12 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -52,7 +48,6 @@ class WebControllerTest {
     private CoshhAssessment coshhAssessment;
     private LabTrackUser user;
     private RiskAssessment riskAssessment;
-    private AuthenticationEntity authenticationEntity;
     private ChemicalHazardCard chemicalHazardCard;
     private BiologicalHazardCard biologicalHazardCard;
     private PhysicalHazardCard physicalHazardCard;
@@ -63,9 +58,6 @@ class WebControllerTest {
 
         user = objectMapper.readValue(new ClassPathResource(
                 "/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
-
-        authenticationEntity = objectMapper.readValue(new ClassPathResource(
-                "/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
 
         riskAssessment = objectMapper.readValue(new ClassPathResource(
                 "/json/RiskAssessment.json").getInputStream(), RiskAssessment.class);

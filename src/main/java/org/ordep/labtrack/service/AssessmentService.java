@@ -5,6 +5,7 @@ import org.ordep.labtrack.data.CoshhAssessmentRepository;
 import org.ordep.labtrack.data.RiskAssessmentRepository;
 import org.ordep.labtrack.exception.AssessmentNotFoundException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.AssessmentState;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ public class AssessmentService {
         riskAssessment.setAssessmentId(riskAssessmentID);
         riskAssessment.setAuthor(author);
         riskAssessment.setDateCreated(LocalDateTime.now());
+        riskAssessment.setStatus(AssessmentState.PENDING);
 
         riskAssessmentRepository.save(riskAssessment);
 
@@ -60,7 +62,7 @@ public class AssessmentService {
         LabTrackUser currentUser = userService.getCurrentUser();
 
         if (LabTrackUtilities.canUserApprove(currentUser)) {
-            return riskAssessmentRepository.findAllByApproved(false);
+            return riskAssessmentRepository.findAllByStatus(AssessmentState.PENDING);
         } else {
             return new ArrayList<>();
         }
@@ -93,6 +95,7 @@ public class AssessmentService {
         coshhAssessment.setAssessmentId(riskAssessmentID);
         coshhAssessment.setAuthor(author);
         coshhAssessment.setDateCreated(LocalDateTime.now());
+        coshhAssessment.setStatus(AssessmentState.PENDING);
 
         coshhAssessmentRepository.save(coshhAssessment);
 
@@ -103,7 +106,7 @@ public class AssessmentService {
         LabTrackUser currentUser = userService.getCurrentUser();
 
         if (LabTrackUtilities.canUserApprove(currentUser)) {
-            return coshhAssessmentRepository.findAllByApproved(false);
+            return coshhAssessmentRepository.findAllByStatus(AssessmentState.PENDING);
         } else {
             return new ArrayList<>();
         }
@@ -123,16 +126,12 @@ public class AssessmentService {
 
 
     public boolean canUserSignAssessment(CoshhAssessment assessment, LabTrackUser user) {
-        return (!hasUserSignedAssessment(assessment, user) && assessment.isApproved());
+        return (!LabTrackUtilities.hasUserSignedAssessment(assessment, user) && assessment.getStatus() == AssessmentState.APPROVED);
     }
 
     public boolean canUserSignAssessment(UUID assessmentId) {
         var assessment = findOneCoshhAssessment(assessmentId);
         return canUserSignAssessment(assessment, userService.getCurrentUser());
-    }
-
-    public boolean hasUserSignedAssessment(CoshhAssessment assessment, LabTrackUser user) {
-        return assessment.getSignedUsers().contains(user);
     }
 
     public void updateCoshhAssessment(CoshhAssessment coshhAssessment) {

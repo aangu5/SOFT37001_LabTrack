@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:form="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="UTF-8">
   <title>New Physical Hazard Card</title>
@@ -82,7 +82,7 @@
       padding: 10px;
     }
     div.selected {
-      border: 5px solid #00766C;
+      border: 5px solid #BF004C;
       border-radius: 12px;
       -moz-border-radius: 12px;
       margin: 10px;
@@ -157,7 +157,7 @@
         <label style="display:flex; justify-content:center"   class="pictogram" th:each="pictogram : ${pictogramTypes}" th:for="${pictogram.name()}">
           <img th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
           <input class="pictogramBox" type="checkbox" th:field="*{symbols}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
-          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"></h4>
         </label>
       </div>
       <h1>Mandatory Pictograms</h1>
@@ -166,7 +166,7 @@
           <div style="background-color:white; text-align: center; margin: 0px; display: flex; flex-wrap: wrap; justify-content: center; flex-direction: column;">
           <img style="margin-left:auto; margin-right:auto;" th:alt="${pictogram.name()}" th:src="@{${'/images/' + pictogram.name() +'.jpg'}}" width="100"/>
           <input class="pictogramBox" type="checkbox" th:field="*{mandatoryPictograms}" th:id="${pictogram.name()}" th:value="${pictogram}"/>
-          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"/>
+          <h4 style="font-family:'Montserrat'" th:text="${pictogram.getDisplayName()}"></h4>
           </div>
         </label>
         </div>
@@ -175,13 +175,11 @@
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
       <input style="display:none" id="submit" type="submit" value="Submit">
       <label for="submit">
-        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+        <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
           <h1 style="padding:10px; color:white">Submit</h1>
         </div>
       </label>
     </div>
-  </div>
-
   </div>
 </form>
 

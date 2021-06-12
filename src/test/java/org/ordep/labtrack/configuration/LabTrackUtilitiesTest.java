@@ -4,22 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.ordep.labtrack.data.AuthenticationRepository;
-import org.ordep.labtrack.model.AuthenticationEntity;
+import org.ordep.labtrack.model.CoshhAssessment;
 import org.ordep.labtrack.model.LabTrackUser;
 import org.ordep.labtrack.model.enums.Role;
-import org.ordep.labtrack.service.AuthenticationService;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 class LabTrackUtilitiesTest {
 
@@ -28,6 +22,7 @@ class LabTrackUtilitiesTest {
 
     @BeforeEach
     void setUp() throws IOException {
+        objectMapper.registerModule(new JavaTimeModule());
         user = objectMapper.readValue(new ClassPathResource("/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
     }
 
@@ -91,5 +86,19 @@ class LabTrackUtilitiesTest {
         user.setRoles(Collections.singletonList(Role.USER));
 
         assertFalse(LabTrackUtilities.canUserApprove(user));
+    }
+
+
+    @Test
+    void hasUserSignedAssessment() throws IOException {
+
+        CoshhAssessment coshhAssessment = objectMapper.readValue(new ClassPathResource("/json/CoshhAssessment.json").getInputStream(), CoshhAssessment.class);
+
+        assertTrue(LabTrackUtilities.hasUserSignedAssessment(coshhAssessment, user));
+
+        user.setEmailAddress("test@gmail.com");
+
+        assertFalse(LabTrackUtilities.hasUserSignedAssessment(coshhAssessment, user));
+
     }
 }

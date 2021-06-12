@@ -19,34 +19,34 @@
     <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
       <tr>
         <th class="rounded">User ID</th>
-        <td class="data" th:text="${user.getUserId().toString()}"/>
+        <td class="data" th:text="${user.getUserId().toString()}"></td>
       </tr>
       <tr>
         <th class="rounded">Display Name</th>
         <td class="data" style="display:flex; height:59px; align-items:center;  padding-left: 15px; padding-top: 0px; padding:0px;">
           <input style="width: calc(100% - 100px);" type="text" required minlength="3" th:value="${user.getDisplayName()}" maxlength="64" pattern="^[^\W\s_]+$" onchange="setSelectedRole(this)">
-          <div onclick="submitNewRole()" id="submit" style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px;width:100px;height:100%; float:right; text-align:center; color:white;">
+          <div onclick="submitNewRole()" id="submit" style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px;width:100px;height:100%; float:right; text-align:center; color:white;">
             <h3>Update</h3>
           </div>
         </td>
       </tr>
       <tr>
         <th class="rounded">Email Address</th>
-        <td class="data" th:text="${user.getEmailAddress()}"/>
+        <td class="data" th:text="${user.getEmailAddress()}"></td>
       </tr>
       <tr>
         <th class="rounded">Role</th>
-        <td class="data" th:text="${role.getDisplayName()}"/>
+        <td class="data" th:text="${role.getDisplayName()}"></td>
       </tr>
     </table>
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center">
-      <a th:if="${permitted}" href="/profile/manage-users">
-        <div style="margin:20px; background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 400px">
+      <a th:if="${permitted}" href="/users">
+        <div style="margin:20px; background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 400px">
           <h1 style="padding:10px; color:white">Manage Users</h1>
         </div>
       </a>
       <a href="/profile/change-password">
-        <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 400px; margin:20px;">
+        <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 400px; margin:20px;">
           <h1 style="padding:10px; color:white">Change Password</h1>
         </div>
       </a>
@@ -65,7 +65,7 @@
   }
 
   function submitNewRole() {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', "/api/user/change-name?displayName="+updatedName, true);
     xhr.send();
     location.reload();

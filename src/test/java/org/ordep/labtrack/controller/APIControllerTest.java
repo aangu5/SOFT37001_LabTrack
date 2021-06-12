@@ -5,8 +5,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.ordep.labtrack.configuration.LabTrackUtilities;
-import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.service.AssessmentService;
@@ -17,21 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +40,6 @@ class APIControllerTest {
     private AuthenticationService authenticationService;
     @MockBean
     private UserService userService;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     @MockBean
     private AssessmentService assessmentService;
     @MockBean
@@ -83,7 +76,7 @@ class APIControllerTest {
         .param("username", "user@email.com")
         .param("password-1", "Password1!")
         .param("password-2", "Password1!"))
-                .andExpect(status().isCreated());
+                .andExpect(status().isFound());
 
         verify(authenticationService, times(1)).saveAuthenticationEntity(any());
         verify(userService, times(1)).registerUser(any());
@@ -212,7 +205,7 @@ class APIControllerTest {
                 .param("old-password", "Password1!")
                 .param("new-password-1", "Password2!")
                 .param("new-password-2", "Password2!"))
-                .andExpect(status().isOk());
+                .andExpect(status().isFound());
 
         verify(authenticationService, times(1)).saveAuthenticationEntity(any());
     }
@@ -390,7 +383,23 @@ class APIControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
 
         mockMvc.perform(post("/api/assessment/risk/approve")
-        .param("assessmentId", UUID.randomUUID().toString()))
+        .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "approve"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void approveRiskAssessment_Decline() throws Exception {
+
+        when(assessmentService.findOneRiskAssessment(any(UUID.class))).thenReturn(riskAssessment);
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(post("/api/assessment/risk/approve")
+                .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "decline")
+                .header("reason", "Some reason"))
                 .andExpect(status().isOk())
                 .andReturn();
     }
@@ -403,7 +412,8 @@ class APIControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
 
         mockMvc.perform(post("/api/assessment/risk/approve")
-                .param("assessmentId", UUID.randomUUID().toString()))
+                .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "approve"))
                 .andExpect(status().isOk())
                 .andReturn();
     }
@@ -488,7 +498,23 @@ class APIControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
 
         mockMvc.perform(post("/api/assessment/coshh/approve")
-                .param("assessmentId", UUID.randomUUID().toString()))
+                .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "approve"))
+                .andExpect(status().isOk())
+                .andReturn();
+    }
+
+    @Test
+    @WithMockUser(username = "user1", password = "Password1!", roles = "USER")
+    void approveCoshhAssessment_Decline() throws Exception {
+
+        when(assessmentService.findOneCoshhAssessment(any(UUID.class))).thenReturn(coshhAssessment);
+        when(userService.getCurrentUser()).thenReturn(user);
+
+        mockMvc.perform(post("/api/assessment/coshh/approve")
+                .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "decline")
+                .header("reason", "Some reason"))
                 .andExpect(status().isOk())
                 .andReturn();
     }
@@ -501,7 +527,8 @@ class APIControllerTest {
         when(userService.getCurrentUser()).thenReturn(user);
 
         mockMvc.perform(post("/api/assessment/coshh/approve")
-                .param("assessmentId", UUID.randomUUID().toString()))
+                .param("assessmentId", UUID.randomUUID().toString())
+                .param("status", "approve"))
                 .andExpect(status().isOk())
                 .andReturn();
     }

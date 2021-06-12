@@ -30,6 +30,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/images/ntu-logo-small.jpg").permitAll()
+                .antMatchers("/images/Ordep-White.jpg").permitAll()
                 .antMatchers("/favicon.ico").permitAll()
                 .antMatchers("/login*").permitAll()
                 .antMatchers("/login/forgotten*").permitAll()

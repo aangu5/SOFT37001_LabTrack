@@ -12,22 +12,21 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
   <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
+    <a href="/cards/physical">
       <div class="button" id="all-cards">
-        <a href="/cards/physical">
           <h2>All Cards</h2>
-        </a>
       </div>
+    </a>
+    <a href="/cards/physical?view=self">
       <div class="button" id="my-cards">
-        <a href="/cards/physical?view=self">
           <h2>My Cards</h2>
-        </a>
       </div>
+    </a>
+    <a href="/card/physical/new">
       <div class="button">
-        <a href="/card/physical/new">
           <h2>New Physical Hazard Card</h2>
-        </a>
-
     </div>
+    </a>
     <table th:if="${!physicalCards.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
       <tr style="font-size: 18px;">
         <th class="overview">Card Name</th>
@@ -38,7 +37,7 @@
       <tr th:each="card : ${physicalCards}">
         <td class="overview"><a th:text="${card.cardName}" th:href="@{/card/{type}(id=${card.cardId}, type=${card.cardType.getDisplayName().toLowerCase()})}">Card Name</a></td>
         <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
-        <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"/></td>
+        <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"></a></td>
         <td class="overview" th:text="${card.synonyms}">Synonyms</td>
       </tr>
     </table>
@@ -49,14 +48,13 @@
 
   </div>
 </div>
-</div>
 <script>
   let url = window.location.href;
   console.log(url);
   if (url.endsWith("?view=self")) {
-    document.getElementById("my-cards").style.opacity = 0.5;
+    document.getElementById("my-cards").style.opacity = "0.5";
   } else {
-    document.getElementById("all-cards").style.opacity = 0.5;
+    document.getElementById("all-cards").style.opacity = "0.5";
   }
 </script>
 </body>

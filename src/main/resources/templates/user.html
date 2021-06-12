@@ -17,19 +17,19 @@
     <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
       <tr>
         <th class="rounded">User ID</th>
-        <td class="data" th:text="${user.getUserId().toString()}"/>
+        <td class="data" th:text="${user.getUserId().toString()}"></td>
       </tr>
       <tr>
         <th class="rounded">Display Name</th>
-        <td class="data" th:text="${user.getDisplayName()}"/>
+        <td class="data" th:text="${user.getDisplayName()}"></td>
       </tr>
       <tr>
         <th class="rounded">Email Address</th>
-        <td class="data" th:text="${user.getEmailAddress()}"/>
+        <td class="data" th:text="${user.getEmailAddress()}"></td>
       </tr>
       <tr th:if="${senior}">
         <th class="rounded">Role</th>
-        <td class="data" th:text="${user.getRoles().get(0).getDisplayName()}"/>
+        <td class="data" th:text="${user.getRoles().get(0).getDisplayName()}"></td>
       </tr>
       <tr th:if="${!senior}">
           <th class="rounded">Role</th>
@@ -37,7 +37,7 @@
             <select style="width: calc(100% - 100px); height:59px;" class="table" onchange="setSelectedRole(this)">
               <option class="table" th:each="i : ${roles}" th:selected="${user.roles.get(0) eq i}" th:text="${i.getDisplayName()}" th:value="${i}"></option>
             </select>
-            <div onclick="submitNewRole()" id="submit" style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px;width:100px;height:100%; float:right; text-align:center; color:white;">
+            <div onclick="submitNewRole()" id="submit" style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px;width:100px;height:100%; float:right; text-align:center; color:white;">
               <h3>Update</h3>
             </div>
           </td>
@@ -57,8 +57,10 @@
   }
 
   function submitNewRole() {
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('POST', "/api/user/change-role?userId="+userId+"&role="+selectedRole, true);
     xhr.send();
+
+    location.reload();
   }
 </script>

@@ -2,10 +2,9 @@ package org.ordep.labtrack.model;
 
 import lombok.Data;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
+import org.ordep.labtrack.model.enums.AssessmentState;
 
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,7 +20,9 @@ public abstract class Assessment {
     private LabTrackUser approver;
     private LocalDateTime dateCreated;
     private LocalDateTime dateApproved;
-    private boolean approved;
+    @Enumerated(EnumType.STRING)
+    private AssessmentState status;
+    private String declinedReason;
 
     public String getFormattedCreatedDate() {
         if (this.getDateCreated() != null) {
@@ -38,6 +39,6 @@ public abstract class Assessment {
     }
 
     public String isActive() {
-        return approved ? "Approved" : "Pending";
+        return status.getDisplayName();
     }
 }

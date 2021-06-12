@@ -21,8 +21,8 @@ public class ChemicalHazardCard extends Card {
     private String cas;
     @Enumerated(EnumType.STRING)
     private SignalWord signalWord;
-    @OneToMany
+    @ManyToMany
     private List<HazardStatement> hazardStatements;
-    @OneToMany
+    @ManyToMany
     private List<PrecautionaryStatement> precautionaryStatements;
 }

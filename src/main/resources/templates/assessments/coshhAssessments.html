@@ -10,26 +10,27 @@
 <div th:replace="components/sidebar">Sidebar</div>
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
-  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">      <div class="button" id="all-cards">
-        <a href="/assessments/coshh">
-          <h2>All COSHH Assessments</h2>
-        </a>
-      </div>
-      <div class="button" id="my-cards">
-        <a href="/assessments/coshh?view=self">
-          <h2>My COSHH Assessments</h2>
-        </a>
-      </div>
-      <div class="button" id="to-approve">
-        <a href="/assessments/coshh?view=approve">
-          <h2>Assessments to Approve</h2>
-        </a>
-      </div>
-      <div class="button">
-        <a href="/assessment/coshh/new">
-          <h2>New COSHH Assessment</h2>
-        </a>
-      </div>
+  <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
+      <a href="/assessments/coshh">
+          <div class="button" id="all-cards">
+              <h2>All COSHH Assessments</h2>
+          </div>
+      </a>
+      <a href="/assessments/coshh?view=self">
+          <div class="button" id="my-cards">
+              <h2>My COSHH Assessments</h2>
+          </div>
+      </a>
+      <a href="/assessments/coshh?view=approve">
+          <div class="button" id="to-approve">
+              <h2>Assessments to Approve</h2>
+          </div>
+      </a>
+      <a href="/assessment/coshh/new">
+          <div class="button">
+              <h2>New COSHH Assessment</h2>
+          </div>
+      </a>
     </div>
     <table th:if="${!coshhAssessments.isEmpty()}" style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center">
         <tr style="font-size: 18px;">
@@ -47,7 +48,7 @@
       <tr th:each="assessment : ${coshhAssessments}">
         <td class="overview"><a th:text="${assessment.assessmentName}" th:href="@{/assessment/coshh(id=${assessment.assessmentId})}">Assessment Name</a></td>
         <td class="overview" th:text="${assessment.getFormattedCreatedDate()}">Date Created</td>
-        <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"/></td>
+        <td class="overview"><a th:text="${assessment.author.displayName}" th:href="@{/user(id=${assessment.author.userId.toString()})}"></a></td>
           <td class="overview" th:text="${assessment.signedUsers.contains(user)} ? 'Yes' : 'No'"></td>
       </tr>
     </table>
@@ -61,11 +62,11 @@
   let url = window.location.href;
   console.log(url);
   if (url.endsWith("?view=self")) {
-    document.getElementById("my-cards").style.opacity = 0.5;
+    document.getElementById("my-cards").style.opacity = "0.5";
   } else if (url.endsWith("?view=approve")) {
-    document.getElementById("to-approve").style.opacity = 0.5;
+    document.getElementById("to-approve").style.opacity = "0.5";
   } else {
-    document.getElementById("all-cards").style.opacity = 0.5;
+    document.getElementById("all-cards").style.opacity = "0.5";
   }
   let searchNameInput = document.getElementById("searchName");
   searchNameInput.addEventListener("keyup", search);

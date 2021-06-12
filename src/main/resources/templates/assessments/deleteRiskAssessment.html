@@ -30,7 +30,7 @@
   function deleteAssessment() {
     let assessmentId =/*[[${riskAssessment.getAssessmentId()}]]*/'abc';
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('DELETE', "/api/assessment/risk?assessmentId=" + assessmentId, true);
     xhr.send();
 

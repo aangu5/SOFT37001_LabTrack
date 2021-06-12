@@ -10,12 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static org.ordep.labtrack.configuration.Constants.*;
 
+@SuppressWarnings("SameReturnValue")
 @Slf4j
 @Controller
 public class WebController {
@@ -260,12 +260,7 @@ public class WebController {
     @GetMapping("/assessment/risk/new")
     public String newRiskAssessment(Model model) {
         model.addAttribute(RISK_ASSESSMENT, new RiskAssessment());
-        model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
-        model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
-        model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
-        model.addAttribute("frequencies", FrequencyOfTask.values());
-        model.addAttribute("severities", Severity.values());
-        model.addAttribute("likelihoods", Likelihood.values());
+        setRiskAssessmentFields(model);
         model.addAttribute(PAGE_TITLE,"New Risk Assessment");
         return "assessments/newRiskAssessment";
     }
@@ -315,6 +310,7 @@ public class WebController {
         model.addAttribute("canUserApprove", LabTrackUtilities.canUserApprove(user));
         model.addAttribute("canUserSign", assessmentService.canUserSignAssessment(id));
         model.addAttribute("isUserOwner", assessment.getAuthor() == user);
+        model.addAttribute("approved", assessment.getStatus() != AssessmentState.PENDING);
 
         model.addAttribute(PAGE_TITLE, assessment.getAssessmentName());
 
@@ -324,15 +320,19 @@ public class WebController {
     @GetMapping("/assessment/coshh/new")
     public String newCoshhAssessment(Model model) {
         model.addAttribute(COSHH_ASSESSMENT, new CoshhAssessment());
+        setCoshhAssessmentFields(model);
+
+        model.addAttribute(PAGE_TITLE,"New COSHH Assessment");
+        return "assessments/newCoshhAssessment";
+    }
+
+    private void setCoshhAssessmentFields(Model model) {
         model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
         model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
         model.addAttribute("hazardToHealths", HazardToHealth.values());
         model.addAttribute("routeOfExposures", RouteOfExposure.values());
         model.addAttribute("precautions", Precaution.values());
         model.addAttribute("protectiveEquipments", ProtectiveEquipment.values());
-
-        model.addAttribute(PAGE_TITLE,"New COSHH Assessment");
-        return "assessments/newCoshhAssessment";
     }
 
     @GetMapping("/assessment/coshh/copy")
@@ -341,12 +341,7 @@ public class WebController {
         coshhAssessment.setAssessmentId(null);
         model.addAttribute(COSHH_ASSESSMENT, coshhAssessment);
 
-        model.addAttribute(PRECAUTIONARY_STATEMENTS, statementService.getAllPrecautionaryStatements());
-        model.addAttribute(HAZARD_STATEMENTS, statementService.getAllHazardStatements());
-        model.addAttribute("hazardToHealths", HazardToHealth.values());
-        model.addAttribute("routeOfExposures", RouteOfExposure.values());
-        model.addAttribute("precautions", Precaution.values());
-        model.addAttribute("protectiveEquipments", ProtectiveEquipment.values());
+        setCoshhAssessmentFields(model);
 
         model.addAttribute(PAGE_TITLE, "Copy: " + coshhAssessment.getAssessmentName());
 
@@ -371,6 +366,8 @@ public class WebController {
         model.addAttribute(RISK_ASSESSMENT, riskAssessment);
         model.addAttribute("canUserApprove", LabTrackUtilities.canUserApprove(user));
         model.addAttribute("isUserOwner", riskAssessment.getAuthor() == user);
+        model.addAttribute("approved", riskAssessment.getStatus() != AssessmentState.PENDING);
+
         model.addAttribute(PAGE_TITLE,riskAssessment.getAssessmentName());
         return "assessments/riskAssessment";
     }
@@ -381,17 +378,21 @@ public class WebController {
         riskAssessment.setAssessmentId(null);
         model.addAttribute(RISK_ASSESSMENT, riskAssessment);
 
+        setRiskAssessmentFields(model);
+
+        model.addAttribute(PAGE_TITLE, "Copy: " + riskAssessment.getAssessmentName());
+
+        return "assessments/copyRiskAssessment";
+
+    }
+
+    private void setRiskAssessmentFields(Model model) {
         model.addAttribute("chemicalHazardCards", cardService.findAllChemicalHazardCards());
         model.addAttribute("biologicalHazardCards", cardService.findAllBiologicalHazardCards());
         model.addAttribute("physicalHazardCards", cardService.findAllPhysicalHazardCards());
         model.addAttribute("frequencies", FrequencyOfTask.values());
         model.addAttribute("severities", Severity.values());
         model.addAttribute("likelihoods", Likelihood.values());
-
-        model.addAttribute(PAGE_TITLE, "Copy: " + riskAssessment.getAssessmentName());
-
-        return "assessments/copyRiskAssessment";
-
     }
 
     @GetMapping("/assessment/risk/delete")

@@ -1,20 +1,17 @@
-a {
-    text-decoration: none;
-    color: black;
-    font-weight: bold;
-}
+
 
 th.overview {
-    background-color:#64D8CB;
+    background-color:#e6005b;
     padding: 8px;
+    color:white;
 }
 td.overview {
-    background-color: #E0E0E0;
+    background-color: #E2E2E2;
     padding: 8px;
 }
 td.data {
     text-align: left;
-    background-color: #E0E0E0;
+    background-color: #E2E2E2;
     border-radius: 6px;
     -moz-border-radius: 6px;
     width: 100%;
@@ -26,12 +23,13 @@ td.data {
 th.rounded {
     padding: 20px;
     text-align: center;
-    background-color: #64D8CB;
+    background-color: #e6005b;
     border-radius: 6px;
     -moz-border-radius: 6px;
     align-content: flex-start;
     white-space: nowrap;
     box-shadow: 3px 3px 5px #888888;
+    color:white;
 }
 ul {
     font-size: 24px;
@@ -57,7 +55,7 @@ h1, h2 {
 div.button {
     height: 50px;
     margin: 17px;
-    background-color:#64D8CB;
+    background-color:#e6005b;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,6 +63,7 @@ div.button {
     margin-right:0px;
     padding-left:15px;
     padding-right:15px;
+    color:white;
 }
 
 img.pictogram {
@@ -72,7 +71,7 @@ img.pictogram {
     margin: 10px;
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-family: montserrat, sans-serif;
 }
 
@@ -108,7 +107,7 @@ div::-webkit-scrollbar-track{
 div::-webkit-scrollbar-thumb {
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    background:#26A69A;
+    background:#e6005b;
 }
 
 div.scrollbox {
@@ -118,7 +117,7 @@ div.scrollbox {
 }
 
 .popup {
-    position: relative;
+    position:relative;
     display: inline-block;
     cursor: pointer;
     -webkit-user-select: none;
@@ -175,5 +174,11 @@ div.scrollbox {
 
 @media print {
     .no-print { display: none !important; }
+}
+
+a {
+    text-decoration: none;
+    color:black;
+    font-weight: bold;
 }
 

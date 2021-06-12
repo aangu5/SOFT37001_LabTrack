@@ -12,9 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.ordep.labtrack.data.AuthenticationRepository;
 import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.AuthenticationEntity;
-import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.enums.Role;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
@@ -32,13 +29,11 @@ class AuthenticationServiceTest {
     private AuthenticationService authenticationService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private AuthenticationEntity authenticationEntity;
-    private LabTrackUser user;
 
     @BeforeEach
     void setUp() throws IOException {
         objectMapper.registerModule(new JavaTimeModule());
         authenticationEntity = objectMapper.readValue(new ClassPathResource("/json/AuthenticationEntity.json").getInputStream(), AuthenticationEntity.class);
-        user = objectMapper.readValue(new ClassPathResource("/json/LabTrackUser.json").getInputStream(), LabTrackUser.class);
 
     }
 

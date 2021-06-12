@@ -5,7 +5,6 @@ import org.ordep.labtrack.data.*;
 import org.ordep.labtrack.exception.CardNotFoundException;
 import org.ordep.labtrack.model.*;
 import org.ordep.labtrack.model.enums.CardType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,16 +18,19 @@ import static org.ordep.labtrack.configuration.Constants.PAGE_COUNT;
 @Service
 public class CardService {
 
-    @Autowired
-    private ChemicalHazardCardRepository chemicalHazardCardRepository;
-    @Autowired
-    private StatementService statementService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PhysicalHazardCardRepository physicalHazardCardRepository;
-    @Autowired
-    private BiologicalHazardCardRepository biologicalHazardCardRepository;
+    private final ChemicalHazardCardRepository chemicalHazardCardRepository;
+    private final UserService userService;
+    private final PhysicalHazardCardRepository physicalHazardCardRepository;
+    private final BiologicalHazardCardRepository biologicalHazardCardRepository;
+
+    public CardService(ChemicalHazardCardRepository chemicalHazardCardRepository,
+                       UserService userService, PhysicalHazardCardRepository physicalHazardCardRepository,
+                       BiologicalHazardCardRepository biologicalHazardCardRepository) {
+        this.chemicalHazardCardRepository = chemicalHazardCardRepository;
+        this.userService = userService;
+        this.physicalHazardCardRepository = physicalHazardCardRepository;
+        this.biologicalHazardCardRepository = biologicalHazardCardRepository;
+    }
 
     // Chemical Hazard Cards
 

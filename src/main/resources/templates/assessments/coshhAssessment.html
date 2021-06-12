@@ -6,33 +6,35 @@
     <link href="/style.css" rel="stylesheet">
 
 </head>
-<body style="margin: 0px">
+<body style="margin: 0">
 <div th:replace="components/header">Header</div>
 <div th:replace="components/sidebar">Sidebar</div>
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
-    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap;">
-        <div class="button">
-            <a th:href="@{/assessment/coshh/copy(id=${coshhAssessment.getAssessmentId()})}">
+    <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0; display: flex; flex-wrap: wrap;">
+        <a th:href="@{/assessment/coshh/copy(id=${coshhAssessment.getAssessmentId()})}">
+            <div class="button">
                 <h2>Copy COSHH Assessment</h2>
-            </a>
-        </div>
-        <div class="button">
-            <a onclick="printPDF()">
+            </div>
+        </a>
+        <a onclick="printPDF()">
+            <div class="button">
                 <h2>Print COSHH Assessment</h2>
-            </a>
-        </div>
-        <div class="button">
-            <a onclick="shareAssessment()" class="popup">
+            </div>
+        </a>
+        <a class="no-print" onclick="shareAssessment()">
+            <div class="button">
                 <h2>Share COSHH Assessment</h2>
-                <span class="popuptext" id="clipboard">Text copied to clipboard</span>
-            </a>
+            </div>
+        </a>
+        <div class="button no-print" id="popup" style="border-radius:4px; background-color:black; display:none;">
+            <h3>Copied to clipboard!</h3>
         </div>
-        <div class="button" th:if="${isUserOwner}">
-            <a th:href="@{/assessment/coshh/delete(id=${coshhAssessment.getAssessmentId()})}">
+        <a th:href="@{/assessment/coshh/delete(id=${coshhAssessment.getAssessmentId()})}">
+            <div class="button" th:if="${isUserOwner}">
                 <h2>Delete COSHH Assessment</h2>
-            </a>
-        </div>
+            </div>
+        </a>
         <div style="width: 100%">
             <table style="background-color:white; margin: 15px; width: calc(100% - 30px); font-family: montserrat,sans-serif; font-weight: bold; border-spacing: 20px 20px; border-radius:6px; -moz-border-radius:6px; align-content:flex-start; ">
                 <tr>
@@ -53,14 +55,19 @@
                     <td class="data" th:text="${coshhAssessment.isActive()}">Stephen 'Conical Flask' Turner
                     </td>
                 </tr>
-                <tr th:if="${coshhAssessment.approved}">
-                    <th class="rounded">Approved By</th>
+                <tr th:if="${coshhAssessment.getApprover() != null}">
+                    <th class="rounded">Reviewed By</th>
                     <td class="data" th:text="${coshhAssessment.getApprover().getDisplayName()}">Stephen 'Conical Flask' Turner
                     </td>
                 </tr>
-                <tr th:if="${coshhAssessment.approved}">
-                    <th class="rounded">Approved On</th>
+                <tr th:if="${coshhAssessment.getStatus}">
+                    <th class="rounded">Reviewed On</th>
                     <td class="data" th:text="${coshhAssessment.getFormattedApprovedDate()}">Stephen 'Conical Flask' Turner
+                    </td>
+                </tr>
+                <tr th:if="${coshhAssessment.getDeclinedReason() != null}">
+                    <th class="rounded">Decline Reason</th>
+                    <td class="data" th:text="${coshhAssessment.getDeclinedReason()}">Stephen 'Conical Flask' Turner
                     </td>
                 </tr>
                 <tr>
@@ -130,7 +137,7 @@
 
                     <div th:each="hazard : ${coshhAssessment.getHazardToHealths()}">
                         <tr style="float:left; width: 100%" >
-                            <td><a th:text="${hazard.getDisplayName()}"/></td>
+                            <td><a th:text="${hazard.getDisplayName()}"></td>
                         </tr>
                     </div>
                 </div>
@@ -143,7 +150,7 @@
 
                     <div th:each="route : ${coshhAssessment.getRouteOfExposures()}">
                         <tr style="float:left; width: 100%" >
-                            <td><a th:text="${route.getDisplayName()}"/></td>
+                            <td><a th:text="${route.getDisplayName()}"></td>
                         </tr>
                     </div>
                 </div>
@@ -156,7 +163,7 @@
 
                     <div th:each="precaution : ${coshhAssessment.getPrecautions()}">
                         <tr style="float:left; width: 100%" >
-                            <td><a th:text="${precaution.getDisplayName()}"/></td>
+                            <td><a th:text="${precaution.getDisplayName()}"></td>
                         </tr>
                     </div>
                 </div>
@@ -169,7 +176,7 @@
 
                     <div th:each="equipment : ${coshhAssessment.getProtectiveEquipments()}">
                         <tr style="float:left; width: 100%" >
-                            <td><a th:text="${equipment.getDisplayName()}"/></td>
+                            <td><a th:text="${equipment.getDisplayName()}"></td>
                         </tr>
                     </div>
                 </div>
@@ -182,25 +189,38 @@
 
                     <div th:each="user : ${coshhAssessment.getSignedUsers()}">
                         <tr style="float:left; width: 100%" >
-                            <td><a th:text="${user.getDisplayName()}"/></td>
+                            <td><a th:text="${user.getDisplayName()}"></td>
                         </tr>
                     </div>
                 </div>
             </table>
         </div>
     </div>
-    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!coshhAssessment.approved && canUserApprove}">
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!approved && canUserApprove}">
         <input style="display:none" id="approve" onclick="submitApproval()">
         <label for="approve">
-            <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+            <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
                 <h1 style="padding:10px; color:white">Approve</h1>
+            </div>
+        </label>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center;">
+        <div style="background-color: #C4C4C4; border-radius: 6px; -moz-border-radius: 6px; width: 500px; height: 250px" id="declineCommentDiv" hidden>
+            <input onclick="" type="text" placeholder="Decline Comment" id="declineComment">
+        </div>
+    </div>
+    <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${!approved && canUserApprove}">
+        <input style="display:none" id="decline" onclick="addCommentBox()">
+        <label for="decline">
+            <div style="background-color: #C4C4C4; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+                <h1 style="padding:10px;" id="declineButtonText">Decline</h1>
             </div>
         </label>
     </div>
     <div style="width: 100%; text-align:center; align-content: center; display:flex; justify-content: center" th:if="${canUserSign}">
         <input style="display:none" id="sign" onclick="signCard()">
         <label for="sign">
-            <div style="background-color: #00766C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
+            <div style="background-color: #BF004C; border-radius: 6px; -moz-border-radius: 6px; width: 200px">
                 <h1 style="padding:10px; color:white">Sign</h1>
             </div>
         </label>
@@ -212,8 +232,8 @@
     function submitApproval() {
         let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', "/api/assessment/coshh/approve?assessmentId=" + assessmentId, true);
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "/api/assessment/coshh/approve?assessmentId=" + assessmentId + "&status=approve", true);
         xhr.send();
         location.reload();
     }
@@ -221,7 +241,7 @@
     function signCard() {
         let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
 
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', "/api/assessment/coshh/sign?assessmentId=" + assessmentId, true);
         xhr.send();
         location.reload();
@@ -238,6 +258,29 @@
 
     function printPDF() {
         window.print();
+    }
+
+    function addCommentBox() {
+        let textBoxDiv = document.getElementById("declineCommentDiv");
+        let declineButton = document.getElementById("declineButtonText");
+        if (textBoxDiv.hidden === false) {
+            submitDecline();
+        } else {
+            textBoxDiv.hidden = false;
+            declineButton.textContent = "Submit Decline";
+        }
+    }
+
+    function submitDecline() {
+        let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
+        let textBox = document.getElementById("declineComment");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', "/api/assessment/coshh/approve?assessmentId=" + assessmentId + "&status=decline", true);
+        xhr.setRequestHeader("reason", textBox.value);
+        xhr.send();
+
+        location.reload();
     }
 
 </script>

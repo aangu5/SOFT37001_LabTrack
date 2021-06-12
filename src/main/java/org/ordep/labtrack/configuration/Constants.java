@@ -13,6 +13,7 @@ public class Constants {
     public static final String HOME_URL = "/home";
     public static final String PAGE_TITLE = "title";
     public static final String APPROVE = "approve";
+    public static final String DECLINE = "decline";
     public static final String REDIRECT_LOCATION = "Location";
 
     // Model fields

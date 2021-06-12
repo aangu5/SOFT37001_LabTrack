@@ -5,18 +5,16 @@
     "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
     "displayName": "Angus Cheney",
     "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-    "loggedIn": false,
     "roles": ["ADMIN"]
   },
   "approver": {
     "userId": "4fb37ffc-49c3-4b3a-8d33-12099cdaf8ac",
     "displayName": "Reece Edwards",
-    "emailAddress": "reece.edwards2019@ntu.ac.uk",
-    "loggedIn": false
+    "emailAddress": "reece.edwards2019@ntu.ac.uk"
   },
   "dateCreated": "2019-07-18T11:22:15",
   "dateApproved": "2019-07-19T11:22:15",
-  "approved": true,
+  "status": "APPROVED",
   "supplierName": "Fisher",
   "cas": "128 - nmds",
   "quantityOrdered": "1",
@@ -67,7 +65,6 @@
       "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
       "displayName": "Angus Cheney",
       "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-      "loggedIn": false,
       "roles": ["ADMIN"]
     }
   ]

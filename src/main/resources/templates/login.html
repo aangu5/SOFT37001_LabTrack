@@ -49,7 +49,7 @@
         }
         button[type=submit] {
             width: 100%;
-            background-color: #4CAF50;
+            background-color: #e6005b;
             color: white;
             padding: 14px 20px;
             margin: 8px 0;
@@ -87,9 +87,16 @@
                 <label for="username-sign-up" class="sr-only">Email</label>
                 <input type="text" id="username-sign-up" name="username" class="form-control" placeholder="Email Address" required th:pattern="${emailRegex}" autofocus="">
             </p>
+            <p style="font-size: 12px;">Password must be between 8 - 32 characters and contain a:
+                <ul style="font-size: 12px">
+                    <li>- number,</li>
+                    <li>- capital letter, </li>
+                    <li>- lowercase letter,</li>
+                    <li>- symbol.</li>
+                </ul>
             <p>
                 <label for="password-sign-up-1" class="sr-only">Password</label>
-                <input type="password" id="password-sign-up-1" name="password-1" class="form-control" placeholder="Password" required th:pattern="${passwordRegex}">
+                <input type="password" id="password-sign-up-1" onclick="" name="password-1" class="form-control" placeholder="Password" required th:pattern="${passwordRegex}">
             </p>
             <p>
                 <label for="password-sign-up-2" class="sr-only">Confirm Password</label>

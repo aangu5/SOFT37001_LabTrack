@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.exception.UserException;
 import org.ordep.labtrack.model.*;
+import org.ordep.labtrack.model.enums.AssessmentState;
 import org.ordep.labtrack.model.enums.Role;
 import org.ordep.labtrack.service.AssessmentService;
 import org.ordep.labtrack.service.AuthenticationService;
@@ -23,10 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.ordep.labtrack.configuration.Constants.HOME_URL;
-import static org.ordep.labtrack.configuration.Constants.REDIRECT_LOCATION;
-import static org.ordep.labtrack.configuration.Constants.EMAIL_REGEX;
-import static org.ordep.labtrack.configuration.Constants.PASSWORD_REGEX;
+import static org.ordep.labtrack.configuration.Constants.*;
 
 @Slf4j
 @RestController
@@ -48,7 +46,7 @@ public class APIController {
     }
 
     @PostMapping(value = "/api/register", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
-    public ResponseEntity<Void> createNewUser(@RequestBody MultiValueMap<String, String> data) {
+    public void createNewUser(@RequestBody MultiValueMap<String, String> data, HttpServletResponse httpServletResponse) {
         log.info("Creating new user!");
         var userID = UUID.randomUUID();
 
@@ -74,6 +72,8 @@ public class APIController {
 
         String hashedPassword = passwordEncoder.encode(password1);
 
+        log.info("New User: {}", username);
+
         var authenticationEntity = new AuthenticationEntity();
         authenticationEntity.setUserId(userID);
         authenticationEntity.setUsername(username);
@@ -87,16 +87,16 @@ public class APIController {
         labTrackUser.setUserId(userID);
         labTrackUser.setEmailAddress(username);
         labTrackUser.setDisplayName(data.getFirst("displayName"));
-        labTrackUser.setLoggedIn(false);
         labTrackUser.setRoles(Collections.singletonList(Role.USER));
 
         userService.registerUser(labTrackUser);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        httpServletResponse.setStatus(302);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, "/login");
     }
 
     @PostMapping("/api/changePassword")
-    public ResponseEntity<Void> changePassword(@RequestBody MultiValueMap<String, String> data) {
+    public void changePassword(@RequestBody MultiValueMap<String, String> data, HttpServletResponse httpServletResponse) {
         LabTrackUser currentUser = userService.getCurrentUser();
 
         log.info("Changing user password for user: {}", currentUser.getUserId());
@@ -129,7 +129,8 @@ public class APIController {
 
         authenticationService.saveAuthenticationEntity(userDetails);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        httpServletResponse.setStatus(302);
+        httpServletResponse.setHeader(REDIRECT_LOCATION, "/login");
     }
 
     @PostMapping("/api/user/change-role")
@@ -189,7 +190,7 @@ public class APIController {
     }
 
     @PostMapping("/api/assessment/risk/approve")
-    public void approveRiskAssessment(@RequestParam UUID assessmentId, HttpServletResponse httpServletResponse) {
+    public void approveRiskAssessment(@RequestParam UUID assessmentId, @RequestParam String status, @RequestHeader(required = false) String reason, HttpServletResponse httpServletResponse) {
 
         var assessment = assessmentService.findOneRiskAssessment(assessmentId);
         var user = userService.getCurrentUser();
@@ -197,11 +198,20 @@ public class APIController {
         log.info("Risk Assessment approval: {} by {}", assessment, user);
 
         if (LabTrackUtilities.canUserApprove(user)) {
-            assessment.setApproved(true);
-            assessment.setDateApproved(LocalDateTime.now());
-            assessment.setApprover(user);
+            if (status.equals(APPROVE)) {
+                assessment.setStatus(AssessmentState.APPROVED);
+                assessment.setDateApproved(LocalDateTime.now());
+                assessment.setApprover(user);
 
-            assessmentService.updateRiskAssessment(assessment);
+                assessmentService.updateRiskAssessment(assessment);
+            } else if (status.equals(DECLINE)){
+                assessment.setStatus(AssessmentState.DECLINED);
+                assessment.setDeclinedReason(reason);
+                assessment.setDateApproved(LocalDateTime.now());
+                assessment.setApprover(user);
+
+                assessmentService.updateRiskAssessment(assessment);
+            }
         }
     }
 
@@ -228,7 +238,7 @@ public class APIController {
     }
 
     @PostMapping("/api/assessment/coshh/approve")
-    public void approveCoshhAssessment(@RequestParam UUID assessmentId, HttpServletResponse httpServletResponse) {
+    public void approveCoshhAssessment(@RequestParam UUID assessmentId, @RequestParam String status, @RequestHeader(required = false) String reason, HttpServletResponse httpServletResponse) {
 
         var assessment = assessmentService.findOneCoshhAssessment(assessmentId);
         var user = userService.getCurrentUser();
@@ -236,11 +246,20 @@ public class APIController {
         log.info("Coshh Assessment approval: {} by {}", assessment, user);
 
         if (LabTrackUtilities.canUserApprove(user)) {
-            assessment.setApproved(true);
-            assessment.setDateApproved(LocalDateTime.now());
-            assessment.setApprover(user);
+            if (status.equals(APPROVE)) {
+                assessment.setStatus(AssessmentState.APPROVED);
+                assessment.setDateApproved(LocalDateTime.now());
+                assessment.setApprover(user);
 
-            assessmentService.updateCoshhAssessment(assessment);
+                assessmentService.updateCoshhAssessment(assessment);
+            } else if (status.equals(DECLINE)) {
+                assessment.setStatus(AssessmentState.DECLINED);
+                assessment.setDeclinedReason(reason);
+                assessment.setDateApproved(LocalDateTime.now());
+                assessment.setApprover(user);
+
+                assessmentService.updateCoshhAssessment(assessment);
+            }
         }
     }
 

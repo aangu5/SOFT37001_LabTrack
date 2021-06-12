@@ -30,7 +30,7 @@
   function deleteAssessment() {
     let assessmentId =/*[[${coshhAssessment.getAssessmentId()}]]*/'abc';
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('DELETE', "/api/assessment/coshh?assessmentId=" + assessmentId, true);
     xhr.send();
 

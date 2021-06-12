@@ -10,8 +10,7 @@
   "author": {
     "userId": "702d1aab-fd01-400f-9d08-fb6485b0a773",
     "displayName": "display name",
-    "emailAddress": "email@mail.com",
-    "loggedIn": false
+    "emailAddress": "email@mail.com"
   },
   "cas": "cas",
   "signalWord": "DANGER",

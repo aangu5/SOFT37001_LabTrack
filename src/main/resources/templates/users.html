@@ -21,7 +21,7 @@
         <th class="overview">Role</th>
       </tr>
       <tr th:each="user : ${users}" >
-          <td class="overview" ><a th:text="${user.displayName}" th:href="@{/user(id=${user.userId.toString()})}"/></td>
+          <td class="overview" ><a th:text="${user.displayName}" th:href="@{/user(id=${user.userId.toString()})}"></a></td>
           <td class="overview" th:text="${user.emailAddress}"></td>
           <td class="overview" th:text="${user.roles.get(0).getDisplayName()}"></td>
       </tr>

@@ -1,6 +1,8 @@
 package org.ordep.labtrack.configuration;
 
+import org.ordep.labtrack.model.CoshhAssessment;
 import org.ordep.labtrack.model.LabTrackUser;
+import org.ordep.labtrack.model.enums.AssessmentState;
 import org.ordep.labtrack.model.enums.Role;
 
 import java.time.LocalDateTime;
@@ -68,5 +70,9 @@ public class LabTrackUtilities {
         List<Role> roles = user.getRoles();
 
         return roles.contains(Role.ADMIN) || roles.contains(Role.LECTURER);
+    }
+
+    public static boolean hasUserSignedAssessment(CoshhAssessment assessment, LabTrackUser user) {
+        return assessment.getSignedUsers().contains(user);
     }
 }

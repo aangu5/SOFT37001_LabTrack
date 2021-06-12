@@ -23,11 +23,8 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CardServiceTest {
-    private final UUID pictogramID = UUID.fromString("95943ef4-ca07-4c7c-b9f8-67b170e6e6bc");
     private final UUID uuid1 = UUID.fromString("c8fdb523-9278-45f6-9cc3-d5b913c47275");
     private final UUID uuid2 = UUID.fromString("5d83af65-e06e-4e1b-8bdd-c2539426f700");
-    private final UUID uuid3 = UUID.fromString("360bcc84-16af-4912-9453-b801251150ca");
-    private final UUID uuid4 = UUID.fromString("9e2f5c23-6dd6-4870-9382-48ef5c6e296c");
     private final UUID userID = UUID.fromString("702d1aab-fd01-400f-9d08-fb6485b0a773");
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Mock
@@ -36,8 +33,6 @@ class CardServiceTest {
     private PhysicalHazardCardRepository physicalHazardCardRepository;
     @Mock
     private BiologicalHazardCardRepository biologicalHazardCardRepository;
-    @Mock
-    private StatementService statementService;
     @Mock
     private UserService userService;
     @InjectMocks
@@ -61,7 +56,7 @@ class CardServiceTest {
                 "state");
         List<PrecautionaryStatement> precautionaryStatements = Collections.singletonList(precautionaryStatement);
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new ChemicalHazardCard();
@@ -142,7 +137,7 @@ class CardServiceTest {
 
         List<MandatoryPictogram> men = Collections.singletonList(MandatoryPictogram.MHS01);
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new PhysicalHazardCard();
@@ -216,7 +211,7 @@ class CardServiceTest {
     @Test
     void newBiologicalHazardCard() throws JsonProcessingException {
 
-        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", false, Collections.singletonList(Role.USER));
+        LabTrackUser user = new LabTrackUser(userID, "display name", "email@mail.com", Collections.singletonList(Role.USER));
         when(userService.getCurrentUser()).thenReturn(user);
 
         var input = new BiologicalHazardCard();

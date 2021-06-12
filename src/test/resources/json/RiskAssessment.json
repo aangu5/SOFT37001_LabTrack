@@ -5,18 +5,16 @@
     "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
     "displayName": "Angus Cheney",
     "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-    "loggedIn": false,
     "roles": ["ADMIN"]
   },
   "approver": {
     "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
     "displayName": "Angus Cheney",
-    "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-    "loggedIn": false
+    "emailAddress": "angus.cheney2019@my.ntu.ac.uk"
   },
   "dateCreated": "2019-07-18T11:22:15",
   "dateApproved": null,
-  "approved": true,
+  "status": "APPROVED",
   "reaction": "",
   "risks": "risk",
   "numberOfExposures": "",
@@ -37,8 +35,7 @@
       "author": {
         "userId": "702d1aab-fd01-400f-9d08-fb6485b0a773",
         "displayName": "display name",
-        "emailAddress": "email@mail.com",
-        "loggedIn": false
+        "emailAddress": "email@mail.com"
       },
       "hazards": "some hazard",
       "mandatoryPictograms": ["MHS12"]
@@ -54,8 +51,7 @@
       "author": {
         "userId": "ab46e913-506e-4fe4-96d4-96ca665aacd2",
         "displayName": "Angus Cheney",
-        "emailAddress": "angus.cheney2019@my.ntu.ac.uk",
-        "loggedIn": false
+        "emailAddress": "angus.cheney2019@my.ntu.ac.uk"
       },
       "pictograms": [
         "GHS02",

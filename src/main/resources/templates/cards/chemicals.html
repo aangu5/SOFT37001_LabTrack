@@ -12,21 +12,21 @@
 
 <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">
     <div style="background-color:white; width: 100%; text-align: center; min-width: 600px; margin: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start;">
-        <div class="button" id="all-cards">
-            <a href="/cards/chemical">
-                <h2>All Cards</h2>
-            </a>
-        </div>
-        <div class="button" id="my-cards">
-            <a href="/cards/chemical?view=self">
-                <h2>My Cards</h2>
-            </a>
-        </div>
-        <div class="button">
-            <a href="/card/chemical/new">
-                <h2>New Chemical Hazard Card</h2>
-            </a>
-        </div>
+        <a href="/cards/chemical">
+            <div class="button" id="all-cards">
+                    <h2>All Cards</h2>
+            </div>
+        </a>
+        <a href="/cards/chemical?view=self">
+            <div class="button" id="my-cards">
+                    <h2>My Cards</h2>
+            </div>
+        </a>
+        <a href="/card/chemical/new">
+            <div class="button">
+               <h2>New Chemical Hazard Card</h2>
+            </div>
+        </a>
     </div>
     <table style="margin: 15px; width: calc(100% - 30px); font-family: montserrat; font-weight: bold; -moz-border-radius:6px; text-align: center"
            th:if="${!chemicalCards.isEmpty()}">
@@ -41,7 +41,7 @@
                                     th:text="${card.cardName}">Card
                 Name</a></td>
             <td class="overview" th:text="${card.getFormattedDate()}">Date Created</td>
-            <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"/></td>
+            <td class="overview"><a th:text="${card.author.displayName}" th:href="@{/user(id=${card.author.userId.toString()})}"></a></td>
             <td class="overview" th:text="${card.synonyms}">Synonyms</td>
         </tr>
     </table>
@@ -55,9 +55,9 @@
     let url = window.location.href;
     console.log(url);
     if (url.endsWith("?view=self")) {
-        document.getElementById("my-cards").style.opacity = 0.5;
+        document.getElementById("my-cards").style.opacity = "0.5";
     } else {
-        document.getElementById("all-cards").style.opacity = 0.5;
+        document.getElementById("all-cards").style.opacity = "0.5";
     }
 </script>
 

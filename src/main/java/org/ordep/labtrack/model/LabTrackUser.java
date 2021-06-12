@@ -18,7 +18,6 @@ public class LabTrackUser {
     private UUID userId;
     private String displayName;
     private String emailAddress;
-    private boolean isLoggedIn;
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     private List<Role> roles;
