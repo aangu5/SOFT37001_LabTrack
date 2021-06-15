@@ -3,7 +3,7 @@ Requirements
 In order to run this application, you will need the following things:
 
 * Java (version 11+)
-* Maven
+* Maven ([installation guide available here](https://maven.apache.org/install.html))
 * Internet Access (to connect to the preconfigured database)
 * Web Browser
 
