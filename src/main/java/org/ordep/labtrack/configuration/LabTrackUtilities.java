@@ -2,7 +2,6 @@ package org.ordep.labtrack.configuration;
 
 import org.ordep.labtrack.model.CoshhAssessment;
 import org.ordep.labtrack.model.LabTrackUser;
-import org.ordep.labtrack.model.enums.AssessmentState;
 import org.ordep.labtrack.model.enums.Role;
 
 import java.time.LocalDateTime;

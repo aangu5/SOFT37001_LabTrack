@@ -100,7 +100,7 @@
 
           <div th:each="chemicalHazardCard : ${riskAssessment.getChemicalHazardCards()}">
             <tr style="float:left; width: 100%" >
-              <td> <a th:text="${chemicalHazardCard.getCardName()}" th:href="@{/card/ChemicalHazardCard(id=${chemicalHazardCard.getCardId()})}"></a></td>
+              <td> <a th:text="${chemicalHazardCard.getCardName()}" th:href="@{/card/chemical(id=${chemicalHazardCard.getCardId()})}"></a></td>
             </tr>
           </div>
 
@@ -114,7 +114,7 @@
 
           <div th:each="biologicalHazardCard : ${riskAssessment.getBiologicalHazardCards()}">
             <tr style="float:left; width: 100%" >
-              <td><a th:text="${biologicalHazardCard.getCardName()}" th:href="@{/card/BiologicalHazardCard(id=${biologicalHazardCard.getCardId()})}"></a></td>
+              <td><a th:text="${biologicalHazardCard.getCardName()}" th:href="@{/card/biologica(id=${biologicalHazardCard.getCardId()})}"></a></td>
             </tr>
           </div>
         </div>
@@ -127,7 +127,7 @@
 
           <div th:each="physicalHazardCard : ${riskAssessment.getPhysicalHazardCards()}">
             <tr style="float:left; width: 100%" >
-              <td><a th:text="${physicalHazardCard.getCardName()}" th:href="@{/card/PhysicalHazardCard(id=${physicalHazardCard.getCardId()})}"></a></td>
+              <td><a th:text="${physicalHazardCard.getCardName()}" th:href="@{/card/physical(id=${physicalHazardCard.getCardId()})}"></a></td>
             </tr>
           </div>
 
