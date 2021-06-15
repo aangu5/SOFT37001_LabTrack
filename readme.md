@@ -9,6 +9,10 @@ In order to run this application, you will need the following things:
 
 Starting the Application
 ---
+This project is also available in the following Git repository:
+https://github.com/aangu5/LabTrack
+
+Steps to start the application:
 1. Ensure the requirements listed above are met and can run Maven commands in the terminal.
 2. Open the root directory of the project in a terminal. If cloned from git, it will likely be LabTrack.
 3. Run "mvn clean install" in the terminal, this will ensure all necessary packages are installed and all tests run successfully.
