@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 import java.util.UUID;
 
 @EqualsAndHashCode(callSuper = true)

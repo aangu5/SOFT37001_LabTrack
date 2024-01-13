@@ -4,7 +4,7 @@ import lombok.*;
 import org.ordep.labtrack.model.enums.ChemicalPictogram;
 import org.ordep.labtrack.model.enums.SignalWord;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

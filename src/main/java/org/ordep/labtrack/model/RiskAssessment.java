@@ -5,7 +5,7 @@ import org.ordep.labtrack.model.enums.FrequencyOfTask;
 import org.ordep.labtrack.model.enums.Likelihood;
 import org.ordep.labtrack.model.enums.Severity;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

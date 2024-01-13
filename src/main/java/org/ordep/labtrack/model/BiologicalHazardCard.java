@@ -3,7 +3,7 @@ package org.ordep.labtrack.model;
 import lombok.*;
 import org.ordep.labtrack.model.enums.BioSafetyLevel;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
