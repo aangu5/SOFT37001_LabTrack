@@ -6,7 +6,7 @@ import org.ordep.labtrack.model.enums.Precaution;
 import org.ordep.labtrack.model.enums.ProtectiveEquipment;
 import org.ordep.labtrack.model.enums.RouteOfExposure;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

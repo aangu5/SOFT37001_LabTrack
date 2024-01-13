@@ -38,8 +38,8 @@
     </style>
 </head>
 <body style="margin: 0px">
-<div th:replace="components/header">Header</div>
-<div th:replace="components/sidebar">Sidebar</div>
+<div th:replace="~{components/header}">Header</div>
+<div th:replace="~{components/sidebar}">Sidebar</div>
 
 <form action="#" method="POST" th:action="@{/api/card/chemical/new}" th:object="${chemicalHazardCard}">
   <div style="margin-left: 275px; margin-top: 60px; justify-content: center; text-align: center; ">

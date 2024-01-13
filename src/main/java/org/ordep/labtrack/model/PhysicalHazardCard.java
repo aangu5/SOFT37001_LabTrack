@@ -4,7 +4,7 @@ import lombok.*;
 import org.ordep.labtrack.model.enums.MandatoryPictogram;
 import org.ordep.labtrack.model.enums.PhysicalPictogram;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)

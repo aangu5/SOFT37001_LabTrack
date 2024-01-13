@@ -4,7 +4,7 @@ import lombok.Data;
 import org.ordep.labtrack.configuration.LabTrackUtilities;
 import org.ordep.labtrack.model.enums.AssessmentState;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
